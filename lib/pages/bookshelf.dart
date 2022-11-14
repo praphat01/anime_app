@@ -1,6 +1,11 @@
 // ignore_for_file: avoid_print
 
+import 'dart:math';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -9,7 +14,7 @@ import '../pages/detailpage.dart';
 import '../constants/colors.dart';
 import '../widgets/leftmenu.dart';
 import '../pages/search/search.dart';
-import '../pages/pdfviewer/pdf_viewer.dart';
+import '../pages/pdfviewer/pdfReader.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
@@ -225,25 +230,38 @@ class _bookshelfState extends State<bookshelf> {
         Permission.storage,
       ].request();
 
-      var _localPath = (await _findLocalPath())!;
-      print('##14nov localPath ==> $_localPath');
-      await FlutterDownloader.enqueue(
-        url: pdfLink,
-        savedDir: _localPath,
-        saveInPublicStorage: true,
-        showNotification:
-            true, // show download progress in status bar (for Android)
-        openFileFromNotification:
-            true, // click on notification to open downloaded file (for Android)
-      ).then((value) {
-        print('##14nov Download Success');
-        // Navigator.pop(context);
-      }).catchError((onError) {
-        print('##14nov onError ==> $onError');
+      var appDocDir = await getExternalStorageDirectory();
+      String nameFile = "/test${Random().nextInt(1000)}.pdf";
+      String savePath = appDocDir!.path + nameFile;
+
+      var response = await Dio().download(pdfLink, savePath);
+      await ImageGallerySaver.saveFile(appDocDir.path, name: nameFile).then((value) {
+        print('Save file Success $savePath');
+        Fluttertoast.showToast(
+          msg: 'Load Finish at $savePath',
+          toastLength: Toast.LENGTH_LONG,
+        );
       });
-      setState(() {
-        _localPath;
-      });
+
+      // var _localPath = (await _findLocalPath())!;
+      // print('##14nov localPath ==> $_localPath');
+      // await FlutterDownloader.enqueue(
+      //   url: pdfLink,
+      //   savedDir: _localPath,
+      //   saveInPublicStorage: true,
+      //   showNotification:
+      //       true, // show download progress in status bar (for Android)
+      //   openFileFromNotification:
+      //       true, // click on notification to open downloaded file (for Android)
+      // ).then((value) {
+      //   print('##14nov Download Success');
+      //   // Navigator.pop(context);
+      // }).catchError((onError) {
+      //   print('##14nov onError ==> $onError');
+      // });
+      // setState(() {
+      //   _localPath;
+      // });
     } catch (e) {
       print('sssss${e}');
     }
@@ -355,21 +373,20 @@ class _bookshelfState extends State<bookshelf> {
                                       ),
                                       ElevatedButton.icon(
                                         onPressed: () {
-                                          Navigator.push(
-                                              context,
+                                          Navigator.push(context,
                                               MaterialPageRoute(
-                                                  builder:
-                                                      (context) => ebookReader(
-                                                            bookTitle: userBookShelflist[
-                                                                        index]!
-                                                                    .bookTitle ??
-                                                                '',
-                                                            fileBook:
-                                                                userBookShelflist[
-                                                                            index]!
-                                                                        .bookId ??
-                                                                    '',
-                                                          )));
+                                                  builder: (context) {
+                                            return ebookReader(
+                                              // bookTitle:
+                                              //     userBookShelflist[index]!
+                                              //             .bookTitle ??
+                                              //         '',
+                                              // fileBook:
+                                              //     userBookShelflist[index]!
+                                              //             .bookId ??
+                                              //         '',
+                                            );
+                                          }));
                                         },
                                         // onPressed: () async {
                                         //   final url =
@@ -381,14 +398,14 @@ class _bookshelfState extends State<bookshelf> {
                                         //   openPDF(context, file);
                                         // },
                                         style: ElevatedButton.styleFrom(
-                                          primary:
+                                          backgroundColor:
                                               AnimeUI.cyan, // Background color
                                         ),
-                                        icon: Icon(
+                                        icon: const Icon(
                                           Icons.menu_book,
                                           size: 24.0,
                                         ),
-                                        label: Text(
+                                        label: const Text(
                                           'อ่านหนังสือ  ',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,

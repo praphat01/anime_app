@@ -561,7 +561,7 @@ class _bookshelfState extends State<bookshelf> {
 
 showDataAlert(context) {
   // set up the button
-  Widget okButton = FlatButton(
+  Widget okButton = TextButton(
     child: Text("OK"),
     onPressed: () {},
   );

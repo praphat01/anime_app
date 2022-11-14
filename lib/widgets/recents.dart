@@ -14,7 +14,7 @@ class Recents extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(top: 10),
         child: AspectRatio(
-          aspectRatio: 16 / 6,
+          aspectRatio: 1/2,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -47,7 +47,10 @@ class Recents extends StatelessWidget {
                   ],
                 ),
               ),
-              const RecentsList()
+              SizedBox(
+                // height: 108,
+                child: const RecentsList(),
+              ),
             ],
           ),
         ),

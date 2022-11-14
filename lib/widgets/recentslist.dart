@@ -72,6 +72,8 @@ class _RecentsListState extends State<RecentsList> {
       height: 250,
       child: LayoutBuilder(
         builder: (context, constraints) {
+          print(
+              '##14nov width ==> ${constraints.maxWidth}, heitht ==> ${constraints.maxHeight}');
           return ListView.builder(
             controller: controller,
             itemCount: dataBookAdd.length,

@@ -91,7 +91,7 @@ class _popularState extends State<popular> {
     return SizedBox(
       width: 150,
       height: 350,
-      child: Card(
+      child: Card(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         elevation: 12,
         child: InkWell(
           onTap: () {

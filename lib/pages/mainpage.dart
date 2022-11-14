@@ -1,9 +1,10 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import '../pages/homepage.dart';
 import '../pages/bookshelf.dart';
 import '../pages/book_publisher.dart';
 import '../pages/book_category.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../constants/colors.dart';
 
 class MainPage extends StatefulWidget {

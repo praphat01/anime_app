@@ -115,7 +115,7 @@ class _searchPageState extends State<searchPage> {
                   ),
                 ),
                 SizedBox(height: 20),
-                RaisedButton(
+                ElevatedButton(
                   // onPressed: () {
                   //   Navigator.push(context, MaterialPageRoute(builder: (context) {
                   //     return searchloading(text: t.text);
@@ -127,8 +127,9 @@ class _searchPageState extends State<searchPage> {
                     MaterialPageRoute(
                         builder: (context) => searchloading(text: t.text)),
                   ),
-                  splashColor: Color(0xfff012AC0),
-                  color: AnimeUI.cyan,
+                  style: ElevatedButton.styleFrom(backgroundColor: AnimeUI.cyan),
+                  // splashColor: Color(0xfff012AC0),
+                  // color: AnimeUI.cyan,
                   child: Text(
                     "               SEARCH               ",
                     style: TextStyle(

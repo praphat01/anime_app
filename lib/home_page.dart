@@ -111,7 +111,7 @@ class _HomePagemainState extends State<HomePagemain> {
                       SizedBox(
                         height: 10,
                       ),
-                      RaisedButton(
+                      ElevatedButton(
                         onPressed: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
@@ -119,8 +119,9 @@ class _HomePagemainState extends State<HomePagemain> {
                             // return searchloading();
                           }));
                         },
-                        splashColor: Color(0xfff012AC0),
-                        color: Colors.orange,
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
+                        // splashColor: Color(0xfff012AC0),
+                        // color: Colors.orange,
                         child: Text(
                           "SEARCH",
                           style: TextStyle(

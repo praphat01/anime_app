@@ -4,7 +4,6 @@ import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:lottie/lottie.dart';
 import '../pages/mainpage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'homepage.dart';
 
 class splashScreen extends StatefulWidget {
   const splashScreen({Key? key}) : super(key: key);
@@ -68,6 +67,8 @@ class _splashScreenState extends State<splashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(body: Container(
+      child: Text('MasterUng'),
+    ),);
   }
 }

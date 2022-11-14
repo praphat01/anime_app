@@ -161,7 +161,7 @@ class _searchloadingState extends State<searchloading> {
                                 SizedBox(
                                   height: 30,
                                 ),
-                                RaisedButton(
+                                ElevatedButton(
                                   onPressed: () {
                                     // getisbn(index);
                                     Navigator.push(
@@ -220,8 +220,8 @@ class _searchloadingState extends State<searchloading> {
                                                     '',
                                               )),
                                     );
-                                  },
-                                  color: AnimeUI.cyan,
+                                  },style: ElevatedButton.styleFrom(backgroundColor: AnimeUI.cyan),
+                                  // color: AnimeUI.cyan,
                                   child: Text(
                                     "DETAILS",
                                     style: TextStyle(color: Colors.white),

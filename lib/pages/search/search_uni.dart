@@ -122,7 +122,7 @@ class _searchloadingUniState extends State<searchloadingUni> {
                                 SizedBox(
                                   height: 10,
                                 ),
-                                RaisedButton(
+                                ElevatedButton(
                                   onPressed: () {
                                     // getisbn(index);
                                     if (dataUniSearch[index]!.t4Id.toString() ==
@@ -152,8 +152,8 @@ class _searchloadingUniState extends State<searchloadingUni> {
                                                         .toString(),
                                               )),
                                     );
-                                  },
-                                  color: AnimeUI.cyan,
+                                  },style: ElevatedButton.styleFrom(backgroundColor: AnimeUI.cyan),
+                                  // color: AnimeUI.cyan,
                                   child: Text(
                                     "Click to Login.",
                                     style: TextStyle(color: Colors.white),

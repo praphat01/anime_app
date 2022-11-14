@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -28,7 +30,7 @@ import 'package:flutter/foundation.dart';
 import '../pages/pdfviewer/api/pdf_api.dart';
 
 class bookshelf extends StatefulWidget {
-  static late DownloadCallback download;
+  // static late DownloadCallback download;
 
   const bookshelf({Key? key}) : super(key: key);
 
@@ -216,13 +218,16 @@ class _bookshelfState extends State<bookshelf> {
   }
 
   void download({required pdfLink}) async {
+    print('##14nov pdfLink ===> $pdfLink');
+
     try {
       await [
         Permission.storage,
       ].request();
 
       var _localPath = (await _findLocalPath())!;
-      final taskId = await FlutterDownloader.enqueue(
+      print('##14nov localPath ==> $_localPath');
+      await FlutterDownloader.enqueue(
         url: pdfLink,
         savedDir: _localPath,
         saveInPublicStorage: true,
@@ -230,7 +235,12 @@ class _bookshelfState extends State<bookshelf> {
             true, // show download progress in status bar (for Android)
         openFileFromNotification:
             true, // click on notification to open downloaded file (for Android)
-      );
+      ).then((value) {
+        print('##14nov Download Success');
+        // Navigator.pop(context);
+      }).catchError((onError) {
+        print('##14nov onError ==> $onError');
+      });
       setState(() {
         _localPath;
       });
@@ -261,7 +271,7 @@ class _bookshelfState extends State<bookshelf> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
+        title: const Text(
           "ชั้นหนังสือ",
           style: TextStyle(
             fontWeight: FontWeight.bold,

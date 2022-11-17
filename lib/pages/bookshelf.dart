@@ -54,6 +54,7 @@ class _bookshelfState extends State<bookshelf> {
   List<String> databook = [];
   List<Map<String, dynamic>> myData = [];
   bool hasmore = true;
+  String statusFile = '';
   String _localPath = '';
   var bookIdType;
   var pathSite;
@@ -240,7 +241,7 @@ class _bookshelfState extends State<bookshelf> {
   void download({required pdfLink}) async {
     String pdfLinkNew =
         pdfLink.replaceAll("ebook_tab", "ebook_wm"); // Test file unlock
-    File file = new File(pdfLink); // Old URL
+    File file = new File(pdfLink);
     String filename = path.basename(file.path);
     print(filename);
     print('##14nov pdfLink ===> $pdfLink');
@@ -287,6 +288,18 @@ class _bookshelfState extends State<bookshelf> {
     } catch (e) {
       print(e);
     }
+  }
+
+  Future<bool> checkfileBeforeReadPdf({required fileBook}) async {
+    var appDocDir = await getExternalStorageDirectory();
+    File file = new File(fileBook);
+    String filename = path.basename(file.path);
+    String nameFile = "/${filename}";
+    String savePath = appDocDir!.path + nameFile;
+
+    final checkStatus = await File(savePath).exists();
+    print('check file exists is ==> $checkStatus');
+    return checkStatus;
   }
 
   // Future<String?> _findLocalPath() async {
@@ -394,58 +407,60 @@ class _bookshelfState extends State<bookshelf> {
                                         ),
                                       ),
                                       ElevatedButton.icon(
-                                        onPressed: () {
-                                          if (checkTypeOfFile(
+                                        onPressed: () async {
+                                          if (await checkfileBeforeReadPdf(
+                                              fileBook:
                                                   userBookShelflist[index]!
-                                                      .pdfLink) ==
-                                              'application/pdf') {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ebookReader(
-                                                    bookTitle:
-                                                        userBookShelflist[
-                                                                    index]!
-                                                                .bookTitle ??
-                                                            '',
-                                                    fileBook: userBookShelflist[
-                                                                index]!
-                                                            .pdfLink ??
-                                                        '',
-                                                  ),
-                                                ));
-                                          } else if (checkTypeOfFile(
-                                                  userBookShelflist[index]!
-                                                      .pdfLink) ==
-                                              'video/mp4') {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      vdoPlayer(
-                                                    bookTitle:
-                                                        userBookShelflist[
-                                                                    index]!
-                                                                .bookTitle ??
-                                                            '',
-                                                    fileBook: userBookShelflist[
-                                                                index]!
-                                                            .pdfLink ??
-                                                        '',
-                                                  ),
-                                                ));
-                                          }
+                                                          .pdfLink ??
+                                                      '')) {
+                                            // Check file book in storage
+                                            if (checkTypeOfFile(
+                                                    userBookShelflist[index]!
+                                                        .pdfLink) ==
+                                                'application/pdf') {
+                                              // check type of book is PDF
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ebookReader(
+                                                      bookTitle:
+                                                          userBookShelflist[
+                                                                      index]!
+                                                                  .bookTitle ??
+                                                              '',
+                                                      fileBook:
+                                                          userBookShelflist[
+                                                                      index]!
+                                                                  .pdfLink ??
+                                                              '',
+                                                    ),
+                                                  ));
+                                            } else if (checkTypeOfFile(
+                                                    userBookShelflist[index]!
+                                                        .pdfLink) ==
+                                                'video/mp4') {
+                                              // check type of book is Video
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        vdoPlayer(
+                                                      bookTitle:
+                                                          userBookShelflist[
+                                                                      index]!
+                                                                  .bookTitle ??
+                                                              '',
+                                                      fileBook:
+                                                          userBookShelflist[
+                                                                      index]!
+                                                                  .pdfLink ??
+                                                              '',
+                                                    ),
+                                                  ));
+                                            }
+                                          } else {}
                                         },
-                                        // onPressed: () async {
-                                        //   final url =
-                                        //       '${userBookShelflist[index]!.bookId}.pdf';
-                                        //   final file =
-                                        //       await PDFApi.loadFileStorage(url);
-
-                                        //   if (file == null) return;
-                                        //   openPDF(context, file);
-                                        // },
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor:
                                               AnimeUI.cyan, // Background color

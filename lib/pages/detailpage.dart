@@ -111,7 +111,7 @@ class _detailPageState extends State<detailPage> {
   List<rating_star?> dataRateing = [];
   int gottenStar = 0;
   late bool statusFav = false;
-  late bool borrowStatus = false;
+  late bool borrowStatus = true;
   var bookIdType;
   var pathSite;
   var imageUrl;
@@ -247,7 +247,9 @@ class _detailPageState extends State<detailPage> {
           await addItem();
         }
 
-        setState(() {});
+        setState(() {
+          borrowStatus = false;
+        });
       }
     });
   }
@@ -464,7 +466,8 @@ class _detailPageState extends State<detailPage> {
                                   ),
                                   onPressed: () {
                                     // _showDialog();
-                                    borrowBook();
+                                    borrowStatus ? borrowBook() : '';
+                                    // borrowBook();
                                   },
                                   child: Text(
                                     'ยืมหนังสือ',

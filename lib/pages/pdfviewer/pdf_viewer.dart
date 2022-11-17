@@ -1,18 +1,15 @@
+import 'dart:io';
+import 'package:easy_pdf_viewer/easy_pdf_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:path_provider_android/path_provider_android.dart';
-import 'dart:io';
+import 'dart:async';
+import 'package:path/path.dart' as path;
+
 import '../../constants/colors.dart';
-import 'package:pdfx/pdfx.dart';
-import 'package:internet_file/internet_file.dart';
-import 'dart:io';
-import 'dart:typed_data';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class ebookReader extends StatefulWidget {
   final String bookTitle;
   final String fileBook;
-
   const ebookReader({
     Key? key,
     required this.bookTitle,
@@ -20,106 +17,98 @@ class ebookReader extends StatefulWidget {
   });
 
   @override
-  State<ebookReader> createState() => _ebookReader(
+  State<ebookReader> createState() => _ebookReaderState(
         bookTitle: bookTitle,
         fileBook: fileBook,
       );
 }
 
-class _ebookReader extends State<ebookReader> {
-  // final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
-  var localPath;
-  Directory? directory;
-  static const int _initialPage = 2;
-  bool _isSampleDoc = true;
-  late PdfController _pdfController;
-  var file;
-  final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
+class _ebookReaderState extends State<ebookReader> {
+  bool _isLoading = false;
 
+  PDFDocument? document;
   String bookTitle;
   String fileBook;
 
-  _ebookReader({
+  _ebookReaderState({
     required this.bookTitle,
     required this.fileBook,
   });
 
-  Future<String?> _findLocalPath() async {
-    // Directory? directory;
-    var externalStorageDirPath;
-    if (Platform.isAndroid) {
-      try {
-        externalStorageDirPath = await PathProviderAndroid()
-            .getDownloadsPath(); //AndroidPathProvider.downloadsPath;
-      } catch (e) {
-        final directory = await getExternalStorageDirectory();
-        externalStorageDirPath = directory?.path;
-      }
-
-      directory = await getExternalStorageDirectory();
-      String newPath = "";
-      List<String> folders = directory!.path.split("/");
-
-      for (int x = 1; x < folders.length; x++) {
-        String folder = folders[x];
-        if (folder != "Android") {
-          newPath += "/" + folder;
-        } else {
-          break;
-        }
-      }
-      externalStorageDirPath = newPath + "/Download/";
-      externalStorageDirPath = externalStorageDirPath.substring(1);
-      print('Arm is :${externalStorageDirPath}');
-    } else if (Platform.isIOS) {
-      externalStorageDirPath =
-          (await getApplicationDocumentsDirectory()).absolute.path;
-    }
-    return externalStorageDirPath;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getfile();
   }
 
-  Future<String?> getPath() async {
-    // localPath = '/storage/emulated/0/Download/';
-    localPath = (await _findLocalPath())!;
-    print('path is : ${localPath}');
+  // Future<String> get _localPath async {
+  //   final directory = await getExternalStorageDirectory();
+
+  //   return directory!.path;
+  // 999
+
+  // Future<File> get _localFile async {
+  //   final path = await _localPath;
+  //   return File('$path/02006099.pdf');
+  // }
+
+  // Future<int> readCounter() async {
+  //   try {
+  //     final file = await _localFile;
+
+  //     // Read the file
+  //     final contents = await file.readAsString();
+
+  //     return int.parse(contents);
+  //   } catch (e) {
+  //     // If encountering an error, return 0
+  //     return 0;
+  //   }
+  // }
+
+  Future getfile() async {
+    // print('##Arm File book ${widget.fileBook}');
+    // var appDocDir = await getExternalStorageDirectory();
+    // String nameFile = "/02006099.pdf";
+    // String savePath = appDocDir!.path + nameFile;
+
+    // var files = await _localFile;
+    // print('##Arm path is ==> ${files}');
+    // File files = File(await _localPath);
+    // PDFDocument doc = await PDFDocument.fromFile(files);
+
+    String urlBook = widget.fileBook.replaceAll("ebook_tab", "ebook_wm");
+
+    // File file = new File(widget.fileBook);
+    // String filename = path.basename(file.path);
+    // print(filename);
+    PDFDocument? doc = await PDFDocument.fromURL(urlBook);
     setState(() {
-      localPath;
-      file = '02006084.pdf';
-      // final loadedPdfPageImage = '/storage/emulated/0/Download/02006084.pdf';
+      document = doc;
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    getPath();
-    _pdfController = PdfController(
-      document:
-          PdfDocument.openFile('/storage/emulated/0/Download/pdf-sample.pdf'),
-      // document: PdfDocument.openData(
-      //   InternetFile.get(
-      //     'https://api.codetabs.com/v1/proxy/?quest=http://www.africau.edu/images/default/sample.pdf',
-      //   ),
-      // ),
-      initialPage: _initialPage,
-    );
-  }
-
-  @override
-  void dispose() {
-    _pdfController.dispose();
-    super.dispose();
-  }
+  // Future<PDFDocument?> loadFromAssets() async {
+  //   try {
+  //     setState(() {
+  //       _isLoading = true; //show loading
+  //     });
+  //     File files = File(await _localPath);
+  //     document = await PDFDocument.fromFile(files);
+  //     setState(() {
+  //       _isLoading = false; //remove loading
+  //     });
+  //     return document;
+  //   } catch (err) {
+  //     print('Caught error: $err');
+  //   } //catch
+  // } //Future
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        iconTheme: IconThemeData(
-          color: AnimeUI.cyan, //change your color here
-        ),
-        backgroundColor: Colors.white,
         title: Text(
           '${widget.bookTitle}',
           style: TextStyle(
@@ -127,50 +116,13 @@ class _ebookReader extends State<ebookReader> {
             color: AnimeUI.cyan,
           ),
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(
-              Icons.bookmark,
-              color: AnimeUI.cyan,
-              semanticLabel: 'Bookmark',
-            ),
-            onPressed: () {
-              _pdfViewerKey.currentState?.openBookmarkView();
-            },
-          ),
-        ],
+        iconTheme: IconThemeData(
+          color: Colors.black,
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
       ),
-      body: SfPdfViewer.file(
-        File('/storage/emulated/0/Download/${widget.fileBook}.pdf'),
-        key: _pdfViewerKey,
-        password: 'Staq021589623Staq',
-        canShowPasswordDialog: false,
-      ),
-    );
-  }
-
-  // body: SfPdfViewer.file(
-  //       File('/storage/emulated/0/Download/02005335.pdf'),
-  //       password: 'staq021589623staq',
-  //       canShowPasswordDialog: false,
-  //     ),
-
-  PhotoViewGalleryPageOptions _pageBuilder(
-    BuildContext context,
-    Future<PdfPageImage> pageImage,
-    int index,
-    PdfDocument document,
-  ) {
-    return PhotoViewGalleryPageOptions(
-      imageProvider: PdfPageImageProvider(
-        pageImage,
-        index,
-        document.id,
-      ),
-      minScale: PhotoViewComputedScale.contained * 1,
-      maxScale: PhotoViewComputedScale.contained * 2,
-      initialScale: PhotoViewComputedScale.contained * 1.0,
-      heroAttributes: PhotoViewHeroAttributes(tag: '${document.id}-$index'),
+      body: Center(child: PDFViewer(document: document!)),
     );
   }
 }

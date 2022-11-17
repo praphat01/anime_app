@@ -14,7 +14,7 @@ class Recents extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(top: 10),
         child: AspectRatio(
-          aspectRatio: 1/2,
+          aspectRatio: 1.3,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [

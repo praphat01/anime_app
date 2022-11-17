@@ -147,7 +147,6 @@ class _RecentsListState extends State<RecentsList> {
                                 ?.copyWith(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold)),
-                        // const SizedBox(height: 20),
                       ]),
                     ),
                   ));

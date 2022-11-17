@@ -14,7 +14,7 @@ import '../pages/detailpage.dart';
 import '../constants/colors.dart';
 import '../widgets/leftmenu.dart';
 import '../pages/search/search.dart';
-import '../pages/pdfviewer/pdfReader.dart';
+import '../pages/pdfviewer/flutter_pdfviewer.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
@@ -32,7 +32,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../../database/database_helper.dart';
 import 'package:flutter/foundation.dart';
-import '../pages/pdfviewer/api/pdf_api.dart';
+// import '../pages/pdfviewer/api/pdf_api.dart';
+import 'package:path/path.dart' as path;
+import 'package:mime/mime.dart';
+import '../pages/videoPlayer/vdoPlayer.dart';
 
 class bookshelf extends StatefulWidget {
   // static late DownloadCallback download;
@@ -166,6 +169,18 @@ class _bookshelfState extends State<bookshelf> {
     );
   }
 
+  String? checkTypeOfFile(bookUrl) {
+    File file = new File(bookUrl);
+    String filename = path.basename(file.path);
+    // print(filename);
+
+    String? typeOfFile = lookupMimeType(filename);
+    // var fileType = mimeStr.split('/');
+    // print('file type ${mimeStr.}');
+
+    return typeOfFile;
+  }
+
   Future fetch() async {
     final prefs = await SharedPreferences.getInstance();
     final String? uniId = prefs.getString('uniId');
@@ -223,6 +238,11 @@ class _bookshelfState extends State<bookshelf> {
   }
 
   void download({required pdfLink}) async {
+    String pdfLinkNew =
+        pdfLink.replaceAll("ebook_tab", "ebook_wm"); // Test file unlock
+    File file = new File(pdfLink); // Old URL
+    String filename = path.basename(file.path);
+    print(filename);
     print('##14nov pdfLink ===> $pdfLink');
 
     try {
@@ -231,11 +251,13 @@ class _bookshelfState extends State<bookshelf> {
       ].request();
 
       var appDocDir = await getExternalStorageDirectory();
-      String nameFile = "/test${Random().nextInt(1000)}.pdf";
+      String nameFile = "/${filename}";
       String savePath = appDocDir!.path + nameFile;
 
-      var response = await Dio().download(pdfLink, savePath);
-      await ImageGallerySaver.saveFile(appDocDir.path, name: nameFile).then((value) {
+      var response = await Dio()
+          .download(pdfLinkNew, savePath); // USE pdfLink NOT  pdfLinkNew
+      await ImageGallerySaver.saveFile(appDocDir.path, name: nameFile)
+          .then((value) {
         print('Save file Success $savePath');
         Fluttertoast.showToast(
           msg: 'Load Finish at $savePath',
@@ -263,26 +285,26 @@ class _bookshelfState extends State<bookshelf> {
       //   _localPath;
       // });
     } catch (e) {
-      print('sssss${e}');
+      print(e);
     }
   }
 
-  Future<String?> _findLocalPath() async {
-    var externalStorageDirPath;
-    if (Platform.isAndroid) {
-      try {
-        externalStorageDirPath = await PathProviderAndroid()
-            .getDownloadsPath(); //AndroidPathProvider.downloadsPath;
-      } catch (e) {
-        final directory = await getApplicationDocumentsDirectory();
-        externalStorageDirPath = directory.path;
-      }
-    } else if (Platform.isIOS) {
-      externalStorageDirPath =
-          (await getApplicationDocumentsDirectory()).absolute.path;
-    }
-    return externalStorageDirPath;
-  }
+  // Future<String?> _findLocalPath() async {
+  //   var externalStorageDirPath;
+  //   if (Platform.isAndroid) {
+  //     try {
+  //       externalStorageDirPath = await PathProviderAndroid()
+  //           .getDownloadsPath(); //AndroidPathProvider.downloadsPath;
+  //     } catch (e) {
+  //       final directory = await getApplicationDocumentsDirectory();
+  //       externalStorageDirPath = directory.path;
+  //     }
+  //   } else if (Platform.isIOS) {
+  //     externalStorageDirPath =
+  //         (await getApplicationDocumentsDirectory()).absolute.path;
+  //   }
+  //   return externalStorageDirPath;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -373,20 +395,47 @@ class _bookshelfState extends State<bookshelf> {
                                       ),
                                       ElevatedButton.icon(
                                         onPressed: () {
-                                          Navigator.push(context,
-                                              MaterialPageRoute(
-                                                  builder: (context) {
-                                            return ebookReader(
-                                              // bookTitle:
-                                              //     userBookShelflist[index]!
-                                              //             .bookTitle ??
-                                              //         '',
-                                              // fileBook:
-                                              //     userBookShelflist[index]!
-                                              //             .bookId ??
-                                              //         '',
-                                            );
-                                          }));
+                                          if (checkTypeOfFile(
+                                                  userBookShelflist[index]!
+                                                      .pdfLink) ==
+                                              'application/pdf') {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ebookReader(
+                                                    bookTitle:
+                                                        userBookShelflist[
+                                                                    index]!
+                                                                .bookTitle ??
+                                                            '',
+                                                    fileBook: userBookShelflist[
+                                                                index]!
+                                                            .pdfLink ??
+                                                        '',
+                                                  ),
+                                                ));
+                                          } else if (checkTypeOfFile(
+                                                  userBookShelflist[index]!
+                                                      .pdfLink) ==
+                                              'video/mp4') {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      vdoPlayer(
+                                                    bookTitle:
+                                                        userBookShelflist[
+                                                                    index]!
+                                                                .bookTitle ??
+                                                            '',
+                                                    fileBook: userBookShelflist[
+                                                                index]!
+                                                            .pdfLink ??
+                                                        '',
+                                                  ),
+                                                ));
+                                          }
                                         },
                                         // onPressed: () async {
                                         //   final url =

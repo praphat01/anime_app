@@ -17,11 +17,6 @@ class Body extends StatelessWidget {
         popular(),
         Trends(),
         Recents(),
-        SliverToBoxAdapter(
-          child: SizedBox(
-            height: 170,
-          ),
-        ),
       ],
     );
   }

@@ -92,7 +92,7 @@ class _bookCategoryState extends State<bookCategory> {
                           AssetImage('assets/images/Book-icon.png'),
                     ),
                     title: Text(
-                        '${dataBookCategory[index]!.bookcateName.toString()}'),
+                        '${dataBookCategory[index]!.bookcateName.toString()} (${dataBookCategory[index]!.bookCount.toString()})'),
                     // subtitle: Text(user.email),
                     trailing: const Icon(Icons.arrow_forward),
                     onTap: () {

@@ -17,7 +17,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0.0,
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.black),
         actions: [
           IconButton(
             icon: const Icon(Icons.search, color: Colors.black, size: 30),
@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      drawer: PublicDrawer(),
+      drawer: const PublicDrawer(),
       body: SafeArea(
         child: Stack(
           children: [const Body()],

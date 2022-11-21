@@ -217,6 +217,8 @@ class _detailPageState extends State<detailPage> {
     // FlutterDownloader.registerCallback(downloadCallback);
   }
 
+  // borrowStatus = false;
+
   @override
   void dispose() {
     // IsolateNameServer.removePortNameMapping('downloader_send_port');
@@ -231,6 +233,7 @@ class _detailPageState extends State<detailPage> {
     var status = false;
     var getBorrow =
         "${uniLink}/borrow.php?bookshelf_id=${widget.bookshelfId}&user=${userLoginname}&book_id=${widget.bookId}&uni_id=${uniId}&os=4";
+    print('Arm test == > $getBorrow');
     final uri = Uri.parse(getBorrow);
 
     http.get(uri).then((response) async {
@@ -239,17 +242,19 @@ class _detailPageState extends State<detailPage> {
         final decodedData = jsonDecode(responseBody);
 
         if (decodedData['status'] == 'false') {
+          setState(() {
+            borrowStatus = false;
+          });
           if (decodedData['result'] == 'borrowlimit') {
             AlertDialogBorrowlimit(context);
           }
         } else {
           AlertDialogSuccess(context);
           await addItem();
+          setState(() {
+            borrowStatus = true;
+          });
         }
-
-        setState(() {
-          borrowStatus = false;
-        });
       }
     });
   }

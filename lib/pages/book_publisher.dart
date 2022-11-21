@@ -90,8 +90,8 @@ class _bookPublisherState extends State<bookPublisher> {
                     backgroundImage:
                         AssetImage('assets/images/publisher_pic.jpeg'),
                   ),
-                  title:
-                      Text('${dataPublisher[index]!.bookcateName.toString()}'),
+                  title: Text(
+                      '${dataPublisher[index]!.bookcateName.toString()} (${dataPublisher[index]!.bookCount.toString()})'),
                   // subtitle: Text(user.email),
                   trailing: const Icon(Icons.arrow_forward),
                   onTap: () {

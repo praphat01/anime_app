@@ -220,7 +220,9 @@ class _searchloadingState extends State<searchloading> {
                                                     '',
                                               )),
                                     );
-                                  },style: ElevatedButton.styleFrom(backgroundColor: AnimeUI.cyan),
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: AnimeUI.cyan),
                                   // color: AnimeUI.cyan,
                                   child: Text(
                                     "DETAILS",

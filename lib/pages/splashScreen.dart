@@ -22,7 +22,7 @@ class _splashScreenState extends State<splashScreen> {
   Future<void> main() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final bool? status = prefs.getBool('isLoggedIn');
-    print(status);
+    // print(status);
     // runApp(MaterialApp(
     //     home: status == true
     //         ? HomePage(selectedPage: 0, uni_id: '85')
@@ -67,8 +67,6 @@ class _splashScreenState extends State<splashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Container(
-      child: Text('MasterUng'),
-    ),);
+    return Container();
   }
 }

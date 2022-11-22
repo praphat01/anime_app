@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:http/http.dart';
@@ -8,12 +9,12 @@ import 'package:permission_handler/permission_handler.dart';
 import 'dart:isolate';
 import 'dart:ui';
 import 'dart:async';
+import '../generated/locale_keys.g.dart';
 import '../models/m_detail/m_rateingStar.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../models/m_detail/check_fav.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../database/database_helper.dart';
 
 class detailPage extends StatefulWidget {
@@ -273,12 +274,12 @@ class _detailPageState extends State<detailPage> {
     showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        title: const Text('ยืมหนังสือ'),
-        content: const Text('ไม่สามารถยืมหนังสือได้ คุณได้ยืมหนังสือครบแล้ว!'),
+        title: Text(LocaleKeys.borrowBook.tr()),
+        content: Text(LocaleKeys.alertBookLimit.tr()),
         actions: <Widget>[
           TextButton(
-            onPressed: () => Navigator.pop(context, 'OK'),
-            child: const Text('OK'),
+            onPressed: () => Navigator.pop(context, LocaleKeys.ok.tr()),
+            child: Text(LocaleKeys.ok.tr()),
           ),
         ],
       ),
@@ -289,12 +290,12 @@ class _detailPageState extends State<detailPage> {
     showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        title: const Text('Success'),
-        content: const Text('ยืมหนังสือ สำเร็จ!'),
+        title: Text(LocaleKeys.success.tr()),
+        content: Text(LocaleKeys.alertBorrowSuccess.tr()),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context, 'OK'),
-            child: const Text('OK'),
+            child: Text(LocaleKeys.ok.tr()),
           ),
         ],
       ),
@@ -475,7 +476,7 @@ class _detailPageState extends State<detailPage> {
                                     // borrowBook();
                                   },
                                   child: Text(
-                                    'ยืมหนังสือ',
+                                    LocaleKeys.borrow.tr(),
                                     style: TextStyle(
                                         fontSize: 20,
                                         color: Colors.red,
@@ -485,8 +486,11 @@ class _detailPageState extends State<detailPage> {
                               ),
                             ],
                           ),
+                          SizedBox(
+                            height: 20,
+                          ),
                           Text(
-                            "รายละเอียดหนังสือ.",
+                            LocaleKeys.bookDetails.tr(),
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
@@ -494,7 +498,7 @@ class _detailPageState extends State<detailPage> {
                             height: 20,
                           ),
                           Text(
-                            "รายละเอียด : ",
+                            "${LocaleKeys.detailsData.tr()} : ",
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
@@ -508,7 +512,7 @@ class _detailPageState extends State<detailPage> {
                           Row(
                             children: [
                               Text(
-                                "ผู้แต่ง : ",
+                                "${LocaleKeys.auther.tr()} : ",
                                 style: TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
@@ -525,7 +529,7 @@ class _detailPageState extends State<detailPage> {
                           Row(
                             children: [
                               Text(
-                                "สำนักพิมพ์ : ",
+                                "${LocaleKeys.publisherData.tr()} : ",
                                 style: TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
@@ -542,7 +546,7 @@ class _detailPageState extends State<detailPage> {
                           Row(
                             children: [
                               Text(
-                                "ชนิดหนังสือ­ : ",
+                                "${LocaleKeys.typeOfBook.tr()} : ",
                                 style: TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
@@ -559,7 +563,7 @@ class _detailPageState extends State<detailPage> {
                           Row(
                             children: [
                               Text(
-                                "หมวดหนังสือ­ : ",
+                                "${LocaleKeys.bookCategory.tr()} : ",
                                 style: TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
@@ -576,7 +580,7 @@ class _detailPageState extends State<detailPage> {
                           Row(
                             children: [
                               Text(
-                                "หัวเรื่อง : ",
+                                "${LocaleKeys.title.tr()} : ",
                                 style: TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
@@ -593,7 +597,7 @@ class _detailPageState extends State<detailPage> {
                           Row(
                             children: [
                               Text(
-                                "รหัสหนังสือ­ : ",
+                                "${LocaleKeys.book_id.tr()} : ",
                                 style: TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
@@ -610,7 +614,7 @@ class _detailPageState extends State<detailPage> {
                           Row(
                             children: [
                               Text(
-                                "เลข ISBN : ",
+                                "${LocaleKeys.ISBN_number.tr()} : ",
                                 style: TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
@@ -627,7 +631,7 @@ class _detailPageState extends State<detailPage> {
                           Row(
                             children: [
                               Text(
-                                "จำนวนหน้า : ",
+                                "${LocaleKeys.pages.tr()} : ",
                                 style: TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
@@ -644,7 +648,7 @@ class _detailPageState extends State<detailPage> {
                           Row(
                             children: [
                               Text(
-                                "จำนวนหนังสือ : ",
+                                "${LocaleKeys.bookAmount.tr()} : ",
                                 style: TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),

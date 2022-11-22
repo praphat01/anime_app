@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:anime_app/generated/locale_keys.g.dart';
 import '../widgets/body.dart';
 import 'package:flutter/material.dart';
 import '../widgets/leftmenu.dart';

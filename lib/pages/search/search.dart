@@ -1,8 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../generated/locale_keys.g.dart';
 import '../../models/m_search/search.dart';
 import '../../pages/detailpage.dart';
 import '../../pages/search/search_loading.dart';
@@ -81,7 +83,7 @@ class _searchPageState extends State<searchPage> {
               children: [
                 SizedBox(height: 100),
                 Text(
-                  '2EBOOK SEARCH!',
+                  LocaleKeys.title_search.tr(),
                   style: TextStyle(
                     color: AnimeUI.cyan,
                     fontWeight: FontWeight.bold,
@@ -90,7 +92,7 @@ class _searchPageState extends State<searchPage> {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  'Find your book in my Library.',
+                  LocaleKeys.detail_search.tr(),
                   style: TextStyle(
                     fontSize: 12,
                   ),
@@ -108,7 +110,7 @@ class _searchPageState extends State<searchPage> {
                       controller: t,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: 'ค้นหาหนังสือ.',
+                        hintText: LocaleKeys.form_search.tr(),
                         prefixIcon: Icon(Icons.search),
                       ),
                     ),
@@ -127,11 +129,12 @@ class _searchPageState extends State<searchPage> {
                     MaterialPageRoute(
                         builder: (context) => searchloading(text: t.text)),
                   ),
-                  style: ElevatedButton.styleFrom(backgroundColor: AnimeUI.cyan),
+                  style:
+                      ElevatedButton.styleFrom(backgroundColor: AnimeUI.cyan),
                   // splashColor: Color(0xfff012AC0),
                   // color: AnimeUI.cyan,
                   child: Text(
-                    "               SEARCH               ",
+                    LocaleKeys.search.tr(),
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,

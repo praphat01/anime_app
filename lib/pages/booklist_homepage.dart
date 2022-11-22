@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import '../generated/locale_keys.g.dart';
 import '../tabs/bookAddedpage.dart';
 import '../tabs/poppularpage.dart';
 import '../tabs/recommendedpage.dart';
@@ -29,31 +31,31 @@ class _booklistState extends State<booklist> {
           backgroundColor: Colors.white,
           centerTitle: true,
           title: Text(
-            "All Book.",
+            LocaleKeys.allBook.tr(),
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: AnimeUI.cyan,
             ),
           ),
-          bottom: const TabBar(
+          bottom: TabBar(
             indicatorColor: Colors.grey,
             labelColor: AnimeUI.cyan,
             unselectedLabelColor: Colors.grey,
             tabs: [
               Tab(
-                text: 'หนังสือใหม่',
+                text: LocaleKeys.newBook.tr(),
                 icon: Icon(
                   Icons.book,
                 ),
               ),
               Tab(
-                text: 'หนังสือแนะนำ',
+                text: LocaleKeys.book_recommended.tr(),
                 icon: Icon(
                   Icons.recommend,
                 ),
               ),
               Tab(
-                text: 'หนังสือยอดนิยม',
+                text: LocaleKeys.book_popular.tr(),
                 icon: Icon(
                   Icons.star,
                 ),

@@ -1,3 +1,5 @@
+import 'package:anime_app/generated/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import '../pages/book_favorites.dart';
@@ -42,9 +44,9 @@ class _PublicDrawerState extends State<PublicDrawer> {
         padding: EdgeInsets.zero,
         children: [
           UserAccountsDrawerHeader(
-            accountName: Text('USER : ${userName}',
+            accountName: Text('${LocaleKeys.user.tr()} : ${userName}',
                 style: TextStyle(fontWeight: FontWeight.bold)),
-            accountEmail: Text('E-MAIL : ${userEmail}',
+            accountEmail: Text('${LocaleKeys.email.tr()} : ${userEmail}',
                 style: TextStyle(fontWeight: FontWeight.bold)),
             currentAccountPicture: CircleAvatar(
               foregroundImage: AssetImage('assets/images/icon-256x256.png'),
@@ -61,7 +63,7 @@ class _PublicDrawerState extends State<PublicDrawer> {
           ),
           ListTile(
             leading: Icon(Icons.bookmark),
-            title: Text("ชั้นหนังสือ"),
+            title: Text(LocaleKeys.bookshelf.tr()),
             onTap: () {
               Navigator.push(
                 context,
@@ -72,7 +74,7 @@ class _PublicDrawerState extends State<PublicDrawer> {
           ),
           ListTile(
             leading: Icon(Icons.favorite),
-            title: Text("หนังสือเล่มโปรด"),
+            title: Text(LocaleKeys.book_faverite.tr()),
             onTap: () {
               Navigator.push(
                 context,
@@ -82,7 +84,7 @@ class _PublicDrawerState extends State<PublicDrawer> {
           ),
           ListTile(
             leading: Icon(Icons.access_time),
-            title: Text("ประวัติการยืม"),
+            title: Text(LocaleKeys.book_history.tr()),
             onTap: () {
               Navigator.push(
                 context,
@@ -92,7 +94,7 @@ class _PublicDrawerState extends State<PublicDrawer> {
           ),
           ListTile(
             leading: Icon(Icons.attach_file),
-            title: Text("ข้อมูลผู้ใช้"),
+            title: Text(LocaleKeys.data_frofile.tr()),
             onTap: () {
               Navigator.push(
                 context,
@@ -102,11 +104,11 @@ class _PublicDrawerState extends State<PublicDrawer> {
           ),
           Padding(
             padding: const EdgeInsets.all(4.0),
-            child: Text("  MENU"),
+            child: Text(LocaleKeys.menu.tr()),
           ),
           ListTile(
             leading: Icon(Icons.home),
-            title: Text("หน้าหลัก"),
+            title: Text(LocaleKeys.homepage.tr()),
             onTap: () {
               Navigator.push(
                 context,
@@ -117,7 +119,7 @@ class _PublicDrawerState extends State<PublicDrawer> {
           ),
           ListTile(
             leading: Icon(Icons.book),
-            title: Text("หนังสือใหม่"),
+            title: Text(LocaleKeys.newBook.tr()),
             onTap: () {
               Navigator.push(
                 context,
@@ -127,7 +129,7 @@ class _PublicDrawerState extends State<PublicDrawer> {
           ),
           ListTile(
             leading: Icon(Icons.recommend),
-            title: Text("หนังสือแนะนำ"),
+            title: Text(LocaleKeys.book_recommended.tr()),
             onTap: () {
               Navigator.push(
                 context,
@@ -137,7 +139,7 @@ class _PublicDrawerState extends State<PublicDrawer> {
           ),
           ListTile(
             leading: Icon(Icons.star),
-            title: Text("หนังสือยอดนิยม"),
+            title: Text(LocaleKeys.book_popular.tr()),
             onTap: () {
               Navigator.push(
                 context,
@@ -147,7 +149,7 @@ class _PublicDrawerState extends State<PublicDrawer> {
           ),
           ListTile(
             leading: Icon(Icons.favorite),
-            title: Text("หนังสือตามหมวดหมู่"),
+            title: Text(LocaleKeys.book_category.tr()),
             onTap: () {
               Navigator.push(
                 context,
@@ -158,7 +160,7 @@ class _PublicDrawerState extends State<PublicDrawer> {
           ),
           ListTile(
             leading: Icon(Icons.fax),
-            title: Text("หนังสือตามสำนักพิมพ์"),
+            title: Text(LocaleKeys.book_publisher.tr()),
             onTap: () {
               Navigator.push(
                 context,
@@ -169,7 +171,7 @@ class _PublicDrawerState extends State<PublicDrawer> {
           ),
           ListTile(
             leading: Icon(Icons.settings),
-            title: Text("การตั้งค่า"),
+            title: Text(LocaleKeys.setting.tr()),
             onTap: () {
               Navigator.push(
                 context,
@@ -179,7 +181,7 @@ class _PublicDrawerState extends State<PublicDrawer> {
           ),
           ListTile(
             leading: Icon(Icons.logout),
-            title: Text("ออกจากระบบ"),
+            title: Text(LocaleKeys.logout.tr()),
             onTap: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
               await prefs.remove('isLoggedIn');

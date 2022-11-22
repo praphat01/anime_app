@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:flutter/gestures.dart';
@@ -9,6 +10,7 @@ import 'dart:convert';
 import 'dart:async';
 import '../pages/splashScreen.dart';
 import '../models/m_user/user_login.dart';
+import 'generated/locale_keys.g.dart';
 
 class login extends StatefulWidget {
   final String uniSname;
@@ -95,8 +97,8 @@ class _loginState extends State<login> {
           showDialog(
               context: context,
               builder: (context) => AlertDialog(
-                    title: Text("ล็อกอินผิดพลาด"),
-                    content: Text("กรุณากรอกข้อมูลให้ถูกต้อง!!"),
+                    title: Text(LocaleKeys.loginFailed.tr()),
+                    content: Text(LocaleKeys.PleaseFillCurrectWord.tr()),
                     actions: [
                       okButton,
                     ],
@@ -160,7 +162,7 @@ class _loginState extends State<login> {
                                           bottom: size.width * .1,
                                         ),
                                         child: Text(
-                                          'SIGN IN ${uniSname}',
+                                          '${LocaleKeys.signin.tr()} ${uniSname.toUpperCase()}',
                                           style: TextStyle(
                                             fontSize: 25,
                                             fontWeight: FontWeight.w600,
@@ -209,7 +211,7 @@ class _loginState extends State<login> {
                                             ),
                                             border: InputBorder.none,
                                             hintMaxLines: 1,
-                                            hintText: 'User name...',
+                                            hintText: LocaleKeys.username.tr(),
                                             hintStyle: TextStyle(
                                               fontSize: 14,
                                               color:
@@ -244,7 +246,7 @@ class _loginState extends State<login> {
                                             ),
                                             border: InputBorder.none,
                                             hintMaxLines: 1,
-                                            hintText: 'Password...',
+                                            hintText: LocaleKeys.password.tr(),
                                             hintStyle: TextStyle(
                                               fontSize: 14,
                                               color:
@@ -265,7 +267,8 @@ class _loginState extends State<login> {
                                         children: [
                                           RichText(
                                             text: TextSpan(
-                                              text: 'Forgotten password!',
+                                              text: LocaleKeys.forgetPassword
+                                                  .tr(),
                                               style: TextStyle(
                                                 color: Colors.white,
                                               ),
@@ -273,15 +276,17 @@ class _loginState extends State<login> {
                                                 ..onTap = () {
                                                   HapticFeedback.lightImpact();
                                                   Fluttertoast.showToast(
-                                                    msg:
-                                                        'Forgotten password! button pressed',
+                                                    msg: LocaleKeys
+                                                        .alertForgetPassword
+                                                        .tr(),
                                                   );
                                                 },
                                             ),
                                           ),
                                           RichText(
                                             text: TextSpan(
-                                              text: 'Create a new Account',
+                                              text: LocaleKeys.createNewAccount
+                                                  .tr(),
                                               style: TextStyle(
                                                 color: Colors.white,
                                               ),
@@ -289,8 +294,9 @@ class _loginState extends State<login> {
                                                 ..onTap = () {
                                                   HapticFeedback.lightImpact();
                                                   Fluttertoast.showToast(
-                                                    msg:
-                                                        'Create a new Account button pressed',
+                                                    msg: LocaleKeys
+                                                        .alertCreateAccount
+                                                        .tr(),
                                                   );
                                                 },
                                             ),
@@ -309,7 +315,7 @@ class _loginState extends State<login> {
                                           );
                                           HapticFeedback.lightImpact();
                                           Fluttertoast.showToast(
-                                            msg: 'Sign-In button pressed',
+                                            msg: LocaleKeys.alertSignIn.tr(),
                                           );
                                         },
                                         child: Container(
@@ -325,7 +331,7 @@ class _loginState extends State<login> {
                                                 BorderRadius.circular(20),
                                           ),
                                           child: Text(
-                                            'Sign-In',
+                                            LocaleKeys.buttonSignin.tr(),
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 20,

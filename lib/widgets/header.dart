@@ -1,3 +1,6 @@
+import 'package:anime_app/generated/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 import '../constants/colors.dart';
 import '../constants/sliver_head_delegate.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +25,7 @@ class Header extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      '2EBOOK.COM',
+                      LocaleKeys.title2ebook.tr(),
                       style: Theme.of(context)
                           .textTheme
                           .headline6
@@ -34,7 +37,7 @@ class Header extends StatelessWidget {
               ),
               const SizedBox(height: 5),
               Text(
-                "What you would like to read today ?",
+                LocaleKeys.headWellcome.tr(),
                 style: Theme.of(context)
                     .textTheme
                     .subtitle1

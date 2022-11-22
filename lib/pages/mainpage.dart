@@ -1,6 +1,8 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import '../generated/locale_keys.g.dart';
 import '../pages/homepage.dart';
 import '../pages/bookshelf.dart';
 import '../pages/book_publisher.dart';
@@ -50,26 +52,26 @@ class _MainPageState extends State<MainPage> {
         padding: const EdgeInsets.only(top: 5),
         child: Scaffold(
           bottomNavigationBar: BottomNavigationBar(
-            items: const [
+            items: [
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
                 backgroundColor: Colors.white,
-                label: "หน้าหลัก",
+                label: LocaleKeys.menu_mainpage.tr(),
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.bookmark),
                 backgroundColor: Colors.white,
-                label: "ชั้นหนังสือ",
+                label: LocaleKeys.menu_Bookshelf.tr(),
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.favorite),
                 backgroundColor: Colors.white,
-                label: "หมวดหมู่",
+                label: LocaleKeys.menu_category.tr(),
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.fax),
                 backgroundColor: Colors.white,
-                label: "สำนักพิมพ์",
+                label: LocaleKeys.menu_publisher.tr(),
               ),
             ],
             selectedItemColor: AnimeUI.cyan,

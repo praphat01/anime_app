@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../generated/locale_keys.g.dart';
 import '../models/m_user/user_bookFaverite.dart';
 import '../pages/detailpage.dart';
 import '../constants/colors.dart';
@@ -81,7 +83,7 @@ class _book_faveritesState extends State<book_faverites> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'หนังสือเล่มโปรด',
+          LocaleKeys.book_faverite.tr(),
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: AnimeUI.cyan,

@@ -2,12 +2,14 @@
 import 'dart:math';
 
 import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../generated/locale_keys.g.dart';
 import '../models/m_allbook/user_bookshelf.dart';
 import '../pages/detailpage.dart';
 import '../constants/colors.dart';
@@ -273,8 +275,8 @@ class _bookshelfState extends State<bookshelf> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
-          "ชั้นหนังสือ",
+        title: Text(
+          LocaleKeys.menu_Bookshelf.tr(),
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: AnimeUI.cyan,
@@ -359,8 +361,8 @@ class _bookshelfState extends State<bookshelf> {
                                             Icons.download,
                                             size: 24.0,
                                           ),
-                                          label: const Text(
-                                            'โหลดหนังสือ',
+                                          label: Text(
+                                            LocaleKeys.download.tr(),
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 20,
@@ -447,8 +449,8 @@ class _bookshelfState extends State<bookshelf> {
                                             Icons.menu_book,
                                             size: 24.0,
                                           ),
-                                          label: const Text(
-                                            'อ่านหนังสือ  ',
+                                          label: Text(
+                                            '${LocaleKeys.read.tr()}  ',
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 20,
@@ -525,8 +527,8 @@ class _bookshelfState extends State<bookshelf> {
                                             Icons.feed_rounded,
                                             size: 24.0,
                                           ),
-                                          label: const Text(
-                                            'รายละเอียด ',
+                                          label: Text(
+                                            '${LocaleKeys.detailsData.tr()} ',
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 20,
@@ -556,8 +558,8 @@ class _bookshelfState extends State<bookshelf> {
                                             Icons.keyboard_return_outlined,
                                             size: 24.0,
                                           ),
-                                          label: const Text(
-                                            'คืนหนังสือ    ',
+                                          label: Text(
+                                            '${LocaleKeys.returnBook.tr()}    ',
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 20,
@@ -632,9 +634,9 @@ class _bookshelfState extends State<bookshelf> {
                   }),
             )
           : Container(
-              child: const Center(
+              child: Center(
                 child: Text(
-                  "ไม่พบหนังสือ",
+                  LocaleKeys.noBook.tr(),
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,

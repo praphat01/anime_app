@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+
 import '../login_page.dart';
 import '../models/m_uni/uni.dart';
 // import 'package:cached_network_image/cached_network_image.dart';
@@ -5,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import '/pages/search/search_uni.dart';
+import 'generated/locale_keys.g.dart';
 
 class HomePagemain extends StatefulWidget {
   const HomePagemain({Key? key}) : super(key: key);
@@ -53,7 +56,7 @@ class _HomePagemainState extends State<HomePagemain> {
             children: <Widget>[
               Container(
                 width: double.infinity,
-                height: 190,
+                height: 200,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   image: DecorationImage(
@@ -79,7 +82,7 @@ class _HomePagemainState extends State<HomePagemain> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       Text(
-                        "Search your library",
+                        LocaleKeys.searchYourLibrary.tr(),
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 35,
@@ -96,7 +99,7 @@ class _HomePagemainState extends State<HomePagemain> {
                             prefixIcon: Icon(Icons.search),
                             filled: true,
                             fillColor: Colors.white,
-                            hintText: 'Find your Libraly..',
+                            hintText: LocaleKeys.findYourLibrary.tr(),
                             focusedBorder: OutlineInputBorder(
                               borderSide:
                                   BorderSide(color: Colors.grey.shade600),
@@ -119,11 +122,12 @@ class _HomePagemainState extends State<HomePagemain> {
                             // return searchloading();
                           }));
                         },
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.orange),
                         // splashColor: Color(0xfff012AC0),
                         // color: Colors.orange,
                         child: Text(
-                          "SEARCH",
+                          LocaleKeys.uniButtonSearch.tr(),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,

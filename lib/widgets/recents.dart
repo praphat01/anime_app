@@ -1,4 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
+
 import '../constants/colors.dart';
+import '../generated/locale_keys.g.dart';
 import '../widgets/recentslist.dart';
 import 'package:flutter/material.dart';
 import '../pages/booklist_homepage.dart';
@@ -23,7 +26,7 @@ class Recents extends StatelessWidget {
                 child: Row(
                   children: [
                     Expanded(
-                        child: Text("หนังสือใหม่",
+                        child: Text(LocaleKeys.newBook.tr(),
                             style: Theme.of(context)
                                 .textTheme
                                 .headline6
@@ -32,7 +35,7 @@ class Recents extends StatelessWidget {
                                     fontWeight: FontWeight.bold))),
                     InkWell(
                       child: Text(
-                        "View all",
+                        LocaleKeys.view_all.tr(),
                         style: Theme.of(context).textTheme.subtitle2?.copyWith(
                             color: AnimeUI.cyan, fontWeight: FontWeight.bold),
                       ),

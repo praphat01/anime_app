@@ -1,6 +1,7 @@
 // import 'package:anime_app/pages/homepage.dart';
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,11 +9,12 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'constants/colors.dart';
 import '../pages/splashScreen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../pages/bookshelf.dart';
+import 'generated/codegen_loader.g.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
 
   // Plugin must be initialized before using
   await FlutterDownloader.initialize(
@@ -22,7 +24,14 @@ void main() async {
       );
   // FlutterDownloader.registerCallback(bookshelf.download);
   HttpOverrides.global = MyHttpOverrides();
-  runApp(const MyApp());
+  runApp(
+    EasyLocalization(
+        supportedLocales: [Locale('en'), Locale('th')],
+        path: 'assets/translations',
+        fallbackLocale: Locale('en'),
+        assetLoader: CodegenLoader(),
+        child: MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -38,19 +47,22 @@ class MyApp extends StatelessWidget {
     );
     return MaterialApp(
       title: '2EBOOK',
-
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       theme: ThemeData.light().copyWith(
           scaffoldBackgroundColor: AnimeUI.background,
           textTheme: GoogleFonts.sourceSansProTextTheme()),
       debugShowCheckedModeBanner: false,
       // home: const HomePage(),
-      localizationsDelegates: const [
-        S.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: S.supportedLocales,
+
+      // localizationsDelegates: const [
+      //   S.delegate,
+      //   GlobalMaterialLocalizations.delegate,
+      //   GlobalWidgetsLocalizations.delegate,
+      //   GlobalCupertinoLocalizations.delegate,
+      // ],
+      // supportedLocales: S.supportedLocales,
       home: const splashScreen(),
     );
   }

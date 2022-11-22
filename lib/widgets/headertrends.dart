@@ -1,5 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
+
 import '../constants/colors.dart';
 import 'package:flutter/material.dart';
+import '../generated/locale_keys.g.dart';
 import '../pages/booklist_homepage.dart';
 
 class HeaderTrends extends StatelessWidget {
@@ -12,12 +15,12 @@ class HeaderTrends extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-              child: Text("หนังสือแนะนำ",
+              child: Text(LocaleKeys.book_recommended.tr(),
                   style: Theme.of(context).textTheme.headline6?.copyWith(
                       color: AnimeUI.cyan, fontWeight: FontWeight.bold))),
           InkWell(
             child: Text(
-              "View all",
+              LocaleKeys.view_all.tr(),
               style: Theme.of(context)
                   .textTheme
                   .subtitle2

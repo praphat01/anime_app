@@ -1,6 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../generated/locale_keys.g.dart';
 
 class userProfile extends StatefulWidget {
   const userProfile({Key? key}) : super(key: key);
@@ -60,7 +63,7 @@ class _userProfileState extends State<userProfile> {
         ),
         backgroundColor: AnimeUI.cyan,
         title: Text(
-          'USER PROFILE ',
+          LocaleKeys.data_frofile.tr(),
           style: TextStyle(color: Colors.white),
         ),
       ),
@@ -128,8 +131,8 @@ class _userProfileState extends State<userProfile> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text(
-                      "ข้อมูลผู้ใช้งาน",
+                    Text(
+                      LocaleKeys.userData.tr(),
                       style: TextStyle(
                         fontFamily: "Montserrat",
                         color: Colors.black87,
@@ -140,15 +143,16 @@ class _userProfileState extends State<userProfile> {
                     const SizedBox(
                       height: 16,
                     ),
-                    listProfile(Icons.person, "Full Name",
+                    listProfile(Icons.person, LocaleKeys.fullName.tr(),
                         "${userName} ${userLastname}"),
-                    listProfile(
-                        Icons.alternate_email, "E-mail", "${userEmail}"),
-                    listProfile(Icons.location_pin, "Location",
+                    listProfile(Icons.alternate_email, LocaleKeys.email.tr(),
+                        "${userEmail}"),
+                    listProfile(Icons.location_pin, LocaleKeys.location.tr(),
                         "${userAddress} ${userState} ${userPostcode}"),
-                    listProfile(Icons.phone, "Home Number", "${userHomeno}"),
-                    listProfile(
-                        Icons.phone_android, "Phone Number", "${userMobileno}"),
+                    listProfile(Icons.phone, LocaleKeys.homeNumber.tr(),
+                        "${userHomeno}"),
+                    listProfile(Icons.phone_android,
+                        LocaleKeys.phoneNumber.tr(), "${userMobileno}"),
                   ],
                 ),
               ),

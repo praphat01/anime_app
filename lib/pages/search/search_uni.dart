@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import '../../generated/locale_keys.g.dart';
 import '../../models/m_uni/uni.dart';
 import '../../login_page.dart';
 import '../../home_page.dart';
@@ -51,7 +53,7 @@ class _searchloadingUniState extends State<searchloadingUni> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          "UNIVERSITY LIST.",
+          LocaleKeys.search_result.tr(),
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: AnimeUI.cyan,
@@ -116,7 +118,7 @@ class _searchloadingUniState extends State<searchloadingUni> {
                                 ),
                                 Flexible(
                                   child: Text(
-                                    'ชื่อย่อ : ${dataUniSearch[index]!.uniSname.toString()}',
+                                    '${LocaleKeys.initials.tr()} : ${dataUniSearch[index]!.uniSname.toString()}',
                                   ),
                                 ),
                                 SizedBox(
@@ -152,10 +154,12 @@ class _searchloadingUniState extends State<searchloadingUni> {
                                                         .toString(),
                                               )),
                                     );
-                                  },style: ElevatedButton.styleFrom(backgroundColor: AnimeUI.cyan),
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: AnimeUI.cyan),
                                   // color: AnimeUI.cyan,
                                   child: Text(
-                                    "Click to Login.",
+                                    LocaleKeys.clickToLogin.tr(),
                                     style: TextStyle(color: Colors.white),
                                   ),
                                 )

@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../generated/locale_keys.g.dart';
 import '../../models/m_search/search.dart';
 import '../../pages/detailpage.dart';
 import '../../constants/colors.dart';
@@ -72,7 +74,7 @@ class _searchloadingState extends State<searchloading> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          "SEARCH RESULT.",
+          LocaleKeys.search_result.tr(),
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: AnimeUI.cyan,
@@ -225,7 +227,7 @@ class _searchloadingState extends State<searchloading> {
                                       backgroundColor: AnimeUI.cyan),
                                   // color: AnimeUI.cyan,
                                   child: Text(
-                                    "DETAILS",
+                                    LocaleKeys.details.tr(),
                                     style: TextStyle(color: Colors.white),
                                   ),
                                 )

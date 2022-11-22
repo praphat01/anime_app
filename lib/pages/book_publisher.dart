@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import '../generated/locale_keys.g.dart';
 import '../widgets/leftmenu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -53,7 +55,7 @@ class _bookPublisherState extends State<bookPublisher> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            "สำนักพิมพ์",
+            LocaleKeys.menu_publisher.tr(),
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: AnimeUI.cyan,

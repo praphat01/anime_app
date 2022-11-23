@@ -24,7 +24,6 @@ class _settingState extends State<setting> {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: AnimeUI.cyan,
-            fontSize: 15,
           ),
         ),
         backgroundColor: Colors.white,
@@ -106,7 +105,7 @@ class _settingState extends State<setting> {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: const Text("close")),
+                      child: Text(LocaleKeys.close.tr())),
                 ],
               );
             });
@@ -141,3 +140,8 @@ class _settingState extends State<setting> {
     }
   }
 }
+
+// command for genarate update word 
+// step 1 :  Deletefile locale_keys.g.dart
+// step 2 :  flutter pub run easy_localization:generate -S "assets/translations"
+// step 3 :  flutter pub run easy_localization:generate -f keys -o locale_keys.g.dart -S "assets/translation

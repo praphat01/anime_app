@@ -77,5 +77,7 @@ abstract class  LocaleKeys {
   static const homeNumber = 'homeNumber';
   static const phoneNumber = 'phoneNumber';
   static const location = 'location';
+  static const close = 'close';
+  static const downloadFinished = 'downloadFinished';
 
 }

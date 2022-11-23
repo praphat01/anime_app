@@ -62,7 +62,10 @@ class _PublicDrawerState extends State<PublicDrawer> {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.bookmark),
+            leading: Icon(
+              Icons.bookmark,
+              color: Colors.blue,
+            ),
             title: Text(LocaleKeys.bookshelf.tr()),
             onTap: () {
               Navigator.push(
@@ -73,7 +76,10 @@ class _PublicDrawerState extends State<PublicDrawer> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.favorite),
+            leading: Icon(
+              Icons.favorite,
+              color: Colors.red,
+            ),
             title: Text(LocaleKeys.book_faverite.tr()),
             onTap: () {
               Navigator.push(
@@ -83,7 +89,10 @@ class _PublicDrawerState extends State<PublicDrawer> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.access_time),
+            leading: Icon(
+              Icons.access_time,
+              color: Colors.grey[600],
+            ),
             title: Text(LocaleKeys.book_history.tr()),
             onTap: () {
               Navigator.push(
@@ -93,7 +102,10 @@ class _PublicDrawerState extends State<PublicDrawer> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.attach_file),
+            leading: Icon(
+              Icons.attach_file,
+              color: Colors.green,
+            ),
             title: Text(LocaleKeys.data_frofile.tr()),
             onTap: () {
               Navigator.push(
@@ -107,7 +119,10 @@ class _PublicDrawerState extends State<PublicDrawer> {
             child: Text(LocaleKeys.menu.tr()),
           ),
           ListTile(
-            leading: Icon(Icons.home),
+            leading: Icon(
+              Icons.home,
+              color: Colors.orange,
+            ),
             title: Text(LocaleKeys.homepage.tr()),
             onTap: () {
               Navigator.push(
@@ -118,7 +133,10 @@ class _PublicDrawerState extends State<PublicDrawer> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.book),
+            leading: Icon(
+              Icons.book,
+              color: Colors.greenAccent,
+            ),
             title: Text(LocaleKeys.newBook.tr()),
             onTap: () {
               Navigator.push(
@@ -128,7 +146,10 @@ class _PublicDrawerState extends State<PublicDrawer> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.recommend),
+            leading: Icon(
+              Icons.recommend,
+              color: Colors.blue,
+            ),
             title: Text(LocaleKeys.book_recommended.tr()),
             onTap: () {
               Navigator.push(
@@ -138,7 +159,10 @@ class _PublicDrawerState extends State<PublicDrawer> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.star),
+            leading: Icon(
+              Icons.star,
+              color: Colors.yellow,
+            ),
             title: Text(LocaleKeys.book_popular.tr()),
             onTap: () {
               Navigator.push(
@@ -148,7 +172,10 @@ class _PublicDrawerState extends State<PublicDrawer> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.favorite),
+            leading: Icon(
+              Icons.favorite,
+              color: Colors.pink,
+            ),
             title: Text(LocaleKeys.book_category.tr()),
             onTap: () {
               Navigator.push(
@@ -159,7 +186,10 @@ class _PublicDrawerState extends State<PublicDrawer> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.fax),
+            leading: Icon(
+              Icons.fax,
+              color: Colors.deepOrange,
+            ),
             title: Text(LocaleKeys.book_publisher.tr()),
             onTap: () {
               Navigator.push(
@@ -170,7 +200,10 @@ class _PublicDrawerState extends State<PublicDrawer> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.settings),
+            leading: Icon(
+              Icons.settings,
+              color: Colors.black,
+            ),
             title: Text(LocaleKeys.setting.tr()),
             onTap: () {
               Navigator.push(
@@ -180,7 +213,10 @@ class _PublicDrawerState extends State<PublicDrawer> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.logout),
+            leading: Icon(
+              Icons.logout,
+              color: Colors.red,
+            ),
             title: Text(LocaleKeys.logout.tr()),
             onTap: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();

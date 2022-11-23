@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:http/http.dart';
 import 'dart:io';
-import 'package:path_provider/path_provider.dart';
-import 'package:path_provider_android/path_provider_android.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'dart:isolate';
 import 'dart:ui';
 import 'dart:async';
@@ -472,8 +469,8 @@ class _detailPageState extends State<detailPage> {
                                   ),
                                   onPressed: () {
                                     // _showDialog();
-                                    borrowStatus ? borrowBook() : '';
-                                    // borrowBook();
+                                    // borrowStatus ? borrowBook() : '';
+                                    borrowBook();
                                   },
                                   child: Text(
                                     LocaleKeys.borrow.tr(),

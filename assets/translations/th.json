@@ -74,6 +74,8 @@
     "fullName" : "ชื่อ นามสกุล",
     "homeNumber" : "เบอร์บ้าน",
     "phoneNumber" : "เบอร์มือถือ",
-    "location" : "ที่อยู่"
+    "location" : "ที่อยู่",
+    "close": "ปิด",
+    "downloadFinished" : "ดาวน์โหลดเสร็จสิ้น"
 
 }

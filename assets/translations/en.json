@@ -76,7 +76,10 @@
     "phoneNumber" : "Phone Number",
     "location" : "Location",
     "close": "Close",
-    "downloadFinished" : "Download Book finished."
+    "downloadFinished" : "Download Book finished.",
+    "readFailed": "Read Failed",
+    "readFailed_details": "Can't Read, Please download Book before Reading"
+
 
     
   

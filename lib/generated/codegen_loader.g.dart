@@ -92,7 +92,9 @@ class CodegenLoader extends AssetLoader{
   "phoneNumber": "Phone Number",
   "location": "Location",
   "close": "Close",
-  "downloadFinished": "Download Book finished."
+  "downloadFinished": "Download Book finished.",
+  "readFailed": "Read Failed",
+  "readFailed_details": "Can't Read, Please download Book before Reading"
 };
 static const Map<String,dynamic> th = {
   "title2ebook": "2Ebook",
@@ -172,7 +174,9 @@ static const Map<String,dynamic> th = {
   "phoneNumber": "เบอร์มือถือ",
   "location": "ที่อยู่",
   "close": "ปิด",
-  "downloadFinished": "ดาวน์โหลดเสร็จสิ้น"
+  "downloadFinished": "ดาวน์โหลดเสร็จสิ้น",
+  "readFailed": "อ่านหนังสือผิดพลาด",
+  "readFailed_details": "ไม่สามารถเปิดได้ เนื่องจากหนังสือยังไม่ได้ดาวน์โหลด"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en": en, "th": th};
 }

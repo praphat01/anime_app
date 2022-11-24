@@ -368,7 +368,7 @@ class _bookshelfState extends State<bookshelf> {
                                                 label: Text(
                                                   '${LocaleKeys.download.tr()}    ',
                                                   textAlign: TextAlign.center,
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 20,
                                                   ),
@@ -444,7 +444,10 @@ class _bookshelfState extends State<bookshelf> {
                                                             ),
                                                           ));
                                                     }
-                                                  } else {}
+                                                  } else {
+                                                    Navigator.of(context).pop();
+                                                    AlertNoBook();
+                                                  }
                                                 },
                                                 style: ElevatedButton.styleFrom(
                                                   backgroundColor: AnimeUI
@@ -457,7 +460,7 @@ class _bookshelfState extends State<bookshelf> {
                                                 label: Text(
                                                   '${LocaleKeys.read.tr()}             ',
                                                   textAlign: TextAlign.center,
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 20,
                                                   ),
@@ -550,7 +553,7 @@ class _bookshelfState extends State<bookshelf> {
                                                 label: Text(
                                                   '${LocaleKeys.detailsData.tr()}            ',
                                                   textAlign: TextAlign.center,
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 20,
                                                   ),
@@ -586,7 +589,7 @@ class _bookshelfState extends State<bookshelf> {
                                                 label: Text(
                                                   '${LocaleKeys.returnBook.tr()}',
                                                   textAlign: TextAlign.center,
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 20,
                                                   ),
@@ -670,7 +673,7 @@ class _bookshelfState extends State<bookshelf> {
               child: Center(
                 child: Text(
                   LocaleKeys.noBook.tr(),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.grey,
@@ -680,6 +683,29 @@ class _bookshelfState extends State<bookshelf> {
               ),
             ),
     );
+  }
+
+  Future AlertNoBook() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(LocaleKeys.readFailed.tr()),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(LocaleKeys.readFailed_details.tr()),
+              ],
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(LocaleKeys.close.tr())),
+            ],
+          );
+        });
   }
 }
 

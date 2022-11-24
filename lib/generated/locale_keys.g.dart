@@ -79,5 +79,7 @@ abstract class  LocaleKeys {
   static const location = 'location';
   static const close = 'close';
   static const downloadFinished = 'downloadFinished';
+  static const readFailed = 'readFailed';
+  static const readFailed_details = 'readFailed_details';
 
 }

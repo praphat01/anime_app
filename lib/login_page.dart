@@ -48,8 +48,15 @@ class _loginState extends State<login> {
     if (Platform.isAndroid) WebView.platform = AndroidWebView();
   }
 
+  Widget modalWebview() {
+    return Container(
+      height: 600.0, // Change as per your requirement
+      width: 340.0, // Change as per your requirement
+      child: WebViewExample(),
+    );
+  }
+
   Future doLogin(String user, password, uniId) async {
-    print(widget.uniLink);
     try {
       Response response = await post(
           Uri.parse('${widget.uniLink}/login_lib.php'),
@@ -58,8 +65,6 @@ class _loginState extends State<login> {
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
         userData = user_login.fromJson(data).result as List<Result?>;
-
-        print(userData[0]!.userId);
 
         if (data['status'] == 'true') {
           // print(data);
@@ -302,13 +307,37 @@ class _loginState extends State<login> {
                                               ),
                                               recognizer: TapGestureRecognizer()
                                                 ..onTap = () {
-                                                  showSheet();
-                                                  // HapticFeedback.lightImpact();
-                                                  // Fluttertoast.showToast(
-                                                  //   msg: LocaleKeys
-                                                  //       .alertCreateAccount
-                                                  //       .tr(),
-                                                  // );
+                                                  showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return AlertDialog(
+                                                        title: Column(
+                                                          children: <Widget>[
+                                                            Align(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .topRight,
+                                                              child: IconButton(
+                                                                icon:
+                                                                    const Icon(
+                                                                  Icons.close,
+                                                                  color: Colors
+                                                                      .red,
+                                                                  size: 25,
+                                                                ),
+                                                                onPressed: () {
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        content: modalWebview(),
+                                                      );
+                                                    },
+                                                  );
                                                 },
                                             ),
                                           ),
@@ -372,114 +401,7 @@ class _loginState extends State<login> {
       ),
     );
   }
-
-  // Widget component(IconData icon, String hintText, bool isPassword,
-  //     bool isEmail, String datafiled) {
-  //   Size size = MediaQuery.of(context).size;
-  //   return Container(
-  //     height: size.width / 8,
-  //     width: size.width / 1.25,
-  //     alignment: Alignment.center,
-  //     padding: EdgeInsets.only(right: size.width / 30),
-  //     decoration: BoxDecoration(
-  //       color: Colors.black.withOpacity(.1),
-  //       borderRadius: BorderRadius.circular(20),
-  //     ),
-  //     child: TextFormField(
-  //       style: TextStyle(
-  //         color: Colors.white.withOpacity(.9),
-  //       ),
-  //       obscureText: isPassword,
-  //       keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,
-  //       decoration: InputDecoration(
-  //         prefixIcon: Icon(
-  //           icon,
-  //           color: Colors.white.withOpacity(.8),
-  //         ),
-  //         border: InputBorder.none,
-  //         hintMaxLines: 1,
-  //         hintText: hintText,
-  //         hintStyle: TextStyle(
-  //           fontSize: 14,
-  //           color: Colors.white.withOpacity(.5),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-  Future showSheet() => showSlidingBottomSheet(context,
-      builder: (context) => SlidingSheetDialog(
-            cornerRadius: 16,
-            avoidStatusBar: true,
-            snapSpec: SnapSpec(
-              initialSnap: 0.8,
-              snappings: [0.4, 0.8, 0.9],
-            ),
-            builder: buildSheet,
-            headerBuilder: buildHeader,
-          ));
-
-  Widget buildSheet(context, state) => Material(
-        child: ListView(
-            shrinkWrap: true,
-            primary: false,
-            padding: EdgeInsets.all(16),
-            children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    shape: StadiumBorder(),
-                    padding: EdgeInsets.symmetric(horizontal: 40)),
-                child: Text('Close'),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-              SizedBox(height: 24),
-
-              // WebViewExample(),
-
-              Text(
-                  "A 2013 study from Oxford University concluded that the most disputed articles on the English Wikipedia tended to be broader issues, while on other language Wikipedias the most disputed articles tended to be regional issues; this is due to the English language's status as a global lingua franca, which means that some who edit the English Wikipedia have English as their second language. The study stated that the most disputed entries on the English Wikipedia were"),
-              Text(
-                  "A 2013 study from Oxford University concluded that the most disputed articles on the English Wikipedia tended to be broader issues, while on other language Wikipedias the most disputed articles tended to be regional issues; this is due to the English language's status as a global lingua franca, which means that some who edit the English Wikipedia have English as their second language. The study stated that the most disputed entries on the English Wikipedia were"),
-              Text(
-                  "A 2013 study from Oxford University concluded that the most disputed articles on the English Wikipedia tended to be broader issues, while on other language Wikipedias the most disputed articles tended to be regional issues; this is due to the English language's status as a global lingua franca, which means that some who edit the English Wikipedia have English as their second language. The study stated that the most disputed entries on the English Wikipedia were"),
-              Text(
-                  "A 2013 study from Oxford University concluded that the most disputed articles on the English Wikipedia tended to be broader issues, while on other language Wikipedias the most disputed articles tended to be regional issues; this is due to the English language's status as a global lingua franca, which means that some who edit the English Wikipedia have English as their second language. The study stated that the most disputed entries on the English Wikipedia were"),
-              Text(
-                  "A 2013 study from Oxford University concluded that the most disputed articles on the English Wikipedia tended to be broader issues, while on other language Wikipedias the most disputed articles tended to be regional issues; this is due to the English language's status as a global lingua franca, which means that some who edit the English Wikipedia have English as their second language. The study stated that the most disputed entries on the English Wikipedia were"),
-              Text(
-                  "A 2013 study from Oxford University concluded that the most disputed articles on the English Wikipedia tended to be broader issues, while on other language Wikipedias the most disputed articles tended to be regional issues; this is due to the English language's status as a global lingua franca, which means that some who edit the English Wikipedia have English as their second language. The study stated that the most disputed entries on the English Wikipedia were"),
-              Text(
-                  "A 2013 study from Oxford University concluded that the most disputed articles on the English Wikipedia tended to be broader issues, while on other language Wikipedias the most disputed articles tended to be regional issues; this is due to the English language's status as a global lingua franca, which means that some who edit the English Wikipedia have English as their second language. The study stated that the most disputed entries on the English Wikipedia were"),
-              Text(
-                  "A 2013 study from Oxford University concluded that the most disputed articles on the English Wikipedia tended to be broader issues, while on other language Wikipedias the most disputed articles tended to be regional issues; this is due to the English language's status as a global lingua franca, which means that some who edit the English Wikipedia have English as their second language. The study stated that the most disputed entries on the English Wikipedia were"),
-              Text(
-                  "A 2013 study from Oxford University concluded that the most disputed articles on the English Wikipedia tended to be broader issues, while on other language Wikipedias the most disputed articles tended to be regional issues; this is due to the English language's status as a global lingua franca, which means that some who edit the English Wikipedia have English as their second language. The study stated that the most disputed entries on the English Wikipedia were"),
-              Text(
-                  "A 2013 study from Oxford University concluded that the most disputed articles on the English Wikipedia tended to be broader issues, while on other language Wikipedias the most disputed articles tended to be regional issues; this is due to the English language's status as a global lingua franca, which means that some who edit the English Wikipedia have English as their second language. The study stated that the most disputed entries on the English Wikipedia were"),
-            ]),
-      );
 }
-
-Widget buildHeader(BuildContext context, SheetState state) => Material(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          const SizedBox(height: 16),
-          Center(
-            child: Container(
-              // color: Colors.blue,
-              width: 32,
-              height: 8,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Colors.grey[600],
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-        ],
-      ),
-    );
 
 class MyBehavior extends ScrollBehavior {
   @override

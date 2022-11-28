@@ -94,7 +94,8 @@ class CodegenLoader extends AssetLoader{
   "close": "Close",
   "downloadFinished": "Download Book finished.",
   "readFailed": "Read Failed",
-  "readFailed_details": "Can't Read, Please download Book before Reading"
+  "readFailed_details": "Can't Read, Please download Book before Reading",
+  "contents": "Contents"
 };
 static const Map<String,dynamic> th = {
   "title2ebook": "2Ebook",
@@ -176,7 +177,8 @@ static const Map<String,dynamic> th = {
   "close": "ปิด",
   "downloadFinished": "ดาวน์โหลดเสร็จสิ้น",
   "readFailed": "อ่านหนังสือผิดพลาด",
-  "readFailed_details": "ไม่สามารถเปิดได้ เนื่องจากหนังสือยังไม่ได้ดาวน์โหลด"
+  "readFailed_details": "ไม่สามารถเปิดได้ เนื่องจากหนังสือยังไม่ได้ดาวน์โหลด",
+  "contents": "สารบัญ"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en": en, "th": th};
 }

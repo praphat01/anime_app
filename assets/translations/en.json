@@ -78,7 +78,8 @@
     "close": "Close",
     "downloadFinished" : "Download Book finished.",
     "readFailed": "Read Failed",
-    "readFailed_details": "Can't Read, Please download Book before Reading"
+    "readFailed_details": "Can't Read, Please download Book before Reading",
+    "contents": "Contents"
 
 
     

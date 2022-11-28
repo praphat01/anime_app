@@ -389,7 +389,7 @@ class _detailPageState extends State<detailPage> {
                                     bookTitle,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -439,7 +439,7 @@ class _detailPageState extends State<detailPage> {
                                         });
                                         clickFavBook(book: 'unFavBook');
                                       },
-                                      child: Icon(
+                                      child: const Icon(
                                         Icons.favorite,
                                         color: Colors.red,
                                         size: 25.0,
@@ -452,7 +452,7 @@ class _detailPageState extends State<detailPage> {
                                         });
                                         clickFavBook(book: 'favBook');
                                       },
-                                      child: Icon(
+                                      child: const Icon(
                                         Icons.favorite_border,
                                         color: Colors.red,
                                         size: 25.0,
@@ -474,7 +474,7 @@ class _detailPageState extends State<detailPage> {
                                   },
                                   child: Text(
                                     LocaleKeys.borrow.tr(),
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 20,
                                         color: Colors.red,
                                         fontWeight: FontWeight.bold),
@@ -488,7 +488,7 @@ class _detailPageState extends State<detailPage> {
                           ),
                           Text(
                             LocaleKeys.bookDetails.tr(),
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           SizedBox(
@@ -496,12 +496,13 @@ class _detailPageState extends State<detailPage> {
                           ),
                           Text(
                             "${LocaleKeys.detailsData.tr()} : ",
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           Text(
                             bookDesc, // รายละเอียดหนังสือ
-                            style: TextStyle(fontSize: 15, color: Colors.grey),
+                            style: const TextStyle(
+                                fontSize: 15, color: Colors.grey),
                           ),
                           SizedBox(
                             height: 10,
@@ -510,13 +511,13 @@ class _detailPageState extends State<detailPage> {
                             children: [
                               Text(
                                 "${LocaleKeys.auther.tr()} : ",
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
                               Text(
                                 bookAuthor, // ชื่อผู้แต่ง
-                                style:
-                                    TextStyle(fontSize: 13, color: Colors.grey),
+                                style: const TextStyle(
+                                    fontSize: 13, color: Colors.grey),
                               ),
                             ],
                           ),
@@ -527,13 +528,13 @@ class _detailPageState extends State<detailPage> {
                             children: [
                               Text(
                                 "${LocaleKeys.publisherData.tr()} : ",
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
                               Text(
                                 publisherName, // ชื่อสำนักพิมพ์
-                                style:
-                                    TextStyle(fontSize: 15, color: Colors.grey),
+                                style: const TextStyle(
+                                    fontSize: 15, color: Colors.grey),
                               ),
                             ],
                           ),
@@ -544,13 +545,13 @@ class _detailPageState extends State<detailPage> {
                             children: [
                               Text(
                                 "${LocaleKeys.typeOfBook.tr()} : ",
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
                               Text(
                                 booktypeName, // ชนิดหนังสือ
-                                style:
-                                    TextStyle(fontSize: 15, color: Colors.grey),
+                                style: const TextStyle(
+                                    fontSize: 15, color: Colors.grey),
                               ),
                             ],
                           ),
@@ -561,7 +562,7 @@ class _detailPageState extends State<detailPage> {
                             children: [
                               Text(
                                 "${LocaleKeys.bookCategory.tr()} : ",
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
                               Text(
@@ -578,10 +579,10 @@ class _detailPageState extends State<detailPage> {
                             children: [
                               Text(
                                 "${LocaleKeys.title.tr()} : ",
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
-                              Text(
+                              const Text(
                                 "-",
                                 style:
                                     TextStyle(fontSize: 15, color: Colors.grey),
@@ -595,13 +596,13 @@ class _detailPageState extends State<detailPage> {
                             children: [
                               Text(
                                 "${LocaleKeys.book_id.tr()} : ",
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
                               Text(
                                 bookId, // รหัสหนังสือ
-                                style:
-                                    TextStyle(fontSize: 15, color: Colors.grey),
+                                style: const TextStyle(
+                                    fontSize: 15, color: Colors.grey),
                               ),
                             ],
                           ),
@@ -612,13 +613,13 @@ class _detailPageState extends State<detailPage> {
                             children: [
                               Text(
                                 "${LocaleKeys.ISBN_number.tr()} : ",
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
                               Text(
                                 bookIsbn, // เลข ISBN
-                                style:
-                                    TextStyle(fontSize: 15, color: Colors.grey),
+                                style: const TextStyle(
+                                    fontSize: 15, color: Colors.grey),
                               ),
                             ],
                           ),
@@ -629,13 +630,13 @@ class _detailPageState extends State<detailPage> {
                             children: [
                               Text(
                                 "${LocaleKeys.pages.tr()} : ",
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
                               Text(
                                 bookNoOfPage, // จำนวนหน้าหนังสือ
-                                style:
-                                    TextStyle(fontSize: 15, color: Colors.grey),
+                                style: const TextStyle(
+                                    fontSize: 15, color: Colors.grey),
                               ),
                             ],
                           ),
@@ -646,13 +647,13 @@ class _detailPageState extends State<detailPage> {
                             children: [
                               Text(
                                 "${LocaleKeys.bookAmount.tr()} : ",
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
                               Text(
                                 onlinetype, // จำนวนหนังสือ
-                                style:
-                                    TextStyle(fontSize: 15, color: Colors.grey),
+                                style: const TextStyle(
+                                    fontSize: 15, color: Colors.grey),
                               ),
                             ],
                           ),
@@ -662,7 +663,7 @@ class _detailPageState extends State<detailPage> {
                         ],
                       ),
                     ),
-                    Text(
+                    const Text(
                       "",
                       style: TextStyle(
                         fontSize: 20,

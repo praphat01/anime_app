@@ -414,6 +414,10 @@ class _bookshelfState extends State<bookshelf> {
                                                                           index]!
                                                                       .pdfLink ??
                                                                   '',
+                                                              book_id: userBookShelflist[
+                                                                          index]!
+                                                                      .bookId ??
+                                                                  '',
                                                             ),
                                                           ));
                                                     } else if (checkTypeOfFile(

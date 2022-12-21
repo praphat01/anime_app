@@ -95,7 +95,20 @@ class CodegenLoader extends AssetLoader{
   "downloadFinished": "Download Book finished.",
   "readFailed": "Read Failed",
   "readFailed_details": "Can't Read, Please download Book before Reading",
-  "contents": "Contents"
+  "contents": "Contents",
+  "exit": "EXIT",
+  "exitDetail": "Do you want to Exit?",
+  "yes": "Yes",
+  "no": "No",
+  "confirm_password": "Confirm password",
+  "form_email": "E-MAIL...",
+  "form_phone": "Phone Number...",
+  "register_success": "Register Success",
+  "register_success_detail": "Register Successfully, Go to login page for login",
+  "regis_error_ip": " IP Location can't register in Library",
+  "backToLogin": "Back to login",
+  "firstName": "Firstname...",
+  "lastName": "Lastname..."
 };
 static const Map<String,dynamic> th = {
   "title2ebook": "2Ebook",
@@ -178,7 +191,20 @@ static const Map<String,dynamic> th = {
   "downloadFinished": "ดาวน์โหลดเสร็จสิ้น",
   "readFailed": "อ่านหนังสือผิดพลาด",
   "readFailed_details": "ไม่สามารถเปิดได้ เนื่องจากหนังสือยังไม่ได้ดาวน์โหลด",
-  "contents": "สารบัญ"
+  "contents": "สารบัญ",
+  "exit": "ออกจากระบบ",
+  "exitDetail": "คุณค้องการออกจากระบบ ใช่หรือไม่?",
+  "yes": "ตกลง",
+  "no": "ยกเลิก",
+  "confirm_password": "ยืนยัน พาสเวิร์ด...",
+  "form_email": "อีเมลล์...",
+  "form_phone": "เบอร์โทร...",
+  "register_success": "สมัครสมาชิก สำเร็จ",
+  "register_success_detail": "สมัครสมาชิกเรียบร้อยแล้ว!! ไปสู่หน้าล็อกอิน",
+  "regis_error_ip": "IP Location ของท่านไม่สามารถ ทำการสมัครสมาชิกห้องสมุดได้",
+  "backToLogin": "กลับไปหน้าล็อกอิน",
+  "firstName": "ชื่อ...",
+  "lastName": "นามสกุล..."
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en": en, "th": th};
 }

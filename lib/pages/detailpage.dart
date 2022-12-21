@@ -124,12 +124,12 @@ class _detailPageState extends State<detailPage> {
 
     var getCheckFav =
         "${uniLink}/get_review_count.php?book_id=${widget.bookId}&uni_id=${uniId}";
+    print(getCheckFav);
     final uri = Uri.parse(getCheckFav);
     http.get(uri).then((response) async {
       if (response.statusCode == 200) {
         final responseBody = response.body;
         final decodedData = jsonDecode(responseBody);
-        print(bookId);
         setState(() {
           var ratingStar = decodedData['result'];
           gottenStar = ratingStar;
@@ -514,10 +514,12 @@ class _detailPageState extends State<detailPage> {
                                 style: const TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
-                              Text(
-                                bookAuthor, // ชื่อผู้แต่ง
-                                style: const TextStyle(
-                                    fontSize: 13, color: Colors.grey),
+                              Flexible(
+                                child: Text(
+                                  bookAuthor, // ชื่อผู้แต่ง
+                                  style: const TextStyle(
+                                      fontSize: 13, color: Colors.grey),
+                                ),
                               ),
                             ],
                           ),
@@ -531,10 +533,12 @@ class _detailPageState extends State<detailPage> {
                                 style: const TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
-                              Text(
-                                publisherName, // ชื่อสำนักพิมพ์
-                                style: const TextStyle(
-                                    fontSize: 15, color: Colors.grey),
+                              Flexible(
+                                child: Text(
+                                  publisherName, // ชื่อสำนักพิมพ์
+                                  style: const TextStyle(
+                                      fontSize: 15, color: Colors.grey),
+                                ),
                               ),
                             ],
                           ),
@@ -548,10 +552,12 @@ class _detailPageState extends State<detailPage> {
                                 style: const TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
-                              Text(
-                                booktypeName, // ชนิดหนังสือ
-                                style: const TextStyle(
-                                    fontSize: 15, color: Colors.grey),
+                              Flexible(
+                                child: Text(
+                                  booktypeName, // ชนิดหนังสือ
+                                  style: const TextStyle(
+                                      fontSize: 15, color: Colors.grey),
+                                ),
                               ),
                             ],
                           ),
@@ -565,10 +571,12 @@ class _detailPageState extends State<detailPage> {
                                 style: const TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
-                              Text(
-                                bookcateName, // หมวดหมู่หนังสือ
-                                style:
-                                    TextStyle(fontSize: 15, color: Colors.grey),
+                              Flexible(
+                                child: Text(
+                                  bookcateName, // หมวดหมู่หนังสือ
+                                  style: TextStyle(
+                                      fontSize: 15, color: Colors.grey),
+                                ),
                               ),
                             ],
                           ),
@@ -599,10 +607,12 @@ class _detailPageState extends State<detailPage> {
                                 style: const TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
-                              Text(
-                                bookId, // รหัสหนังสือ
-                                style: const TextStyle(
-                                    fontSize: 15, color: Colors.grey),
+                              Flexible(
+                                child: Text(
+                                  bookId, // รหัสหนังสือ
+                                  style: const TextStyle(
+                                      fontSize: 15, color: Colors.grey),
+                                ),
                               ),
                             ],
                           ),
@@ -616,10 +626,12 @@ class _detailPageState extends State<detailPage> {
                                 style: const TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
-                              Text(
-                                bookIsbn, // เลข ISBN
-                                style: const TextStyle(
-                                    fontSize: 15, color: Colors.grey),
+                              Flexible(
+                                child: Text(
+                                  bookIsbn, // เลข ISBN
+                                  style: const TextStyle(
+                                      fontSize: 15, color: Colors.grey),
+                                ),
                               ),
                             ],
                           ),
@@ -633,10 +645,12 @@ class _detailPageState extends State<detailPage> {
                                 style: const TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
-                              Text(
-                                bookNoOfPage, // จำนวนหน้าหนังสือ
-                                style: const TextStyle(
-                                    fontSize: 15, color: Colors.grey),
+                              Flexible(
+                                child: Text(
+                                  bookNoOfPage, // จำนวนหน้าหนังสือ
+                                  style: const TextStyle(
+                                      fontSize: 15, color: Colors.grey),
+                                ),
                               ),
                             ],
                           ),
@@ -650,10 +664,12 @@ class _detailPageState extends State<detailPage> {
                                 style: const TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
-                              Text(
-                                onlinetype, // จำนวนหนังสือ
-                                style: const TextStyle(
-                                    fontSize: 15, color: Colors.grey),
+                              Flexible(
+                                child: Text(
+                                  onlinetype, // จำนวนหนังสือ
+                                  style: const TextStyle(
+                                      fontSize: 15, color: Colors.grey),
+                                ),
                               ),
                             ],
                           ),

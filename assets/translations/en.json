@@ -79,7 +79,21 @@
     "downloadFinished" : "Download Book finished.",
     "readFailed": "Read Failed",
     "readFailed_details": "Can't Read, Please download Book before Reading",
-    "contents": "Contents"
+    "contents": "Contents",
+    "exit" : "EXIT",
+    "exitDetail" : "Do you want to Exit?",
+    "yes" : "Yes",
+    "no" : "No",
+    "confirm_password" : "Confirm password",
+    "form_email" : "E-MAIL...",
+    "form_phone" : "Phone Number...",
+    "register_success" : "Register Success",
+    "register_success_detail" : "Register Successfully, Go to login page for login",
+    "regis_error_ip" : " IP Location can't register in Library",
+    "backToLogin" : "Back to login",
+    "firstName" : "Firstname...",
+    "lastName" : "Lastname..."
+
 
 
     

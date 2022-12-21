@@ -116,8 +116,8 @@ class _ebookReaderState extends State<ebookReader> {
             return Card(
               child: ListTile(
                 title: Text(
-                  '${dataBookmark[index]!.title.toString()}',
-                  style: TextStyle(fontSize: 15),
+                  dataBookmark[index]!.title.toString(),
+                  style: const TextStyle(fontSize: 15),
                 ),
                 trailing: Text(dataBookmark[index]!.page.toString()),
                 onTap: () {
@@ -137,7 +137,7 @@ class _ebookReaderState extends State<ebookReader> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          '${widget.bookTitle}',
+          widget.bookTitle,
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             color: AnimeUI.cyan,
@@ -182,7 +182,7 @@ class _ebookReaderState extends State<ebookReader> {
               controller: _pdfViewerController,
             ),
           )
-        : Center(
+        : const Center(
             child: CircularProgressIndicator(),
           );
   }

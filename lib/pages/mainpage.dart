@@ -38,55 +38,84 @@ class _MainPageState extends State<MainPage> {
       debugShowCheckedModeBanner: false,
       title: 'Flutter layout demo',
       home: Container(
-        height: kBottomNavigationBarHeight * 1,
-        decoration: BoxDecoration(
-          color: AnimeUI.background,
-          boxShadow: [
-            BoxShadow(
-              spreadRadius: 7.5,
-              blurRadius: 15,
-              color: AnimeUI.cyan.withOpacity(.45),
-            ),
-          ],
-        ),
-        padding: const EdgeInsets.only(top: 5),
-        child: Scaffold(
-          bottomNavigationBar: BottomNavigationBar(
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                backgroundColor: Colors.white,
-                label: LocaleKeys.menu_mainpage.tr(),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.bookmark),
-                backgroundColor: Colors.white,
-                label: LocaleKeys.menu_Bookshelf.tr(),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.favorite),
-                backgroundColor: Colors.white,
-                label: LocaleKeys.menu_category.tr(),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.fax),
-                backgroundColor: Colors.white,
-                label: LocaleKeys.menu_publisher.tr(),
+          height: kBottomNavigationBarHeight * 1,
+          decoration: BoxDecoration(
+            color: AnimeUI.background,
+            boxShadow: [
+              BoxShadow(
+                spreadRadius: 7.5,
+                blurRadius: 15,
+                color: AnimeUI.cyan.withOpacity(.45),
               ),
             ],
-            selectedItemColor: AnimeUI.cyan,
-            unselectedItemColor: Colors.black,
-            type: BottomNavigationBarType.fixed,
-            currentIndex: index,
-            onTap: (i) {
-              setState(() {
-                index = i;
-              });
-            },
           ),
-          body: _widgetList[index],
-        ),
-      ),
+          padding: const EdgeInsets.only(top: 5),
+          child: WillPopScope(
+            child: Scaffold(
+              bottomNavigationBar: BottomNavigationBar(
+                items: [
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.home),
+                    backgroundColor: Colors.white,
+                    label: LocaleKeys.menu_mainpage.tr(),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.bookmark),
+                    backgroundColor: Colors.white,
+                    label: LocaleKeys.menu_Bookshelf.tr(),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.favorite),
+                    backgroundColor: Colors.white,
+                    label: LocaleKeys.menu_category.tr(),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.fax),
+                    backgroundColor: Colors.white,
+                    label: LocaleKeys.menu_publisher.tr(),
+                  ),
+                ],
+                selectedItemColor: AnimeUI.cyan,
+                unselectedItemColor: Colors.black,
+                type: BottomNavigationBarType.fixed,
+                currentIndex: index,
+                onTap: (i) {
+                  setState(() {
+                    index = i;
+                  });
+                },
+              ),
+              body: _widgetList[index],
+            ),
+            onWillPop: () => _clickForExit(context),
+          )),
     );
+  }
+
+  Future<bool> _clickForExit(BuildContext context) async {
+    bool exitApp = await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(LocaleKeys.exit.tr()),
+            content: Text(LocaleKeys.exitDetail.tr()),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+                child: Text(LocaleKeys.no.tr()),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: Text(LocaleKeys.yes.tr()),
+              ),
+            ],
+          );
+        });
+
+    return exitApp ?? false;
   }
 }

@@ -82,5 +82,18 @@ abstract class  LocaleKeys {
   static const readFailed = 'readFailed';
   static const readFailed_details = 'readFailed_details';
   static const contents = 'contents';
+  static const exit = 'exit';
+  static const exitDetail = 'exitDetail';
+  static const yes = 'yes';
+  static const no = 'no';
+  static const confirm_password = 'confirm_password';
+  static const form_email = 'form_email';
+  static const form_phone = 'form_phone';
+  static const register_success = 'register_success';
+  static const register_success_detail = 'register_success_detail';
+  static const regis_error_ip = 'regis_error_ip';
+  static const backToLogin = 'backToLogin';
+  static const firstName = 'firstName';
+  static const lastName = 'lastName';
 
 }

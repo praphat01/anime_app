@@ -77,6 +77,10 @@ dependencies:
   easy_localization: ^3.0.1
   sliding_sheet: ^0.5.2
   webview_flutter: ^3.0.4
+  flutter_easyloading: ^3.0.5
+  percent_indicator: ^4.2.2
+  email_validator: ^2.1.17
+  dart_ipify: ^1.1.1
 
 
 dev_dependencies:

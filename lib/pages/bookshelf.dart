@@ -6,6 +6,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -224,12 +225,22 @@ class _bookshelfState extends State<bookshelf> {
 
   void download({required pdfLink}) async {
     // Navigator.of(context).pop();
+    // String percent = '';
+    // double percentNumber = 0.0;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Center(child: CircularProgressIndicator());
+      },
+    );
+
     String pdfLinkNew =
         pdfLink.replaceAll("ebook_tab", "ebook_wm"); // Test file unlock
     File file = new File(pdfLink);
     String filename = path.basename(file.path);
-    print(filename);
-    print('##14nov pdfLink ===> $pdfLink');
+    // print(filename);
+    // print('##14nov pdfLink ===> $pdfLink');
 
     try {
       await [
@@ -242,6 +253,39 @@ class _bookshelfState extends State<bookshelf> {
 
       var response = await Dio()
           .download(pdfLinkNew, savePath); // USE pdfLink NOT  pdfLinkNew
+
+      await Dio().download(pdfLinkNew, savePath,
+          onReceiveProgress: (count, total) {
+        print((count / total * 100).toStringAsFixed(0) + "%");
+
+        // String percent = (count / total * 100).toStringAsFixed(0) + "%";
+        // double percentNumber =
+        //     double.parse((count / total * 100).toStringAsFixed(0));
+      });
+
+      // showDialog(
+      //     context: context,
+      //     builder: (context) {
+      //       return CircularPercentIndicator(
+      //         radius: 120.0,
+      //         lineWidth: 13.0,
+      //         animation: true,
+      //         percent: percentNumber,
+      //         center: new Text(
+      //           percent,
+      //           style:
+      //               new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+      //         ),
+      //         footer: new Text(
+      //           "Downloading...",
+      //           style:
+      //               new TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
+      //         ),
+      //         circularStrokeCap: CircularStrokeCap.round,
+      //         progressColor: Colors.purple,
+      //       );
+      //     });
+
       await ImageGallerySaver.saveFile(appDocDir.path, name: nameFile)
           .then((value) {
         // print('Save file Success $savePath');
@@ -253,6 +297,7 @@ class _bookshelfState extends State<bookshelf> {
     } catch (e) {
       print(e);
     }
+    Navigator.of(context, rootNavigator: true).pop(context);
   }
 
   Future<bool> checkfileBeforeReadPdf({required fileBook}) async {
@@ -272,420 +317,451 @@ class _bookshelfState extends State<bookshelf> {
     if (userBookShelflist.length != 0) {
       hasBook = true;
     }
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          LocaleKeys.menu_Bookshelf.tr(),
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: AnimeUI.cyan,
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            LocaleKeys.menu_Bookshelf.tr(),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: AnimeUI.cyan,
+            ),
           ),
+          backgroundColor: Colors.white,
+          elevation: 0.0,
+          iconTheme: const IconThemeData(color: Colors.black),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.search, color: Colors.black, size: 30),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const searchPage()),
+                );
+              },
+            ),
+          ],
         ),
-        backgroundColor: Colors.white,
-        elevation: 0.0,
-        iconTheme: const IconThemeData(color: Colors.black),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search, color: Colors.black, size: 30),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const searchPage()),
-              );
-            },
-          ),
-        ],
-      ),
-      drawer: const PublicDrawer(),
-      body: hasBook
-          ? Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GridView.builder(
-                  controller: controller,
-                  itemCount: userBookShelflist.length + 1,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    mainAxisSpacing: 20,
-                    crossAxisSpacing: 8,
-                    mainAxisExtent: 200,
-                  ),
+        drawer: const PublicDrawer(),
+        body: hasBook
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GridView.builder(
+                    controller: controller,
+                    itemCount: userBookShelflist.length + 1,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      mainAxisSpacing: 20,
+                      crossAxisSpacing: 8,
+                      mainAxisExtent: 200,
+                    ),
 
-                  // itemCount: popularBooklist.length,
-                  itemBuilder: (BuildContext ctx, index) {
-                    if (index < userBookShelflist.length) {
-                      bookIdType = userBookShelflist[index]!
-                          .bookId
-                          .toString()
-                          .substring(1, 2);
-                      if (bookIdType == '9') {
-                        // Re url image
-                        imageUrl = userBookShelflist[index]!.imgLink.toString();
-                        userBookShelflist[index]!.imgLink = imageUrl.replaceAll(
-                            "http://www.2ebook.com/new", pathSite);
-                        // userBookShelflist[index]!.imgLink = imageUrl.replaceAll(
-                        //     "http://2ebook.com/new", pathSite);
+                    // itemCount: popularBooklist.length,
+                    itemBuilder: (BuildContext ctx, index) {
+                      if (index < userBookShelflist.length) {
+                        bookIdType = userBookShelflist[index]!
+                            .bookId
+                            .toString()
+                            .substring(1, 2);
+                        if (bookIdType == '9') {
+                          // Re url image
+                          imageUrl =
+                              userBookShelflist[index]!.imgLink.toString();
+                          userBookShelflist[index]!.imgLink =
+                              imageUrl.replaceAll(
+                                  "http://www.2ebook.com/new", pathSite);
+                          // userBookShelflist[index]!.imgLink = imageUrl.replaceAll(
+                          //     "http://2ebook.com/new", pathSite);
 
-                        // Re url pdf
-                        pdfUrl = userBookShelflist[index]!.pdfLink.toString();
-                        userBookShelflist[index]!.pdfLink = pdfUrl.replaceAll(
-                            "http://www.2ebook.com/new", pathSite);
-                        userBookShelflist[index]!.pdfLink = pdfUrl.replaceAll(
-                            "http://2ebook.com/new", pathSite);
-                        // print(
-                        //     '##zzz ===> ${userBookShelflist[index]!.pdfLink}');
-                      }
-                      return Container(
-                        //borderRadius: BorderRadius.circular(20),
-                        child: (userBookShelflist[index]!.bookDesc != null &&
-                                userBookShelflist[index]!.bookId != '0')
-                            ? InkWell(
-                                onTap: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          scrollable: true,
-                                          content: Column(
-                                            children: [
-                                              ElevatedButton.icon(
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                  download(
-                                                      pdfLink:
-                                                          userBookShelflist[
-                                                                  index]!
-                                                              .pdfLink);
-                                                },
-                                                style: ElevatedButton.styleFrom(
-                                                  primary: AnimeUI
-                                                      .cyan, // Background color
-                                                ),
-                                                icon: const Icon(
-                                                  Icons.download,
-                                                  size: 24.0,
-                                                ),
-                                                label: Text(
-                                                  '${LocaleKeys.download.tr()}    ',
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 20,
-                                                  ),
-                                                ),
-                                              ),
-
-                                              // if ( checkfileBeforeReadPdf(
-                                              //         fileBook:
-                                              //             userBookShelflist[index]!
-                                              //                     .pdfLink ??
-                                              //                 '')) {
-
-                                              //                 }else{
-
-                                              //                 }
-
-                                              ElevatedButton.icon(
-                                                onPressed: () async {
-                                                  if (await checkfileBeforeReadPdf(
-                                                      fileBook:
-                                                          userBookShelflist[
-                                                                      index]!
-                                                                  .pdfLink ??
-                                                              '')) {
-                                                    // Check file book in storage
-                                                    if (checkTypeOfFile(
-                                                            userBookShelflist[
-                                                                    index]!
-                                                                .pdfLink) ==
-                                                        'application/pdf') {
-                                                      // check type of book is PDF
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder:
-                                                                (context) =>
-                                                                    ebookReader(
-                                                              bookTitle: userBookShelflist[
+                          // Re url pdf
+                          pdfUrl = userBookShelflist[index]!.pdfLink.toString();
+                          userBookShelflist[index]!.pdfLink = pdfUrl.replaceAll(
+                              "http://www.2ebook.com/new", pathSite);
+                          userBookShelflist[index]!.pdfLink = pdfUrl.replaceAll(
+                              "http://2ebook.com/new", pathSite);
+                          // print(
+                          //     '##zzz ===> ${userBookShelflist[index]!.pdfLink}');
+                        }
+                        return Container(
+                          //borderRadius: BorderRadius.circular(20),
+                          child:
+                              (userBookShelflist[index]!.bookDesc != null &&
+                                      userBookShelflist[index]!.bookId != '0')
+                                  ? InkWell(
+                                      onTap: () {
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                scrollable: true,
+                                                content: Column(
+                                                  children: [
+                                                    SizedBox(
+                                                      width: 200,
+                                                      child:
+                                                          ElevatedButton.icon(
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                          download(
+                                                              pdfLink:
+                                                                  userBookShelflist[
                                                                           index]!
-                                                                      .bookTitle ??
-                                                                  '',
+                                                                      .pdfLink);
+                                                        },
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          primary: AnimeUI
+                                                              .cyan, // Background color
+                                                        ),
+                                                        icon: const Icon(
+                                                          Icons.download,
+                                                          size: 24.0,
+                                                        ),
+                                                        label: Text(
+                                                          '${LocaleKeys.download.tr()}    ',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 20,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+
+                                                    // if ( checkfileBeforeReadPdf(
+                                                    //         fileBook:
+                                                    //             userBookShelflist[index]!
+                                                    //                     .pdfLink ??
+                                                    //                 '')) {
+
+                                                    //                 }else{
+
+                                                    //                 }
+
+                                                    SizedBox(
+                                                      width: 200,
+                                                      child:
+                                                          ElevatedButton.icon(
+                                                        onPressed: () async {
+                                                          if (await checkfileBeforeReadPdf(
                                                               fileBook: userBookShelflist[
                                                                           index]!
                                                                       .pdfLink ??
-                                                                  '',
-                                                              book_id: userBookShelflist[
+                                                                  '')) {
+                                                            // Check file book in storage
+                                                            if (checkTypeOfFile(
+                                                                    userBookShelflist[
+                                                                            index]!
+                                                                        .pdfLink) ==
+                                                                'application/pdf') {
+                                                              // check type of book is PDF
+                                                              Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            ebookReader(
+                                                                      bookTitle:
+                                                                          userBookShelflist[index]!.bookTitle ??
+                                                                              '',
+                                                                      fileBook:
+                                                                          userBookShelflist[index]!.pdfLink ??
+                                                                              '',
+                                                                      book_id:
+                                                                          userBookShelflist[index]!.bookId ??
+                                                                              '',
+                                                                    ),
+                                                                  ));
+                                                            } else if (checkTypeOfFile(
+                                                                        userBookShelflist[index]!
+                                                                            .pdfLink) ==
+                                                                    'video/mp4' ||
+                                                                checkTypeOfFile(
+                                                                        userBookShelflist[index]!
+                                                                            .pdfLink) ==
+                                                                    'audio/mpeg') {
+                                                              // check type of book is Video
+                                                              Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            vdoPlayer(
+                                                                      bookTitle:
+                                                                          userBookShelflist[index]!.bookTitle ??
+                                                                              '',
+                                                                      fileBook:
+                                                                          userBookShelflist[index]!.pdfLink ??
+                                                                              '',
+                                                                    ),
+                                                                  ));
+                                                            }
+                                                          } else {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                            AlertNoBook();
+                                                          }
+                                                        },
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          backgroundColor: AnimeUI
+                                                              .cyan, // Background color
+                                                        ),
+                                                        icon: const Icon(
+                                                          Icons.menu_book,
+                                                          size: 24.0,
+                                                        ),
+                                                        label: Text(
+                                                          '${LocaleKeys.read.tr()}             ',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 20,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 200,
+                                                      child:
+                                                          ElevatedButton.icon(
+                                                        onPressed: () {
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder:
+                                                                  (context) =>
+                                                                      detailPage(
+                                                                bookId: userBookShelflist[
+                                                                            index]!
+                                                                        .bookId ??
+                                                                    '',
+                                                                bookDesc: userBookShelflist[
+                                                                            index]!
+                                                                        .bookDesc ??
+                                                                    '',
+                                                                bookshelfId:
+                                                                    userBookShelflist[index]!
+                                                                            .bookshelfId ??
+                                                                        '',
+                                                                bookPrice: userBookShelflist[
+                                                                            index]!
+                                                                        .bookPrice ??
+                                                                    '',
+                                                                bookTitle: userBookShelflist[
+                                                                            index]!
+                                                                        .bookTitle ??
+                                                                    '',
+                                                                bookAuthor:
+                                                                    userBookShelflist[index]!
+                                                                            .bookAuthor ??
+                                                                        '',
+                                                                bookNoOfPage:
+                                                                    userBookShelflist[index]!
+                                                                            .bookNoOfPage ??
+                                                                        '',
+                                                                booktypeName:
+                                                                    userBookShelflist[index]!
+                                                                            .booktypeName ??
+                                                                        '',
+                                                                publisherName:
+                                                                    userBookShelflist[index]!
+                                                                            .publisherName ??
+                                                                        '',
+                                                                bookIsbn: userBookShelflist[
+                                                                            index]!
+                                                                        .bookIsbn ??
+                                                                    '',
+                                                                bookcateId:
+                                                                    '', // No data
+                                                                bookcateName:
+                                                                    userBookShelflist[index]!
+                                                                            .bookcateName ??
+                                                                        '',
+                                                                onlinetype:
+                                                                    '', // No data
+                                                                t2Id:
+                                                                    '', // No data
+                                                                imgLink: userBookShelflist[
+                                                                            index]!
+                                                                        .imgLink ??
+                                                                    '',
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          primary: AnimeUI
+                                                              .cyan, // Background color
+                                                        ),
+                                                        icon: const Icon(
+                                                          Icons.feed_rounded,
+                                                          size: 24.0,
+                                                        ),
+                                                        label: Text(
+                                                          '${LocaleKeys.detailsData.tr()}            ',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 20,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 200,
+                                                      child:
+                                                          ElevatedButton.icon(
+                                                        onPressed: () {
+                                                          returnBook(
+                                                              bookshelfId:
+                                                                  userBookShelflist[
+                                                                              index]!
+                                                                          .bookshelfId ??
+                                                                      '',
+                                                              DB_id: userBookShelflist[
                                                                           index]!
                                                                       .bookId ??
                                                                   '',
-                                                            ),
-                                                          ));
-                                                    } else if (checkTypeOfFile(
-                                                                userBookShelflist[
-                                                                        index]!
-                                                                    .pdfLink) ==
-                                                            'video/mp4' ||
-                                                        checkTypeOfFile(
-                                                                userBookShelflist[
-                                                                        index]!
-                                                                    .pdfLink) ==
-                                                            'audio/mpeg') {
-                                                      // check type of book is Video
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder:
-                                                                (context) =>
-                                                                    vdoPlayer(
-                                                              bookTitle: userBookShelflist[
-                                                                          index]!
-                                                                      .bookTitle ??
-                                                                  '',
-                                                              fileBook: userBookShelflist[
+                                                              pdfLink: userBookShelflist[
                                                                           index]!
                                                                       .pdfLink ??
-                                                                  '',
-                                                            ),
-                                                          ));
-                                                    }
-                                                  } else {
-                                                    Navigator.of(context).pop();
-                                                    AlertNoBook();
-                                                  }
-                                                },
-                                                style: ElevatedButton.styleFrom(
-                                                  backgroundColor: AnimeUI
-                                                      .cyan, // Background color
-                                                ),
-                                                icon: const Icon(
-                                                  Icons.menu_book,
-                                                  size: 24.0,
-                                                ),
-                                                label: Text(
-                                                  '${LocaleKeys.read.tr()}             ',
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 20,
-                                                  ),
-                                                ),
-                                              ),
-                                              ElevatedButton.icon(
-                                                onPressed: () {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          detailPage(
-                                                        bookId:
-                                                            userBookShelflist[
-                                                                        index]!
-                                                                    .bookId ??
-                                                                '',
-                                                        bookDesc:
-                                                            userBookShelflist[
-                                                                        index]!
-                                                                    .bookDesc ??
-                                                                '',
-                                                        bookshelfId:
-                                                            userBookShelflist[
-                                                                        index]!
-                                                                    .bookshelfId ??
-                                                                '',
-                                                        bookPrice:
-                                                            userBookShelflist[
-                                                                        index]!
-                                                                    .bookPrice ??
-                                                                '',
-                                                        bookTitle:
-                                                            userBookShelflist[
-                                                                        index]!
-                                                                    .bookTitle ??
-                                                                '',
-                                                        bookAuthor:
-                                                            userBookShelflist[
-                                                                        index]!
-                                                                    .bookAuthor ??
-                                                                '',
-                                                        bookNoOfPage:
-                                                            userBookShelflist[
-                                                                        index]!
-                                                                    .bookNoOfPage ??
-                                                                '',
-                                                        booktypeName:
-                                                            userBookShelflist[
-                                                                        index]!
-                                                                    .booktypeName ??
-                                                                '',
-                                                        publisherName:
-                                                            userBookShelflist[
-                                                                        index]!
-                                                                    .publisherName ??
-                                                                '',
-                                                        bookIsbn:
-                                                            userBookShelflist[
-                                                                        index]!
-                                                                    .bookIsbn ??
-                                                                '',
-                                                        bookcateId:
-                                                            '', // No data
-                                                        bookcateName:
-                                                            userBookShelflist[
-                                                                        index]!
-                                                                    .bookcateName ??
-                                                                '',
-                                                        onlinetype:
-                                                            '', // No data
-                                                        t2Id: '', // No data
-                                                        imgLink:
-                                                            userBookShelflist[
-                                                                        index]!
-                                                                    .imgLink ??
-                                                                '',
+                                                                  '');
+                                                        },
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          primary: AnimeUI
+                                                              .cyan, // Background color
+                                                        ),
+                                                        icon: const Icon(
+                                                          Icons
+                                                              .keyboard_return_outlined,
+                                                          size: 24.0,
+                                                        ),
+                                                        label: Text(
+                                                          '${LocaleKeys.returnBook.tr()}',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 20,
+                                                          ),
+                                                        ),
                                                       ),
                                                     ),
-                                                  );
-                                                },
-                                                style: ElevatedButton.styleFrom(
-                                                  primary: AnimeUI
-                                                      .cyan, // Background color
+                                                  ],
                                                 ),
-                                                icon: const Icon(
-                                                  Icons.feed_rounded,
-                                                  size: 24.0,
-                                                ),
-                                                label: Text(
-                                                  '${LocaleKeys.detailsData.tr()}            ',
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 20,
-                                                  ),
-                                                ),
+                                                actions: [
+                                                  TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: Text(LocaleKeys
+                                                          .close
+                                                          .tr())),
+                                                ],
+                                              );
+                                            });
+                                      },
+                                      child: Column(
+                                        children: [
+                                          Card(
+                                            shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20.0))),
+                                            elevation: 10.0,
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                Radius.circular(20.0),
                                               ),
-                                              ElevatedButton.icon(
-                                                onPressed: () {
-                                                  returnBook(
-                                                      bookshelfId:
-                                                          userBookShelflist[
-                                                                      index]!
-                                                                  .bookshelfId ??
-                                                              '',
-                                                      DB_id: userBookShelflist[
-                                                                  index]!
-                                                              .bookId ??
-                                                          '',
-                                                      pdfLink:
-                                                          userBookShelflist[
-                                                                      index]!
-                                                                  .pdfLink ??
-                                                              '');
-                                                },
-                                                style: ElevatedButton.styleFrom(
-                                                  primary: AnimeUI
-                                                      .cyan, // Background color
-                                                ),
-                                                icon: const Icon(
-                                                  Icons
-                                                      .keyboard_return_outlined,
-                                                  size: 24.0,
-                                                ),
-                                                label: Text(
-                                                  '${LocaleKeys.returnBook.tr()}',
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 20,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: Text(
-                                                    LocaleKeys.close.tr())),
-                                          ],
-                                        );
-                                      });
-                                },
-                                child: Column(
-                                  children: [
-                                    Card(
-                                      shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20.0))),
-                                      elevation: 10.0,
-                                      child: ClipRRect(
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(20.0),
-                                        ),
-                                        child: Stack(
-                                          children: <Widget>[
-                                            Image.network(
-                                              userBookShelflist[index]!
-                                                  .imgLink
-                                                  .toString(),
-                                              height: 150,
-                                              width: 200,
-                                              fit: BoxFit.fitWidth,
-                                            ),
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                  top: 160, left: 20),
-                                              height: 30,
-                                              width: 90,
                                               child: Stack(
                                                 children: <Widget>[
-                                                  Center(
-                                                      child: Text(
+                                                  Image.network(
                                                     userBookShelflist[index]!
-                                                        .bookDesc
+                                                        .imgLink
                                                         .toString(),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: const TextStyle(
-                                                        color: Colors.black),
-                                                  ))
+                                                    height: 150,
+                                                    width: 200,
+                                                    fit: BoxFit.fitWidth,
+                                                  ),
+                                                  Container(
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            top: 160, left: 20),
+                                                    height: 30,
+                                                    width: 90,
+                                                    child: Stack(
+                                                      children: <Widget>[
+                                                        Center(
+                                                            child: Text(
+                                                          userBookShelflist[
+                                                                  index]!
+                                                              .bookDesc
+                                                              .toString(),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: Colors
+                                                                      .black),
+                                                        ))
+                                                      ],
+                                                    ),
+                                                  ),
                                                 ],
                                               ),
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : Image.asset('assets/images/logo_2ebook.png'),
-                      );
-                    } else {
-                      return const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 30),
-                        child: Center(),
-                        // child: hasmore
-                        //     ? const CircularProgressIndicator()
-                        //     : const Text('')),
-                      );
-                    }
-                  }),
-            )
-          : Container(
-              child: Center(
-                child: Text(
-                  LocaleKeys.noBook.tr(),
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey,
+                                    )
+                                  : Image.asset(
+                                      'assets/images/logo_2ebook.png'),
+                        );
+                      } else {
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 30),
+                          child: Center(),
+                          // child: hasmore
+                          //     ? const CircularProgressIndicator()
+                          //     : const Text('')),
+                        );
+                      }
+                    }),
+              )
+            : Container(
+                child: Center(
+                  child: Text(
+                    LocaleKeys.noBook.tr(),
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
                 ),
               ),
-            ),
+      ),
     );
   }
 

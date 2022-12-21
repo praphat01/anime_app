@@ -1,3 +1,5 @@
+import 'package:anime_app/constants/colors.dart';
+import 'package:anime_app/users/register.dart';
 import 'package:anime_app/widgets/webView.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -30,17 +32,28 @@ class login extends StatefulWidget {
     required this.pathWebSite,
   }) : super(key: key);
   @override
-  _loginState createState() => _loginState(uniSname: uniSname, uniId: uniId);
+  _loginState createState() => _loginState(
+      uniSname: uniSname,
+      uniId: uniId,
+      pathWebSite: pathWebSite,
+      uniLink: uniLink);
 }
 
 class _loginState extends State<login> {
   String uniSname;
   String uniId;
-  _loginState({required this.uniSname, required this.uniId});
+  String pathWebSite;
+  String uniLink;
+  _loginState(
+      {required this.uniSname,
+      required this.uniId,
+      required this.pathWebSite,
+      required this.uniLink});
 
   TextEditingController userController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   List<Result?> userData = [];
+  bool _isSecurePassword = true;
 
   void initState() {
     super.initState();
@@ -48,11 +61,13 @@ class _loginState extends State<login> {
     if (Platform.isAndroid) WebView.platform = AndroidWebView();
   }
 
-  Widget modalWebview() {
+  Widget modalBookmark() {
     return Container(
-      height: 600.0, // Change as per your requirement
-      width: 340.0, // Change as per your requirement
-      child: WebViewExample(),
+      height: 600.0,
+      child: WebViewExample(
+        pathWebSite: pathWebSite,
+        uniSname: uniSname,
+      ),
     );
   }
 
@@ -65,6 +80,8 @@ class _loginState extends State<login> {
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
         userData = user_login.fromJson(data).result as List<Result?>;
+
+        print(userData[0]!.userId);
 
         if (data['status'] == 'true') {
           // print(data);
@@ -96,6 +113,9 @@ class _loginState extends State<login> {
               'userState', userData[0]!.userState.toString());
           var userPostcode = await prefs.setString(
               'userPostcode', userData[0]!.userPostcode.toString());
+          var uniSname = await prefs.setString(
+              'uniSname', userData[0]!.uniSname.toString());
+
           var uniLink = await prefs.setString('uniLink', widget.uniLink);
           var pathWebSite =
               await prefs.setString('pathWebSite', widget.pathWebSite);
@@ -145,7 +165,6 @@ class _loginState extends State<login> {
                     height: size.height,
                     child: Image.asset(
                       'assets/images/Coffee-Magazine (1).jpeg',
-                      // #Image Url: https://unsplash.com/photos/bOBM8CB4ZC4
                       fit: BoxFit.fitHeight,
                     ),
                   ),
@@ -233,6 +252,13 @@ class _loginState extends State<login> {
                                                   Colors.white.withOpacity(.5),
                                             ),
                                           ),
+                                          validator: (String? username) {
+                                            if (username!.isEmpty) {
+                                              return 'Please enter username';
+                                            } else {
+                                              return null;
+                                            }
+                                          },
                                         ),
                                       ),
 
@@ -252,7 +278,7 @@ class _loginState extends State<login> {
                                             color: Colors.white.withOpacity(.9),
                                           ),
                                           controller: passwordController,
-                                          obscureText: true,
+                                          obscureText: _isSecurePassword,
                                           decoration: InputDecoration(
                                             prefixIcon: Icon(
                                               Icons.lock_outline,
@@ -267,7 +293,15 @@ class _loginState extends State<login> {
                                               color:
                                                   Colors.white.withOpacity(.5),
                                             ),
+                                            suffixIcon: togglePassword(),
                                           ),
+                                          validator: (String? password) {
+                                            if (password!.isEmpty) {
+                                              return 'Please enter password';
+                                            } else {
+                                              return null;
+                                            }
+                                          },
                                         ),
                                       ),
                                       // TextFormField(
@@ -307,36 +341,23 @@ class _loginState extends State<login> {
                                               ),
                                               recognizer: TapGestureRecognizer()
                                                 ..onTap = () {
-                                                  showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return AlertDialog(
-                                                        title: Column(
-                                                          children: <Widget>[
-                                                            Align(
-                                                              alignment:
-                                                                  Alignment
-                                                                      .topRight,
-                                                              child: IconButton(
-                                                                icon:
-                                                                    const Icon(
-                                                                  Icons.close,
-                                                                  color: Colors
-                                                                      .red,
-                                                                  size: 25,
-                                                                ),
-                                                                onPressed: () {
-                                                                  Navigator.pop(
-                                                                      context);
-                                                                },
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        content: modalWebview(),
-                                                      );
-                                                    },
+                                                  Navigator.push(context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) {
+                                                    return register(
+                                                        uniLink: uniLink,
+                                                        pathWebSite:
+                                                            pathWebSite,
+                                                        uniSname: uniSname,
+                                                        uniId: uniId);
+                                                    // return searchloading();
+                                                  }));
+
+                                                  HapticFeedback.lightImpact();
+                                                  Fluttertoast.showToast(
+                                                    msg: LocaleKeys
+                                                        .alertCreateAccount
+                                                        .tr(),
                                                   );
                                                 },
                                             ),
@@ -401,7 +422,77 @@ class _loginState extends State<login> {
       ),
     );
   }
+
+  Future showSheet() => showSlidingBottomSheet(context,
+      builder: (context) => SlidingSheetDialog(
+            cornerRadius: 16,
+            avoidStatusBar: true,
+            snapSpec: const SnapSpec(
+              initialSnap: 0.8,
+              snappings: [0.4, 0.8, 0.9],
+            ),
+            builder: buildSheet,
+            headerBuilder: buildHeader,
+          ));
+
+  Widget buildSheet(context, state) => Material(
+        child: ListView(
+            shrinkWrap: true,
+            primary: false,
+            padding: EdgeInsets.all(16),
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    primary: AnimeUI.cyan,
+                    shape: StadiumBorder(),
+                    padding: const EdgeInsets.symmetric(horizontal: 40)),
+                child: Text(LocaleKeys.close.tr()),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              const SizedBox(height: 15),
+              Column(
+                children: [
+                  modalBookmark(),
+                ],
+              ),
+            ]),
+      );
+
+  Widget togglePassword() {
+    return IconButton(
+      onPressed: () {
+        setState(() {
+          _isSecurePassword = !_isSecurePassword;
+        });
+      },
+      icon: _isSecurePassword
+          ? Icon(Icons.visibility)
+          : Icon(Icons.visibility_off),
+      color: Colors.grey,
+    );
+  }
 }
+
+Widget buildHeader(BuildContext context, SheetState state) => Material(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          const SizedBox(height: 16),
+          Center(
+            child: Container(
+              // color: Colors.blue,
+              width: 32,
+              height: 8,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.grey[600],
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+        ],
+      ),
+    );
 
 class MyBehavior extends ScrollBehavior {
   @override

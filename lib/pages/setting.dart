@@ -60,55 +60,7 @@ class _settingState extends State<setting> {
   GestureDetector buildSettingOption(BuildContext context, String title) {
     return GestureDetector(
       onTap: () {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text(title),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _checkLanguageNow(),
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        if (context.locale == Locale('en')) {
-                          context.setLocale(Locale('th'));
-                        } else {
-                          context.setLocale(Locale('en'));
-                        }
-
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => splashScreen()),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: AnimeUI.cyan, // Background color
-                      ),
-                      icon: const Icon(
-                        Icons.language,
-                        size: 24.0,
-                      ),
-                      label: Text(
-                        LocaleKeys.chageLanguageTo.tr(),
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                actions: [
-                  TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text(LocaleKeys.close.tr())),
-                ],
-              );
-            });
+        alertChangeLanguage(title);
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
@@ -138,6 +90,57 @@ class _settingState extends State<setting> {
     } else {
       return Text('${LocaleKeys.language.tr()} : ${LocaleKeys.thai.tr()}');
     }
+  }
+
+  Future alertChangeLanguage(title) async {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _checkLanguageNow(),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    if (context.locale == Locale('en')) {
+                      context.setLocale(Locale('th'));
+                    } else {
+                      context.setLocale(Locale('en'));
+                    }
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => splashScreen()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: AnimeUI.cyan, // Background color
+                  ),
+                  icon: const Icon(
+                    Icons.language,
+                    size: 24.0,
+                  ),
+                  label: Text(
+                    LocaleKeys.chageLanguageTo.tr(),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(LocaleKeys.close.tr())),
+            ],
+          );
+        });
   }
 }
 

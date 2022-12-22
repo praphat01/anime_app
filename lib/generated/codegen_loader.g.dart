@@ -108,7 +108,9 @@ class CodegenLoader extends AssetLoader{
   "regis_error_ip": " IP Location can't register in Library",
   "backToLogin": "Back to login",
   "firstName": "Firstname...",
-  "lastName": "Lastname..."
+  "lastName": "Lastname...",
+  "downloadFail": "Download Failed",
+  "downloadFailDetails": "Can't download this book , You already downloaded"
 };
 static const Map<String,dynamic> th = {
   "title2ebook": "2Ebook",
@@ -204,7 +206,9 @@ static const Map<String,dynamic> th = {
   "regis_error_ip": "IP Location ของท่านไม่สามารถ ทำการสมัครสมาชิกห้องสมุดได้",
   "backToLogin": "กลับไปหน้าล็อกอิน",
   "firstName": "ชื่อ...",
-  "lastName": "นามสกุล..."
+  "lastName": "นามสกุล...",
+  "downloadFail": "ดาวน์โหลดผิดพลาด",
+  "downloadFailDetails": "ไม่สามารถโหลดหนังสือเล่มนี้ได้ เนื่องจากโหลดหนังสือเล่มนี้แล้ว"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en": en, "th": th};
 }

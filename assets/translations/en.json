@@ -92,7 +92,9 @@
     "regis_error_ip" : " IP Location can't register in Library",
     "backToLogin" : "Back to login",
     "firstName" : "Firstname...",
-    "lastName" : "Lastname..."
+    "lastName" : "Lastname...",
+    "downloadFail" : "Download Failed",
+    "downloadFailDetails" : "Can't download this book , You already downloaded"
 
 
 

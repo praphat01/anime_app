@@ -179,6 +179,7 @@ class _ebookReaderState extends State<ebookReader> {
         ? Center(
             child: PDFViewer(
               document: document!,
+              lazyLoad: false,
               controller: _pdfViewerController,
             ),
           )

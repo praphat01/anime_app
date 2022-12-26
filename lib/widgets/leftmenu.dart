@@ -82,6 +82,7 @@ class _PublicDrawerState extends State<PublicDrawer> {
             ),
             title: Text(LocaleKeys.book_faverite.tr()),
             onTap: () {
+              Navigator.pop(context);
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => book_faverites()),

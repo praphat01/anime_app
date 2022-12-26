@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:async';
 import 'package:path/path.dart' as paths;
 import 'package:mime/mime.dart';
+// import 'package:pdf_viewer_plugin/pdf_viewer_plugin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
 import '../../constants/colors.dart';
@@ -72,21 +73,33 @@ class _ebookReaderState extends State<ebookReader> {
     });
   }
 
+  String? pathTestpdf;
+
+  //  PDFViewerController testpdfViewerController;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getfile();
     getBookmark();
-    _pdfViewerController = PageController();
+    // _pdfViewerController = PageController();
+
+    // testpdfViewerController = PDFViewerController(
+    //   filePath: "path/to/file.pdf",
+    //   password: "password",
+    // );
   }
 
   Future getfile() async {
     String urlBook = widget.fileBook.replaceAll("ebook_tab", "ebook_wm");
 
     File file = new File(widget.fileBook);
+
     String filename = paths.basename(file.path);
+
     String? mimeStr = lookupMimeType(filename);
+
     PDFDocument? doc = await PDFDocument.fromFile(await _localFile);
     setState(() {
       document = doc;
@@ -100,9 +113,14 @@ class _ebookReaderState extends State<ebookReader> {
   }
 
   Future<File> get _localFile async {
-    File file = new File(widget.fileBook);
+    File file = File(widget.fileBook);
     String filename = paths.basename(file.path);
     final path = await _localPath;
+
+    pathTestpdf = '$path/$filename';
+
+    print('##26dec path ---> $path');
+
     return File('$path/$filename');
   }
 
@@ -170,7 +188,12 @@ class _ebookReaderState extends State<ebookReader> {
           ),
         ],
       ),
-      body: pdf_viewer(),
+      body: pdf_viewer(), //ของเดิม
+      // body: pathTestpdf == null
+      //     ? const Text('Loading')
+      //     : PdfView(
+      //         path: pathTestpdf!,
+      //       ),
     );
   }
 

@@ -260,7 +260,7 @@ class _registerState extends State<register> {
 
                                       // username
                                       Container(
-                                        height: size.width / 8,
+                                        // height: size.width / 8,
                                         width: size.width / 1.25,
                                         alignment: Alignment.center,
                                         padding: EdgeInsets.only(
@@ -275,13 +275,14 @@ class _registerState extends State<register> {
                                             color: Colors.white.withOpacity(.9),
                                           ),
                                           controller: userController,
-                                          decoration: InputDecoration(
+                                          decoration: InputDecoration(fillColor: Colors.green,
+                                            filled: true,
                                             prefixIcon: Icon(
                                               Icons.account_circle_outlined,
                                               color:
                                                   Colors.white.withOpacity(.8),
                                             ),
-                                            border: InputBorder.none,
+                                            border: OutlineInputBorder(),
                                             hintMaxLines: 1,
                                             hintText: LocaleKeys.username.tr(),
                                             hintStyle: TextStyle(

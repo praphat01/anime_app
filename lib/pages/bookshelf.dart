@@ -1,6 +1,6 @@
 // ignore_for_file: avoid_print
-import 'dart:math';
 
+import 'package:anime_app/widgets/widget_circulat_percent.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +37,7 @@ import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as path;
 import 'package:mime/mime.dart';
 import '../pages/videoPlayer/vdoPlayer.dart';
+// import 'package:get/get.dart' as getx;
 
 class bookshelf extends StatefulWidget {
   // static late DownloadCallback download;
@@ -57,6 +58,7 @@ class _bookshelfState extends State<bookshelf> {
   bool hasmore = true;
   String statusFile = '';
   String _localPath = '';
+  bool load = true;
   bool hasBook = false;
   var bookIdType;
   var pathSite;
@@ -64,10 +66,16 @@ class _bookshelfState extends State<bookshelf> {
   var pdfUrl;
   var imageLocalFile;
 
+  String? percent;
+
+  bool displayProcessLoadPdf = false;
+  double percentNumber = 0;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
     fetch();
 
     controller.addListener(() {
@@ -199,6 +207,8 @@ class _bookshelfState extends State<bookshelf> {
           ];
         }
 
+        load = false;
+
         setState(() {
           page++;
           pathSite = pathWebSite;
@@ -228,75 +238,53 @@ class _bookshelfState extends State<bookshelf> {
     // String percent = '';
     // double percentNumber = 0.0;
 
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Center(child: CircularProgressIndicator());
-      },
-    );
-
     String pdfLinkNew =
         pdfLink.replaceAll("ebook_tab", "ebook_wm"); // Test file unlock
-    File file = new File(pdfLink);
+    File file = File(pdfLink);
     String filename = path.basename(file.path);
     // print(filename);
     // print('##14nov pdfLink ===> $pdfLink');
 
-    try {
-      await [
-        Permission.storage,
-      ].request();
+    await [
+      Permission.storage,
+    ].request();
 
-      var appDocDir = await getExternalStorageDirectory();
-      String nameFile = "/${filename}";
-      String savePath = appDocDir!.path + nameFile;
+    var appDocDir = await getExternalStorageDirectory();
+    String nameFile = "/${filename}";
+    String savePath = appDocDir!.path + nameFile;
 
-      var response = await Dio()
-          .download(pdfLinkNew, savePath); // USE pdfLink NOT  pdfLinkNew
+    double second = 0.1;
 
-      await Dio().download(pdfLinkNew, savePath,
-          onReceiveProgress: (count, total) {
-        print((count / total * 100).toStringAsFixed(0) + "%");
+    await Dio().download(pdfLinkNew, savePath,
+        onReceiveProgress: (count, total) {
+      print((count / total * 100).toStringAsFixed(0) + "%");
 
-        // String percent = (count / total * 100).toStringAsFixed(0) + "%";
-        // double percentNumber =
-        //     double.parse((count / total * 100).toStringAsFixed(0));
-      });
+      percent = (count / total * 100).toStringAsFixed(0) + "%";
+      percentNumber = double.parse((count / total * 100).toStringAsFixed(0));
+
+      displayProcessLoadPdf = true;
+
+      setState(() {});
 
       // showDialog(
+      //     barrierColor: Colors.black.withOpacity(0.01),
       //     context: context,
       //     builder: (context) {
-      //       return CircularPercentIndicator(
-      //         radius: 120.0,
-      //         lineWidth: 13.0,
-      //         animation: true,
-      //         percent: percentNumber,
-      //         center: new Text(
-      //           percent,
-      //           style:
-      //               new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-      //         ),
-      //         footer: new Text(
-      //           "Downloading...",
-      //           style:
-      //               new TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
-      //         ),
-      //         circularStrokeCap: CircularStrokeCap.round,
-      //         progressColor: Colors.purple,
-      //       );
+      //       return WidgetCirculatPercentIndicator(percentNumber: percentNumber);
       //     });
+    }).then((value) {
+      displayProcessLoadPdf = false;
+      setState(() {});
+    });
 
-      await ImageGallerySaver.saveFile(appDocDir.path, name: nameFile)
-          .then((value) {
-        Fluttertoast.showToast(
-          msg: LocaleKeys.downloadFinished.tr(),
-          toastLength: Toast.LENGTH_LONG,
-        );
-      });
-    } catch (e) {
-      print(e);
-    }
-    Navigator.of(context, rootNavigator: true).pop(context);
+    await ImageGallerySaver.saveFile(appDocDir.path, name: nameFile)
+        .then((value) {
+      Fluttertoast.showToast(
+        msg: LocaleKeys.downloadFinished.tr(),
+        toastLength: Toast.LENGTH_LONG,
+      );
+    });
+    // Navigator.of(context, rootNavigator: true).pop(context);
   }
 
   Future<bool> checkfileBeforeReadPdf({required fileBook}) async {
@@ -313,171 +301,181 @@ class _bookshelfState extends State<bookshelf> {
 
   @override
   Widget build(BuildContext context) {
-    if (userBookShelflist.length != 0) {
+    if (userBookShelflist.isNotEmpty) {
       hasBook = true;
     }
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(
-            LocaleKeys.menu_Bookshelf.tr(),
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: AnimeUI.cyan,
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          LocaleKeys.menu_Bookshelf.tr(),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: AnimeUI.cyan,
           ),
-          backgroundColor: Colors.white,
-          elevation: 0.0,
-          iconTheme: const IconThemeData(color: Colors.black),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.search, color: Colors.black, size: 30),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const searchPage()),
-                );
-              },
-            ),
-          ],
         ),
-        drawer: const PublicDrawer(),
-        body: hasBook
-            ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GridView.builder(
-                    controller: controller,
-                    itemCount: userBookShelflist.length + 1,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      mainAxisSpacing: 20,
-                      crossAxisSpacing: 8,
-                      mainAxisExtent: 200,
-                    ),
-
-                    // itemCount: popularBooklist.length,
-                    itemBuilder: (BuildContext ctx, index) {
-                      if (index < userBookShelflist.length) {
-                        bookIdType = userBookShelflist[index]!
-                            .bookId
-                            .toString()
-                            .substring(1, 2);
-                        if (bookIdType == '9') {
-                          // Re url image
-                          imageUrl =
-                              userBookShelflist[index]!.imgLink.toString();
-                          userBookShelflist[index]!.imgLink =
-                              imageUrl.replaceAll(
-                                  "http://www.2ebook.com/new", pathSite);
-                          // userBookShelflist[index]!.imgLink = imageUrl.replaceAll(
-                          //     "http://2ebook.com/new", pathSite);
-
-                          // Re url pdf
-                          pdfUrl = userBookShelflist[index]!.pdfLink.toString();
-                          userBookShelflist[index]!.pdfLink = pdfUrl.replaceAll(
-                              "http://www.2ebook.com/new", pathSite);
-                          userBookShelflist[index]!.pdfLink = pdfUrl.replaceAll(
-                              "http://2ebook.com/new", pathSite);
-                        }
-                        return Container(
-                          //borderRadius: BorderRadius.circular(20),
-                          child: (userBookShelflist[index]!.bookDesc != null &&
-                                  userBookShelflist[index]!.bookId != '0')
-                              ? InkWell(
-                                  onTap: () {
-                                    bookshelfMenu(
-                                        userBookShelflist[index]!.pdfLink,
-                                        userBookShelflist[index]!.bookTitle,
-                                        userBookShelflist[index]!.bookId,
-                                        userBookShelflist[index]!.bookDesc,
-                                        userBookShelflist[index]!.bookshelfId,
-                                        userBookShelflist[index]!.bookPrice,
-                                        userBookShelflist[index]!.bookAuthor,
-                                        userBookShelflist[index]!.bookNoOfPage,
-                                        userBookShelflist[index]!.booktypeName,
-                                        userBookShelflist[index]!.publisherName,
-                                        userBookShelflist[index]!.bookIsbn,
-                                        userBookShelflist[index]!.bookcateName,
-                                        userBookShelflist[index]!.imgLink);
-                                  },
-                                  child: Column(
-                                    children: [
-                                      Card(
-                                        shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20.0))),
-                                        elevation: 10.0,
-                                        child: ClipRRect(
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(20.0),
-                                          ),
-                                          child: Stack(
-                                            children: <Widget>[
-                                              Image.network(
-                                                userBookShelflist[index]!
-                                                    .imgLink
-                                                    .toString(),
-                                                height: 150,
-                                                width: 200,
-                                                fit: BoxFit.fitWidth,
-                                              ),
-                                              Container(
-                                                margin: const EdgeInsets.only(
-                                                    top: 160, left: 20),
-                                                height: 30,
-                                                width: 90,
-                                                child: Stack(
-                                                  children: <Widget>[
-                                                    Center(
-                                                        child: Text(
-                                                      userBookShelflist[index]!
-                                                          .bookDesc
-                                                          .toString(),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: const TextStyle(
-                                                          color: Colors.black),
-                                                    ))
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              : Image.asset('assets/images/logo_2ebook.png'),
-                        );
-                      } else {
-                        return const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 30),
-                          child: Center(),
-                          // child: hasmore
-                          //     ? const CircularProgressIndicator()
-                          //     : const Text('')),
-                        );
-                      }
-                    }),
-              )
-            : Container(
-                child: Center(
-                  child: Text(
-                    LocaleKeys.noBook.tr(),
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey,
-                    ),
-                    textAlign: TextAlign.center,
+        backgroundColor: Colors.white,
+        elevation: 0.0,
+        iconTheme: const IconThemeData(color: Colors.black),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search, color: Colors.black, size: 30),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const searchPage()),
+              );
+            },
+          ),
+        ],
+      ),
+      drawer: const PublicDrawer(),
+      body: load ? const Center(child: CircularProgressIndicator()) :  hasBook
+          ? Stack(
+              children: [
+                contentMain(),
+                displayProcessLoadPdf ? showProcessLoad() : const SizedBox(),
+              ],
+            )
+          : Container(
+              child: Center(
+                child: Text(
+                  LocaleKeys.noBook.tr(),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey,
                   ),
+                  textAlign: TextAlign.center,
                 ),
               ),
-      ),
+            ),
+    );
+  }
+
+  Widget showProcessLoad() {
+    return Container(
+      decoration: BoxDecoration(color: Colors.black.withOpacity(0.25)),
+      alignment: Alignment.center,
+      width: double.infinity,
+      height: double.infinity,
+      child: WidgetCirculatPercentIndicator(percentNumber: percentNumber),
+    );
+  }
+
+  Padding contentMain() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: GridView.builder(
+          controller: controller,
+          itemCount: userBookShelflist.length + 1,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            mainAxisSpacing: 20,
+            crossAxisSpacing: 8,
+            mainAxisExtent: 200,
+          ),
+
+          // itemCount: popularBooklist.length,
+          itemBuilder: (BuildContext ctx, index) {
+            if (index < userBookShelflist.length) {
+              bookIdType =
+                  userBookShelflist[index]!.bookId.toString().substring(1, 2);
+              if (bookIdType == '9') {
+                // Re url image
+                imageUrl = userBookShelflist[index]!.imgLink.toString();
+                userBookShelflist[index]!.imgLink =
+                    imageUrl.replaceAll("http://www.2ebook.com/new", pathSite);
+                // userBookShelflist[index]!.imgLink = imageUrl.replaceAll(
+                //     "http://2ebook.com/new", pathSite);
+
+                // Re url pdf
+                pdfUrl = userBookShelflist[index]!.pdfLink.toString();
+                userBookShelflist[index]!.pdfLink =
+                    pdfUrl.replaceAll("http://www.2ebook.com/new", pathSite);
+                userBookShelflist[index]!.pdfLink =
+                    pdfUrl.replaceAll("http://2ebook.com/new", pathSite);
+              }
+              return Container(
+                //borderRadius: BorderRadius.circular(20),
+                child: (userBookShelflist[index]!.bookDesc != null &&
+                        userBookShelflist[index]!.bookId != '0')
+                    ? InkWell(
+                        onTap: () {
+                          bookshelfMenu(
+                              userBookShelflist[index]!.pdfLink,
+                              userBookShelflist[index]!.bookTitle,
+                              userBookShelflist[index]!.bookId,
+                              userBookShelflist[index]!.bookDesc,
+                              userBookShelflist[index]!.bookshelfId,
+                              userBookShelflist[index]!.bookPrice,
+                              userBookShelflist[index]!.bookAuthor,
+                              userBookShelflist[index]!.bookNoOfPage,
+                              userBookShelflist[index]!.booktypeName,
+                              userBookShelflist[index]!.publisherName,
+                              userBookShelflist[index]!.bookIsbn,
+                              userBookShelflist[index]!.bookcateName,
+                              userBookShelflist[index]!.imgLink);
+                        },
+                        child: Column(
+                          children: [
+                            Card(
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0))),
+                              elevation: 10.0,
+                              child: ClipRRect(
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(20.0),
+                                ),
+                                child: Stack(
+                                  children: <Widget>[
+                                    Image.network(
+                                      userBookShelflist[index]!
+                                          .imgLink
+                                          .toString(),
+                                      height: 150,
+                                      width: 200,
+                                      fit: BoxFit.fitWidth,
+                                    ),
+                                    Container(
+                                      margin: const EdgeInsets.only(
+                                          top: 160, left: 20),
+                                      height: 30,
+                                      width: 90,
+                                      child: Stack(
+                                        children: <Widget>[
+                                          Center(
+                                              child: Text(
+                                            userBookShelflist[index]!
+                                                .bookDesc
+                                                .toString(),
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                                color: Colors.black),
+                                          ))
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : Image.asset('assets/images/logo_2ebook.png'),
+              );
+            } else {
+              return const Padding(
+                padding: EdgeInsets.symmetric(vertical: 30),
+                child: Center(),
+                // child: hasmore
+                //     ? const CircularProgressIndicator()
+                //     : const Text('')),
+              );
+            }
+          }),
     );
   }
 

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'constants/colors.dart';
@@ -41,11 +42,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.light,
+        // statusBarColor: Colors.transparent,
+        statusBarColor: Colors.white,
+        statusBarIconBrightness: Brightness.dark,
       ),
     );
-    return MaterialApp(
+    return GetMaterialApp(
       title: '2EBOOK',
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,

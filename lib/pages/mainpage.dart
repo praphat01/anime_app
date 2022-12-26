@@ -33,62 +33,61 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter layout demo',
-      home: Container(
-          height: kBottomNavigationBarHeight * 1,
-          decoration: BoxDecoration(
-            color: AnimeUI.background,
-            boxShadow: [
-              BoxShadow(
-                spreadRadius: 7.5,
-                blurRadius: 15,
-                color: AnimeUI.cyan.withOpacity(.45),
-              ),
-            ],
-          ),
-          padding: const EdgeInsets.only(top: 5),
-          child: WillPopScope(
-            child: Scaffold(
-              bottomNavigationBar: BottomNavigationBar(
-                items: [
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.home),
-                    backgroundColor: Colors.white,
-                    label: LocaleKeys.menu_mainpage.tr(),
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.bookmark),
-                    backgroundColor: Colors.white,
-                    label: LocaleKeys.menu_Bookshelf.tr(),
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.favorite),
-                    backgroundColor: Colors.white,
-                    label: LocaleKeys.menu_category.tr(),
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.fax),
-                    backgroundColor: Colors.white,
-                    label: LocaleKeys.menu_publisher.tr(),
-                  ),
-                ],
-                selectedItemColor: AnimeUI.cyan,
-                unselectedItemColor: Colors.black,
-                type: BottomNavigationBarType.fixed,
-                currentIndex: index,
-                onTap: (i) {
-                  setState(() {
-                    index = i;
-                  });
-                },
-              ),
-              body: _widgetList[index],
+    return SafeArea(
+      child: Container(
+        height: kBottomNavigationBarHeight * 1,
+        decoration: BoxDecoration(
+          color: AnimeUI.background,
+          boxShadow: [
+            BoxShadow(
+              spreadRadius: 7.5,
+              blurRadius: 15,
+              color: AnimeUI.cyan.withOpacity(.45),
             ),
-            onWillPop: () => _clickForExit(context),
-          )),
-    );
+          ],
+        ),
+        // padding: const EdgeInsets.only(top: 5),
+        child: WillPopScope(
+          child: Scaffold(
+            bottomNavigationBar: BottomNavigationBar(
+              items: [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home),
+                  backgroundColor: Colors.white,
+                  label: LocaleKeys.menu_mainpage.tr(),
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.bookmark),
+                  backgroundColor: Colors.white,
+                  label: LocaleKeys.menu_Bookshelf.tr(),
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.favorite),
+                  backgroundColor: Colors.white,
+                  label: LocaleKeys.menu_category.tr(),
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.fax),
+                  backgroundColor: Colors.white,
+                  label: LocaleKeys.menu_publisher.tr(),
+                ),
+              ],
+              selectedItemColor: AnimeUI.cyan,
+              unselectedItemColor: Colors.black,
+              type: BottomNavigationBarType.fixed,
+              currentIndex: index,
+              onTap: (i) {
+                setState(() {
+                  index = i;
+                });
+              },
+            ),
+            body: _widgetList[index],
+          ),
+          onWillPop: () => _clickForExit(context),
+        ),
+      ),
+    ); // end contaner;
   }
 
   Future<bool> _clickForExit(BuildContext context) async {

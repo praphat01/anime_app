@@ -13,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../models/m_detail/check_fav.dart';
 import '../../database/database_helper.dart';
+import 'bookshelf.dart';
 
 class detailPage extends StatefulWidget {
   final String bookId;
@@ -283,15 +284,20 @@ class _detailPageState extends State<detailPage> {
     );
   }
 
-  AlertDialogSuccess(BuildContext context) {
-    showDialog<String>(
+  Future AlertDialogSuccess(BuildContext context) {
+    return showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
         title: Text(LocaleKeys.success.tr()),
         content: Text(LocaleKeys.alertBorrowSuccess.tr()),
         actions: <Widget>[
           TextButton(
-            onPressed: () => Navigator.pop(context, 'OK'),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => bookshelf(),
+              ),
+            ),
             child: Text(LocaleKeys.ok.tr()),
           ),
         ],

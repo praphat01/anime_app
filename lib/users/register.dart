@@ -158,20 +158,7 @@ class _registerState extends State<register> {
             );
           },
         );
-      } else {}
-      // }).catchError((err) {
-      //   debugPrint('=========== $err =============');
-      // });
-
-      // if (response.statusCode == 200) {
-      //   var data = jsonDecode(response.body.toString());
-      //   userData = user_login.fromJson(data).result as List<Result?>;
-
-      //   // print(userData[0]!.userId);
-
-      //     } else {
-      //       print('Connect server is failed');
-      //     }
+      }
     } catch (e) {
       print(e.toString());
     }

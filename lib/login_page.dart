@@ -316,8 +316,9 @@ class _loginState extends State<login> {
                                         children: [
                                           RichText(
                                             text: TextSpan(
-                                              text: LocaleKeys.forgetPassword
-                                                  .tr(),
+                                              // text: LocaleKeys.forgetPassword
+                                              //     .tr(),
+                                              text: '               ',
                                               style: TextStyle(
                                                 color: Colors.white,
                                               ),

@@ -68,6 +68,7 @@ class _PublicDrawerState extends State<PublicDrawer> {
             ),
             title: Text(LocaleKeys.bookshelf.tr()),
             onTap: () {
+              Navigator.of(context).pop();
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -82,6 +83,7 @@ class _PublicDrawerState extends State<PublicDrawer> {
             ),
             title: Text(LocaleKeys.book_faverite.tr()),
             onTap: () {
+              Navigator.of(context).pop();
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => book_faverites()),
@@ -95,6 +97,7 @@ class _PublicDrawerState extends State<PublicDrawer> {
             ),
             title: Text(LocaleKeys.book_history.tr()),
             onTap: () {
+              Navigator.of(context).pop();
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => bookHistoryBorrow()),
@@ -108,6 +111,7 @@ class _PublicDrawerState extends State<PublicDrawer> {
             ),
             title: Text(LocaleKeys.data_frofile.tr()),
             onTap: () {
+              Navigator.of(context).pop();
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => userProfile()),
@@ -125,6 +129,7 @@ class _PublicDrawerState extends State<PublicDrawer> {
             ),
             title: Text(LocaleKeys.homepage.tr()),
             onTap: () {
+              Navigator.of(context).pop();
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -178,6 +183,7 @@ class _PublicDrawerState extends State<PublicDrawer> {
             ),
             title: Text(LocaleKeys.book_category.tr()),
             onTap: () {
+              Navigator.of(context).pop();
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -192,6 +198,7 @@ class _PublicDrawerState extends State<PublicDrawer> {
             ),
             title: Text(LocaleKeys.book_publisher.tr()),
             onTap: () {
+              Navigator.of(context).pop();
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -206,6 +213,7 @@ class _PublicDrawerState extends State<PublicDrawer> {
             ),
             title: Text(LocaleKeys.setting.tr()),
             onTap: () {
+              Navigator.of(context).pop();
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => setting()),
@@ -219,6 +227,7 @@ class _PublicDrawerState extends State<PublicDrawer> {
             ),
             title: Text(LocaleKeys.logout.tr()),
             onTap: () async {
+              Navigator.of(context).pop();
               SharedPreferences prefs = await SharedPreferences.getInstance();
               await prefs.remove('isLoggedIn');
               await prefs.remove('userId');

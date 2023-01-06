@@ -65,6 +65,16 @@ class _popularState extends State<popular> {
 
   @override
   Widget build(BuildContext context) {
+    final double shortestSide = MediaQuery.of(context).size.shortestSide;
+    final bool useMobileLayout = shortestSide < 600;
+    return useMobileLayout
+        ? SliverToBoxAdapterMobile()
+        : SliverToBoxAdapterTablet();
+  }
+
+  // ignore: non_constant_identifier_names
+  SliverToBoxAdapter SliverToBoxAdapterMobile() {
+    // Moblie
     return SliverToBoxAdapter(
       child: SizedBox(
         height: 250,
@@ -80,7 +90,27 @@ class _popularState extends State<popular> {
     );
   }
 
+  // ignore: non_constant_identifier_names
+  SliverToBoxAdapter SliverToBoxAdapterTablet() {
+    // Tablet
+    return SliverToBoxAdapter(
+      child: SizedBox(
+        height: 550,
+        child: ScrollSnapList(
+          itemBuilder: _buildListItem,
+          listController: controller,
+          itemCount: dataBookPopular.length,
+          itemSize: 330,
+          onItemFocus: (index) {},
+          dynamicItemSize: true,
+        ),
+      ),
+    );
+  }
+
   Widget _buildListItem(BuildContext context, int index) {
+    final double shortestSide = MediaQuery.of(context).size.shortestSide;
+    final bool useMobileLayout = shortestSide < 600;
     bookIdType = dataBookPopular[index]!.bookId.toString().substring(1, 2);
     if (bookIdType == '9') {
       imageUrl = dataBookPopular[index]!.imgLink.toString();
@@ -88,62 +118,130 @@ class _popularState extends State<popular> {
           imageUrl.replaceAll("http://www.2ebook.com/new", pathSite);
     }
     // Product product = productList[index];
-    return SizedBox(
-      width: 150,
-      height: 350,
-      child: Card(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        elevation: 12,
-        child: InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => detailPage(
-                        bookId: dataBookPopular[index]!.bookId ?? '',
-                        bookDesc: dataBookPopular[index]!.bookDesc ?? '',
-                        bookshelfId: dataBookPopular[index]!.bookshelfId ?? '',
-                        bookPrice: dataBookPopular[index]!.bookPrice ?? '',
-                        bookTitle: dataBookPopular[index]!.bookTitle ?? '',
-                        bookAuthor: dataBookPopular[index]!.bookAuthor ?? '',
-                        bookNoOfPage:
-                            dataBookPopular[index]!.bookNoOfPage ?? '',
-                        booktypeName:
-                            dataBookPopular[index]!.booktypeName ?? '',
-                        publisherName:
-                            dataBookPopular[index]!.publisherName ?? '',
-                        bookIsbn: dataBookPopular[index]!.bookIsbn ?? '',
-                        bookcateId: dataBookPopular[index]!.bookcateId ?? '',
-                        bookcateName:
-                            dataBookPopular[index]!.bookcateName ?? '',
-                        onlinetype: dataBookPopular[index]!.onlinetype ?? '',
-                        t2Id: dataBookPopular[index]!.t2Id ?? '',
-                        imgLink: dataBookPopular[index]!.imgLink ?? '',
-                      )),
-            );
-          },
-          child: ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Image.network(
-                    dataBookPopular[index]!.imgLink.toString(),
-                    fit: BoxFit.cover,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    dataBookPopular[index]!.bookTitle.toString(),
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 15),
-                  ),
-                ],
+    if (useMobileLayout) {
+      // Mobile
+      return SizedBox(
+        width: 150,
+        height: 350,
+        child: Card(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 12,
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => detailPage(
+                          bookId: dataBookPopular[index]!.bookId ?? '',
+                          bookDesc: dataBookPopular[index]!.bookDesc ?? '',
+                          bookshelfId:
+                              dataBookPopular[index]!.bookshelfId ?? '',
+                          bookPrice: dataBookPopular[index]!.bookPrice ?? '',
+                          bookTitle: dataBookPopular[index]!.bookTitle ?? '',
+                          bookAuthor: dataBookPopular[index]!.bookAuthor ?? '',
+                          bookNoOfPage:
+                              dataBookPopular[index]!.bookNoOfPage ?? '',
+                          booktypeName:
+                              dataBookPopular[index]!.booktypeName ?? '',
+                          publisherName:
+                              dataBookPopular[index]!.publisherName ?? '',
+                          bookIsbn: dataBookPopular[index]!.bookIsbn ?? '',
+                          bookcateId: dataBookPopular[index]!.bookcateId ?? '',
+                          bookcateName:
+                              dataBookPopular[index]!.bookcateName ?? '',
+                          onlinetype: dataBookPopular[index]!.onlinetype ?? '',
+                          t2Id: dataBookPopular[index]!.t2Id ?? '',
+                          imgLink: dataBookPopular[index]!.imgLink ?? '',
+                        )),
+              );
+            },
+            child: ClipRRect(
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Image.network(
+                      dataBookPopular[index]!.imgLink.toString(),
+                      fit: BoxFit.cover,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      dataBookPopular[index]!.bookTitle.toString(),
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 15),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    } else {
+      // Tablet
+      return SizedBox(
+        width: 330,
+        height: 450,
+        child: Card(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 20,
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => detailPage(
+                          bookId: dataBookPopular[index]!.bookId ?? '',
+                          bookDesc: dataBookPopular[index]!.bookDesc ?? '',
+                          bookshelfId:
+                              dataBookPopular[index]!.bookshelfId ?? '',
+                          bookPrice: dataBookPopular[index]!.bookPrice ?? '',
+                          bookTitle: dataBookPopular[index]!.bookTitle ?? '',
+                          bookAuthor: dataBookPopular[index]!.bookAuthor ?? '',
+                          bookNoOfPage:
+                              dataBookPopular[index]!.bookNoOfPage ?? '',
+                          booktypeName:
+                              dataBookPopular[index]!.booktypeName ?? '',
+                          publisherName:
+                              dataBookPopular[index]!.publisherName ?? '',
+                          bookIsbn: dataBookPopular[index]!.bookIsbn ?? '',
+                          bookcateId: dataBookPopular[index]!.bookcateId ?? '',
+                          bookcateName:
+                              dataBookPopular[index]!.bookcateName ?? '',
+                          onlinetype: dataBookPopular[index]!.onlinetype ?? '',
+                          t2Id: dataBookPopular[index]!.t2Id ?? '',
+                          imgLink: dataBookPopular[index]!.imgLink ?? '',
+                        )),
+              );
+            },
+            child: ClipRRect(
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Image.network(
+                      dataBookPopular[index]!.imgLink.toString(),
+                      fit: BoxFit.cover,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      dataBookPopular[index]!.bookTitle.toString(),
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
   }
 }

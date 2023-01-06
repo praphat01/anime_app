@@ -10,22 +10,41 @@ class HeaderTrends extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double shortestSide = MediaQuery.of(context).size.shortestSide;
+    final bool useMobileLayout = shortestSide < 600;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         children: [
           Expanded(
-              child: Text(LocaleKeys.book_recommended.tr(),
-                  style: Theme.of(context).textTheme.headline6?.copyWith(
-                      color: AnimeUI.cyan, fontWeight: FontWeight.bold))),
+            child: useMobileLayout
+                ? // For Mobile
+                Text(
+                    LocaleKeys.book_recommended.tr(),
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                        color: AnimeUI.cyan, fontWeight: FontWeight.bold),
+                  )
+                : // For Tablet
+                Text(
+                    LocaleKeys.book_recommended.tr(),
+                    style: Theme.of(context).textTheme.headline4?.copyWith(
+                        color: AnimeUI.cyan, fontWeight: FontWeight.bold),
+                  ),
+          ),
           InkWell(
-            child: Text(
-              LocaleKeys.view_all.tr(),
-              style: Theme.of(context)
-                  .textTheme
-                  .subtitle2
-                  ?.copyWith(color: AnimeUI.cyan, fontWeight: FontWeight.bold),
-            ),
+            child: useMobileLayout
+                ? // For Mobile
+                Text(
+                    LocaleKeys.view_all.tr(),
+                    style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                        color: AnimeUI.cyan, fontWeight: FontWeight.bold),
+                  )
+                : // For Tablet
+                Text(
+                    LocaleKeys.view_all.tr(),
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                        color: AnimeUI.cyan, fontWeight: FontWeight.bold),
+                  ),
             onTap: () {
               Navigator.push(
                 context,

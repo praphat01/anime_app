@@ -79,11 +79,13 @@ class _loginState extends State<login> {
 
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-        userData = user_login.fromJson(data).result as List<Result?>;
 
-        print(userData[0]!.userId);
+        // print(userData[0]!.userId);
+        // print(userData[0]!);
+        print('Arm test ==> ${data['status']}');
 
         if (data['status'] == 'true') {
+          userData = user_login.fromJson(data).result as List<Result?>;
           // print(data);
           print('Login successfully');
           final prefs = await SharedPreferences.getInstance();
@@ -119,25 +121,38 @@ class _loginState extends State<login> {
           var uniLink = await prefs.setString('uniLink', widget.uniLink);
           var pathWebSite =
               await prefs.setString('pathWebSite', widget.pathWebSite);
+          var uniFullname = await prefs.setString(
+              'uniFullname', userData[0]!.uniFullname.toString());
+
+          Fluttertoast.showToast(
+            msg: LocaleKeys.alertSignIn.tr(),
+          );
 
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => splashScreen()));
           print(status);
-        } else {
-          Widget okButton = TextButton(
-            child: Text("OK"),
-            onPressed: () {},
-          );
-
+        } else if (data['status'] == "false") {
           showDialog(
               context: context,
-              builder: (context) => AlertDialog(
-                    title: Text(LocaleKeys.loginFailed.tr()),
-                    content: Text(LocaleKeys.PleaseFillCurrectWord.tr()),
-                    actions: [
-                      okButton,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text(LocaleKeys.loginFailed.tr()),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(LocaleKeys.PleaseFillCurrectWord.tr()),
                     ],
-                  ));
+                  ),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(LocaleKeys.close.tr())),
+                  ],
+                );
+              });
+
           print('Login failed password is wrong!');
         }
       } else {
@@ -376,9 +391,6 @@ class _loginState extends State<login> {
                                             uniId,
                                           );
                                           HapticFeedback.lightImpact();
-                                          Fluttertoast.showToast(
-                                            msg: LocaleKeys.alertSignIn.tr(),
-                                          );
                                         },
                                         child: Container(
                                           margin: EdgeInsets.only(

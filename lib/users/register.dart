@@ -87,6 +87,7 @@ class _registerState extends State<register> {
                       actions: [
                         TextButton(
                           onPressed: () {
+                            Navigator.of(context).pop();
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -141,6 +142,7 @@ class _registerState extends State<register> {
               actions: [
                 TextButton(
                   onPressed: () {
+                    Navigator.of(context).pop();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -174,6 +176,7 @@ class _registerState extends State<register> {
           actions: [
             TextButton(
               onPressed: () {
+                Navigator.of(context).pop();
                 Navigator.push(
                   context,
                   MaterialPageRoute(

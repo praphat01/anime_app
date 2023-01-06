@@ -68,6 +68,13 @@ class _RecentsListState extends State<RecentsList> {
 
   @override
   Widget build(BuildContext context) {
+    final double shortestSide = MediaQuery.of(context).size.shortestSide;
+    final bool useMobileLayout = shortestSide < 600;
+    return useMobileLayout ? bodyContentMoblie() : bodyContentTablet();
+  }
+
+  Container bodyContentMoblie() {
+    // For Tablet
     return Container(
       height: 250,
       child: LayoutBuilder(
@@ -132,6 +139,96 @@ class _RecentsListState extends State<RecentsList> {
                               dataBookAdd[index]!.imgLink.toString(),
                               height: 300.0,
                               width: 150.0,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 15),
+                        Text(dataBookAdd[index]!.bookTitle.toString(),
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle1
+                                ?.copyWith(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold)),
+                      ]),
+                    ),
+                  ));
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  Container bodyContentTablet() {
+    // For Tablet
+
+    return Container(
+      height: 450,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return ListView.builder(
+            controller: controller,
+            itemCount: dataBookAdd.length,
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.only(left: 20, top: 5),
+            itemBuilder: (BuildContext context, int index) {
+              bookIdType =
+                  dataBookAdd[index]!.bookId.toString().substring(1, 2);
+              if (bookIdType == '9') {
+                imageUrl = dataBookAdd[index]!.imgLink.toString();
+                dataBookAdd[index]!.imgLink =
+                    imageUrl.replaceAll("http://www.2ebook.com/new", pathSite);
+              }
+              return Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => detailPage(
+                                  bookId: dataBookAdd[index]!.bookId ?? '',
+                                  bookDesc: dataBookAdd[index]!.bookDesc ?? '',
+                                  bookshelfId:
+                                      dataBookAdd[index]!.bookshelfId ?? '',
+                                  bookPrice:
+                                      dataBookAdd[index]!.bookPrice ?? '',
+                                  bookTitle:
+                                      dataBookAdd[index]!.bookTitle ?? '',
+                                  bookAuthor:
+                                      dataBookAdd[index]!.bookAuthor ?? '',
+                                  bookNoOfPage:
+                                      dataBookAdd[index]!.bookNoOfPage ?? '',
+                                  booktypeName:
+                                      dataBookAdd[index]!.booktypeName ?? '',
+                                  publisherName:
+                                      dataBookAdd[index]!.publisherName ?? '',
+                                  bookIsbn: dataBookAdd[index]!.bookIsbn ?? '',
+                                  bookcateId:
+                                      dataBookAdd[index]!.bookcateId ?? '',
+                                  bookcateName:
+                                      dataBookAdd[index]!.bookcateName ?? '',
+                                  onlinetype:
+                                      dataBookAdd[index]!.onlinetype ?? '',
+                                  t2Id: dataBookAdd[index]!.t2Id ?? '',
+                                  imgLink: dataBookAdd[index]!.imgLink ?? '',
+                                )),
+                      );
+                    },
+                    child: SizedBox(
+                      height: constraints.maxHeight,
+                      width: constraints.maxWidth * .375,
+                      child: Column(mainAxisSize: MainAxisSize.min, children: [
+                        Expanded(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              dataBookAdd[index]!.imgLink.toString(),
+                              height: 300.0,
+                              width: 450.0,
                               fit: BoxFit.cover,
                             ),
                           ),

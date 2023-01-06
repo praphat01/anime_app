@@ -48,7 +48,7 @@ class _MainPageState extends State<MainPage> {
               ),
             ],
           ),
-          padding: const EdgeInsets.only(top: 5),
+          // padding: const EdgeInsets.only(top: 5),
           child: WillPopScope(
             child: Scaffold(
               bottomNavigationBar: BottomNavigationBar(

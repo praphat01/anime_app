@@ -145,9 +145,7 @@ class _searchloadingUniState extends State<searchloadingUni> {
                                                 uniId: dataUniSearch[index]!
                                                     .uniId
                                                     .toString(),
-                                                uniLink: dataUniSearch[index]!
-                                                    .uniLink
-                                                    .toString(),
+                                                uniLink: urlWeb,
                                                 pathWebSite:
                                                     dataUniSearch[index]!
                                                         .uniLink

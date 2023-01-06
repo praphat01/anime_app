@@ -13,7 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../models/m_detail/check_fav.dart';
 import '../../database/database_helper.dart';
-import 'bookshelf.dart';
+import 'mainpage.dart';
 
 class detailPage extends StatefulWidget {
   final String bookId;
@@ -292,12 +292,15 @@ class _detailPageState extends State<detailPage> {
         content: Text(LocaleKeys.alertBorrowSuccess.tr()),
         actions: <Widget>[
           TextButton(
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => bookshelf(),
-              ),
-            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MainPage(selectedPage: 1),
+                ),
+              );
+            },
             child: Text(LocaleKeys.ok.tr()),
           ),
         ],
@@ -307,397 +310,796 @@ class _detailPageState extends State<detailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final double shortestSide = MediaQuery.of(context).size.shortestSide;
+    final bool useMobileLayout = shortestSide < 600;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
       ),
       extendBodyBehindAppBar: true,
-      body: Container(
-        width: double.maxFinite,
-        height: double.maxFinite,
-        child: Stack(
-          children: [
-            Positioned(
-              left: 0,
-              right: 0,
-              child: Container(
-                width: double.maxFinite,
-                height: 350,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: NetworkImage(imgLink), fit: BoxFit.cover),
-                ),
-                child: new BackdropFilter(
-                  filter: new ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                  child: new Container(
-                    decoration:
-                        new BoxDecoration(color: Colors.white.withOpacity(0.0)),
-                  ),
+      body: useMobileLayout
+          ? bodyContentMoblie(context)
+          : bodyContentTablet(context),
+    );
+  }
+
+  Container bodyContentMoblie(BuildContext context) {
+    // For Mobile
+    return Container(
+      width: double.maxFinite,
+      height: double.maxFinite,
+      child: Stack(
+        children: [
+          Positioned(
+            left: 0,
+            right: 0,
+            child: Container(
+              width: double.maxFinite,
+              height: 350,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: NetworkImage(imgLink), fit: BoxFit.cover),
+              ),
+              child: new BackdropFilter(
+                filter: new ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                child: new Container(
+                  decoration:
+                      new BoxDecoration(color: Colors.white.withOpacity(0.0)),
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.center,
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 30,
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 30,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.8),
+                        spreadRadius: 5,
+                        blurRadius: 4,
+                        offset: Offset(4, 8), // changes position of shadow
+                      ),
+                    ],
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.8),
-                          spreadRadius: 5,
-                          blurRadius: 4,
-                          offset: Offset(4, 8), // changes position of shadow
+                  child: Image.network(
+                    imgLink,
+                    height: 220,
+                    width: 150,
+                    fit: BoxFit.fitHeight,
+                  ),
+                )
+              ],
+            ),
+          ),
+          Positioned(
+            top: 280,
+            child: Container(
+              padding: const EdgeInsets.only(left: 20, right: 20, top: 30),
+              width: MediaQuery.of(context).size.width,
+              height: 500,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                ),
+              ),
+              child: ListView(
+                padding: EdgeInsets.all(15),
+                children: <Widget>[
+                  Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ConstrainedBox(
+                              constraints: BoxConstraints(maxWidth: 320),
+                              child: Container(
+                                child: Text(
+                                  bookTitle,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            )
+                          ],
                         ),
-                      ],
-                    ),
-                    child: Image.network(
-                      imgLink,
-                      height: 220,
-                      width: 150,
-                      fit: BoxFit.fitHeight,
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Positioned(
-              top: 280,
-              child: Container(
-                padding: const EdgeInsets.only(left: 20, right: 20, top: 30),
-                width: MediaQuery.of(context).size.width,
-                height: 500,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                  ),
-                ),
-                child: ListView(
-                  padding: EdgeInsets.all(15),
-                  children: <Widget>[
-                    Center(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              ConstrainedBox(
-                                constraints: BoxConstraints(maxWidth: 320),
-                                child: Container(
-                                  child: Text(
-                                    bookTitle,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            children: [
-                              Wrap(
-                                children: List.generate(
-                                  5,
-                                  (index) {
-                                    return Icon(
-                                      Icons.star,
-                                      color: index < gottenStar
-                                          ? Colors.yellow
-                                          : Colors.grey,
-                                    );
-                                  },
-                                ),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                '(${gottenStar}.0)',
-                                style: TextStyle(
-                                    color: Colors.purple.withOpacity(0.6)),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              (statusFav == true)
-                                  ? OutlinedButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          statusFav = false;
-                                        });
-                                        clickFavBook(book: 'unFavBook');
-                                      },
-                                      child: const Icon(
-                                        Icons.favorite,
-                                        color: Colors.red,
-                                        size: 25.0,
-                                      ),
-                                    )
-                                  : OutlinedButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          statusFav = true;
-                                        });
-                                        clickFavBook(book: 'favBook');
-                                      },
-                                      child: const Icon(
-                                        Icons.favorite_border,
-                                        color: Colors.red,
-                                        size: 25.0,
-                                      ),
-                                    ),
-                              OutlinedButton(
-                                onPressed: () {
-                                  debugPrint('Received click');
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Wrap(
+                              children: List.generate(
+                                5,
+                                (index) {
+                                  return Icon(
+                                    Icons.star,
+                                    color: index < gottenStar
+                                        ? Colors.yellow
+                                        : Colors.grey,
+                                  );
                                 },
-                                child: TextButton(
-                                  style: TextButton.styleFrom(
-                                    primary: Colors.blue,
-                                    onSurface: Colors.red,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              '(${gottenStar}.0)',
+                              style: TextStyle(
+                                  color: Colors.purple.withOpacity(0.6)),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            (statusFav == true)
+                                ? OutlinedButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        statusFav = false;
+                                      });
+                                      clickFavBook(book: 'unFavBook');
+                                    },
+                                    child: const Icon(
+                                      Icons.favorite,
+                                      color: Colors.red,
+                                      size: 25.0,
+                                    ),
+                                  )
+                                : OutlinedButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        statusFav = true;
+                                      });
+                                      clickFavBook(book: 'favBook');
+                                    },
+                                    child: const Icon(
+                                      Icons.favorite_border,
+                                      color: Colors.red,
+                                      size: 25.0,
+                                    ),
                                   ),
-                                  onPressed: () {
-                                    // _showDialog();
-                                    // borrowStatus ? borrowBook() : '';
-                                    borrowBook();
-                                  },
-                                  child: Text(
-                                    LocaleKeys.borrow.tr(),
-                                    style: const TextStyle(
-                                        fontSize: 20,
-                                        color: Colors.red,
-                                        fontWeight: FontWeight.bold),
-                                  ),
+                            OutlinedButton(
+                              onPressed: () {
+                                debugPrint('Received click');
+                              },
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  primary: Colors.blue,
+                                  onSurface: Colors.red,
                                 ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            LocaleKeys.bookDetails.tr(),
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            "${LocaleKeys.detailsData.tr()} : ",
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            bookDesc, // รายละเอียดหนังสือ
-                            style: const TextStyle(
-                                fontSize: 15, color: Colors.grey),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "${LocaleKeys.auther.tr()} : ",
-                                style: const TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                              Flexible(
+                                onPressed: () {
+                                  // _showDialog();
+                                  // borrowStatus ? borrowBook() : '';
+                                  borrowBook();
+                                },
                                 child: Text(
-                                  bookAuthor, // ชื่อผู้แต่ง
+                                  LocaleKeys.borrow.tr(),
                                   style: const TextStyle(
-                                      fontSize: 13, color: Colors.grey),
+                                      fontSize: 20,
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "${LocaleKeys.publisherData.tr()} : ",
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          LocaleKeys.bookDetails.tr(),
+                          style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          "${LocaleKeys.detailsData.tr()} : ",
+                          style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          bookDesc, // รายละเอียดหนังสือ
+                          style:
+                              const TextStyle(fontSize: 15, color: Colors.grey),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "${LocaleKeys.auther.tr()} : ",
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            Flexible(
+                              child: Text(
+                                bookAuthor, // ชื่อผู้แต่ง
                                 style: const TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                                    fontSize: 13, color: Colors.grey),
                               ),
-                              Flexible(
-                                child: Text(
-                                  publisherName, // ชื่อสำนักพิมพ์
-                                  style: const TextStyle(
-                                      fontSize: 15, color: Colors.grey),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "${LocaleKeys.typeOfBook.tr()} : ",
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "${LocaleKeys.publisherData.tr()} : ",
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            Flexible(
+                              child: Text(
+                                publisherName, // ชื่อสำนักพิมพ์
                                 style: const TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                                    fontSize: 15, color: Colors.grey),
                               ),
-                              Flexible(
-                                child: Text(
-                                  booktypeName, // ชนิดหนังสือ
-                                  style: const TextStyle(
-                                      fontSize: 15, color: Colors.grey),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "${LocaleKeys.bookCategory.tr()} : ",
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "${LocaleKeys.typeOfBook.tr()} : ",
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            Flexible(
+                              child: Text(
+                                booktypeName, // ชนิดหนังสือ
                                 style: const TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                                    fontSize: 15, color: Colors.grey),
                               ),
-                              Flexible(
-                                child: Text(
-                                  bookcateName, // หมวดหมู่หนังสือ
-                                  style: TextStyle(
-                                      fontSize: 15, color: Colors.grey),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "${LocaleKeys.title.tr()} : ",
-                                style: const TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                              const Text(
-                                "-",
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "${LocaleKeys.bookCategory.tr()} : ",
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            Flexible(
+                              child: Text(
+                                bookcateName, // หมวดหมู่หนังสือ
                                 style:
                                     TextStyle(fontSize: 15, color: Colors.grey),
                               ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "${LocaleKeys.book_id.tr()} : ",
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "${LocaleKeys.title.tr()} : ",
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            const Text(
+                              "-",
+                              style:
+                                  TextStyle(fontSize: 15, color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "${LocaleKeys.book_id.tr()} : ",
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            Flexible(
+                              child: Text(
+                                bookId, // รหัสหนังสือ
                                 style: const TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                                    fontSize: 15, color: Colors.grey),
                               ),
-                              Flexible(
-                                child: Text(
-                                  bookId, // รหัสหนังสือ
-                                  style: const TextStyle(
-                                      fontSize: 15, color: Colors.grey),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "${LocaleKeys.ISBN_number.tr()} : ",
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "${LocaleKeys.ISBN_number.tr()} : ",
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            Flexible(
+                              child: Text(
+                                bookIsbn, // เลข ISBN
                                 style: const TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                                    fontSize: 15, color: Colors.grey),
                               ),
-                              Flexible(
-                                child: Text(
-                                  bookIsbn, // เลข ISBN
-                                  style: const TextStyle(
-                                      fontSize: 15, color: Colors.grey),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "${LocaleKeys.pages.tr()} : ",
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "${LocaleKeys.pages.tr()} : ",
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            Flexible(
+                              child: Text(
+                                bookNoOfPage, // จำนวนหน้าหนังสือ
                                 style: const TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                                    fontSize: 15, color: Colors.grey),
                               ),
-                              Flexible(
-                                child: Text(
-                                  bookNoOfPage, // จำนวนหน้าหนังสือ
-                                  style: const TextStyle(
-                                      fontSize: 15, color: Colors.grey),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "${LocaleKeys.bookAmount.tr()} : ",
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "${LocaleKeys.bookAmount.tr()} : ",
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            Flexible(
+                              child: Text(
+                                onlinetype, // จำนวนหนังสือ
                                 style: const TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                                    fontSize: 15, color: Colors.grey),
                               ),
-                              Flexible(
-                                child: Text(
-                                  onlinetype, // จำนวนหนังสือ
-                                  style: const TextStyle(
-                                      fontSize: 15, color: Colors.grey),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 100,
-                          ),
-                        ],
-                      ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 100,
+                        ),
+                      ],
                     ),
-                    const Text(
-                      "",
-                      style: TextStyle(
-                        fontSize: 20,
-                      ),
+                  ),
+                  const Text(
+                    "",
+                    style: TextStyle(
+                      fontSize: 20,
                     ),
-                  ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          // BottomNavBar(),
+        ],
+      ),
+    );
+  }
+
+  Container bodyContentTablet(BuildContext context) {
+    // For Tablet
+    return Container(
+      width: double.maxFinite,
+      height: double.maxFinite,
+      child: Stack(
+        children: [
+          Positioned(
+            left: 0,
+            right: 0,
+            child: Container(
+              width: double.maxFinite,
+              height: 600,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: NetworkImage(imgLink), fit: BoxFit.cover),
+              ),
+              child: new BackdropFilter(
+                filter: new ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                child: new Container(
+                  decoration:
+                      new BoxDecoration(color: Colors.white.withOpacity(0.0)),
                 ),
               ),
             ),
-            // BottomNavBar(),
-          ],
-        ),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 130,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.8),
+                        spreadRadius: 5,
+                        blurRadius: 4,
+                        offset: Offset(4, 8), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: Image.network(
+                    imgLink,
+                    height: 350,
+                    width: 250,
+                    fit: BoxFit.fitHeight,
+                  ),
+                )
+              ],
+            ),
+          ),
+          Positioned(
+            top: 600,
+            child: Container(
+              padding: const EdgeInsets.only(left: 20, right: 20, top: 30),
+              width: MediaQuery.of(context).size.width,
+              height: 600,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                ),
+              ),
+              child: ListView(
+                padding: EdgeInsets.all(15),
+                children: <Widget>[
+                  Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ConstrainedBox(
+                              constraints: BoxConstraints(maxWidth: 320),
+                              child: Container(
+                                child: Text(
+                                  bookTitle,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.clip,
+                                  style: const TextStyle(
+                                      fontSize: 40,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Row(
+                          children: [
+                            Wrap(
+                              children: List.generate(
+                                5,
+                                (index) {
+                                  return Icon(
+                                    Icons.star,
+                                    color: index < gottenStar
+                                        ? Colors.yellow
+                                        : Colors.grey,
+                                  );
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              width: 30,
+                            ),
+                            Text(
+                              '(${gottenStar}.0)',
+                              style: TextStyle(
+                                  color: Colors.purple.withOpacity(0.6)),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            (statusFav == true)
+                                ? OutlinedButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        statusFav = false;
+                                      });
+                                      clickFavBook(book: 'unFavBook');
+                                    },
+                                    child: const Icon(
+                                      Icons.favorite,
+                                      color: Colors.red,
+                                      size: 50.0,
+                                    ),
+                                  )
+                                : OutlinedButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        statusFav = true;
+                                      });
+                                      clickFavBook(book: 'favBook');
+                                    },
+                                    child: const Icon(
+                                      Icons.favorite_border,
+                                      color: Colors.red,
+                                      size: 50.0,
+                                    ),
+                                  ),
+                            OutlinedButton(
+                              onPressed: () {
+                                debugPrint('Received click');
+                              },
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                    primary: Colors.blue,
+                                    onSurface: Colors.red,
+                                    fixedSize: Size.fromHeight(150)),
+                                onPressed: () {
+                                  // _showDialog();
+                                  // borrowStatus ? borrowBook() : '';
+                                  borrowBook();
+                                },
+                                child: Text(
+                                  LocaleKeys.borrow.tr(),
+                                  style: const TextStyle(
+                                      fontSize: 50,
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          LocaleKeys.bookDetails.tr(),
+                          style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          "${LocaleKeys.detailsData.tr()} : ",
+                          style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          bookDesc, // รายละเอียดหนังสือ
+                          style:
+                              const TextStyle(fontSize: 15, color: Colors.grey),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "${LocaleKeys.auther.tr()} : ",
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            Flexible(
+                              child: Text(
+                                bookAuthor, // ชื่อผู้แต่ง
+                                style: const TextStyle(
+                                    fontSize: 13, color: Colors.grey),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "${LocaleKeys.publisherData.tr()} : ",
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            Flexible(
+                              child: Text(
+                                publisherName, // ชื่อสำนักพิมพ์
+                                style: const TextStyle(
+                                    fontSize: 15, color: Colors.grey),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "${LocaleKeys.typeOfBook.tr()} : ",
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            Flexible(
+                              child: Text(
+                                booktypeName, // ชนิดหนังสือ
+                                style: const TextStyle(
+                                    fontSize: 15, color: Colors.grey),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "${LocaleKeys.bookCategory.tr()} : ",
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            Flexible(
+                              child: Text(
+                                bookcateName, // หมวดหมู่หนังสือ
+                                style:
+                                    TextStyle(fontSize: 15, color: Colors.grey),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "${LocaleKeys.title.tr()} : ",
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            const Text(
+                              "-",
+                              style:
+                                  TextStyle(fontSize: 15, color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "${LocaleKeys.book_id.tr()} : ",
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            Flexible(
+                              child: Text(
+                                bookId, // รหัสหนังสือ
+                                style: const TextStyle(
+                                    fontSize: 15, color: Colors.grey),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "${LocaleKeys.ISBN_number.tr()} : ",
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            Flexible(
+                              child: Text(
+                                bookIsbn, // เลข ISBN
+                                style: const TextStyle(
+                                    fontSize: 15, color: Colors.grey),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "${LocaleKeys.pages.tr()} : ",
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            Flexible(
+                              child: Text(
+                                bookNoOfPage, // จำนวนหน้าหนังสือ
+                                style: const TextStyle(
+                                    fontSize: 15, color: Colors.grey),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "${LocaleKeys.bookAmount.tr()} : ",
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            Flexible(
+                              child: Text(
+                                onlinetype, // จำนวนหนังสือ
+                                style: const TextStyle(
+                                    fontSize: 15, color: Colors.grey),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 100,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Text(
+                    "",
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          // BottomNavBar(),
+        ],
       ),
     );
   }

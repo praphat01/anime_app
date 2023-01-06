@@ -1,0 +1,16 @@
+{
+    "editor.autoClosingBrackets": "always",
+    "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+    "editor.guides.bracketPairs": "active",
+    "terminal.integrated.enableMultiLinePasteWarning": false,
+    "editor.bracketPairColorization.enabled": true,
+    "editor.guides.highlightActiveBracketPair": true,
+    "java.selectionRange.enabled": false,
+    "editor.guides.bracketPairsHorizontal": "active",
+    "editor.language.brackets": [
+        ["[", "]"],
+        ["(", ")"],
+        ["{", "}"]
+    ]
+    
+}

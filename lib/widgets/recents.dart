@@ -13,6 +13,8 @@ class Recents extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double shortestSide = MediaQuery.of(context).size.shortestSide;
+    final bool useMobileLayout = shortestSide < 600;
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.only(top: 10),
@@ -26,20 +28,48 @@ class Recents extends StatelessWidget {
                 child: Row(
                   children: [
                     Expanded(
-                        child: Text(LocaleKeys.newBook.tr(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline6
-                                ?.copyWith(
-                                    color: AnimeUI.cyan,
-                                    fontWeight: FontWeight.bold))),
+                      child: useMobileLayout
+                          ? // For Mobile
+                          Text(LocaleKeys.newBook.tr(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  ?.copyWith(
+                                      color: AnimeUI.cyan,
+                                      fontWeight: FontWeight.bold))
+                          : // For Tablet
+                          Text(LocaleKeys.newBook.tr(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4
+                                  ?.copyWith(
+                                      color: AnimeUI.cyan,
+                                      fontWeight: FontWeight.bold)),
+                    ),
                     InkWell(
-                      child: Text(
-                        LocaleKeys.view_all.tr(),
-                        style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                            color: AnimeUI.cyan, fontWeight: FontWeight.bold),
-                      ),
+                      child: useMobileLayout
+                          ? // For Mobile
+                          Text(
+                              LocaleKeys.view_all.tr(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  ?.copyWith(
+                                      color: AnimeUI.cyan,
+                                      fontWeight: FontWeight.bold),
+                            )
+                          : // For Tablet
+                          Text(
+                              LocaleKeys.view_all.tr(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  ?.copyWith(
+                                      color: AnimeUI.cyan,
+                                      fontWeight: FontWeight.bold),
+                            ),
                       onTap: () {
+                        Navigator.of(context).pop();
                         Navigator.push(
                           context,
                           MaterialPageRoute(

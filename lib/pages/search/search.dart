@@ -124,11 +124,14 @@ class _searchPageState extends State<searchPage> {
                   //     // return searchloading();
                   //   }));
                   // },
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => searchloading(text: t.text)),
-                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => searchloading(text: t.text)),
+                    );
+                  },
                   style:
                       ElevatedButton.styleFrom(backgroundColor: AnimeUI.cyan),
                   // splashColor: Color(0xfff012AC0),

@@ -28,7 +28,7 @@ class _MainPageState extends State<MainPage> {
   var isDeviceConnected = false;
   List<Widget> _widgetList = [
     HomePage(),
-    bookshelf(),
+    bookshelfOffline(),
     bookCategory(),
     bookPublisher(),
   ];

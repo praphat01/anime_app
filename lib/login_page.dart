@@ -128,8 +128,16 @@ class _loginState extends State<login> {
             msg: LocaleKeys.alertSignIn.tr(),
           );
 
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => splashScreen()));
+          // Navigator.pushReplacement(
+          //     context, MaterialPageRoute(builder: (context) => splashScreen()));
+
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const splashScreen(),
+              ),
+              (route) => false);
+
           print(status);
         } else if (data['status'] == "false") {
           showDialog(

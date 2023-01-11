@@ -1,3 +1,7 @@
+// ignore_for_file: avoid_print
+
+import 'package:anime_app/models/sqlite_model.dart';
+import 'package:anime_app/pages/pdfviewer/offline_readpdf.dart';
 import 'package:anime_app/widgets/widget_circulat_percent.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -73,13 +77,27 @@ class _bookshelfState extends State<bookshelf> {
   bool displayProcessLoadPdf = false;
   double percentNumber = 0;
 
+  var sqliteModels = <SQLiteModel>[];
+
+  var coverFiles = <File>[];
+  var contentFiles = <File>[];
+  
+  bool? haveBook;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    GetConnecttivity();
-    _refreshData();
+    getConnecttivity();
+
     // checkExpireBook();
+  }
+
+  void statusNoInternet() {
+    _refreshData();
+  }
+
+  void statusHaveInternet() {
     fetch();
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
@@ -101,14 +119,20 @@ class _bookshelfState extends State<bookshelf> {
     FlutterDownloader.registerCallback(downloadCallback);
   }
 
-  Future GetConnecttivity() async {
-    subscription = Connectivity()
-        .onConnectivityChanged
-        .listen((ConnectivityResult result) async {
-      isDeviceConnected = await InternetConnectionChecker().hasConnection;
-      setState(() {
-        isDeviceConnected;
-      });
+  Future getConnecttivity() async {
+    print('##11jan GetConnecttivity Work');
+
+    await Connectivity().checkConnectivity().then((value) {
+      if (value == ConnectivityResult.none) {
+        print('##11jan Not Connected Interner');
+        isDeviceConnected = false;
+        statusNoInternet();
+      } else {
+        print('##11jan Connected Interner');
+        isDeviceConnected = true;
+        statusHaveInternet();
+      }
+      setState(() {});
     });
   }
 
@@ -144,6 +168,22 @@ class _bookshelfState extends State<bookshelf> {
 
   void _refreshData() async {
     final data = await DatabaseHelper.getItems();
+    print('##11jan data sqlite --> $data');
+
+    if (data.isNotEmpty) {
+      for (var element in data) {
+        SQLiteModel sqLiteModel = SQLiteModel.fromMap(element);
+        sqliteModels.add(sqLiteModel);
+
+        File coverfile = File(element['book_image']);
+        coverFiles.add(coverfile);
+
+        File contentfile = File(element['book_file']);
+        contentFiles.add(contentfile);
+      }
+    }
+
+    load = false;
     setState(() {
       myData = data;
     });
@@ -315,15 +355,23 @@ class _bookshelfState extends State<bookshelf> {
     final uri = Uri.parse(getNewBook);
     http.get(uri).then((response) {
       if (response.statusCode == 200) {
+        print('##11jan response -->${response.body}');
         final responseBody = response.body;
+
         final decodedData = jsonDecode(responseBody);
 
         if (decodedData["insert_key"] != Null) {
+          haveBook = true;
           userBookShelflist = [
             ...userBookShelflist,
             ...userBookshelf.fromJson(decodedData).insertKey as List<InsertKey?>
           ];
+        } else {
+          haveBook = false;
         }
+
+        print(
+            '##11jan userBookShelflist ขนาด ----> ${userBookShelflist.length}');
 
         load = false;
 
@@ -395,9 +443,21 @@ class _bookshelfState extends State<bookshelf> {
     String nameFile = "/${filename}";
     String savePath = appDocDir!.path + nameFile;
 
+    print('##11jan savePath ---> $savePath');
+
     // Path of image cover book
     String nameFileImage = "/${fileImageName}";
     String saveImagePath = appDocDir.path + nameFileImage;
+
+    print('##11jan saveImagePath ---> $saveImagePath');
+
+    List<Map> data = await DatabaseHelper.getIDWithBookId(bookId);
+    print('##11jan data at $bookId --> $data');
+
+    for (var element in data) {
+      DatabaseHelper.updateImageFilePath(
+          id: element['id'], book_image: saveImagePath, book_file: savePath);
+    }
 
     double second = 0.1;
 
@@ -448,55 +508,83 @@ class _bookshelfState extends State<bookshelf> {
       hasBook = true;
     }
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(
-            LocaleKeys.menu_Bookshelf.tr(),
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              color: AnimeUI.cyan,
-            ),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          LocaleKeys.menu_Bookshelf.tr(),
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: AnimeUI.cyan,
           ),
-          backgroundColor: Colors.white,
-          elevation: 0.0,
-          iconTheme: const IconThemeData(color: Colors.black),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.search, color: Colors.black, size: 30),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const searchPage()),
-                );
-              },
-            ),
-          ],
         ),
-        drawer: const PublicDrawer(),
-        body: load
-            ? circular(hasBook)
-            : hasBook
-                ? Stack(
-                    children: [
-                      contentMain(),
-                      displayProcessLoadPdf
-                          ? showProcessLoad()
-                          : const SizedBox(),
-                    ],
-                  )
-                : Container(
-                    child: Center(
-                      child: Text(
-                        LocaleKeys.noBook.tr(),
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey,
+        backgroundColor: Colors.white,
+        elevation: 0.0,
+        iconTheme: const IconThemeData(color: Colors.black),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search, color: Colors.black, size: 30),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const searchPage()),
+              );
+            },
+          ),
+        ],
+      ),
+      drawer: const PublicDrawer(),
+      body: load
+          ? circular(hasBook)
+          : isDeviceConnected
+              ? haveBook!
+                  ? Text('Have Book')
+                  : Container(
+                      child: Center(
+                        child: Text(
+                          LocaleKeys.noBook.tr(),
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
                       ),
-                    ),
-                  ));
+                    )
+              : GridView.builder(
+                  itemCount: sqliteModels.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3, childAspectRatio: 1 / 2),
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () {
+                        if (sqliteModels[index].book_file.isEmpty) {
+                          //Non Dowload
+                          Fluttertoast.showToast(msg: 'ยังไม่ได้โหลดเลย');
+                        } else {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OfflineReadPdf(
+                                  sqLiteModel: sqliteModels[index],
+                                ),
+                              ));
+                        }
+                      },
+                      child: Card(
+                        child: Column(
+                          children: [
+                            sqliteModels[index].book_image.isEmpty
+                                ? Image.asset('assets/images/Book-icon.png')
+                                : Image.file(coverFiles[index]),
+                            Text(sqliteModels[index].book_name),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+    );
   }
 
   Widget showProcessLoad() {

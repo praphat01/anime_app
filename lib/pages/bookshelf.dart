@@ -79,11 +79,10 @@ class _bookshelfState extends State<bookshelf> {
 
   var sqliteModels = <SQLiteModel>[];
 
-  File file = File(
-      '/storage/emulated/0/Android/data/com.example.anime_app/files/02007417.jpg');
-
   var coverFiles = <File>[];
   var contentFiles = <File>[];
+  
+  bool? haveBook;
 
   @override
   void initState() {
@@ -356,15 +355,23 @@ class _bookshelfState extends State<bookshelf> {
     final uri = Uri.parse(getNewBook);
     http.get(uri).then((response) {
       if (response.statusCode == 200) {
+        print('##11jan response -->${response.body}');
         final responseBody = response.body;
+
         final decodedData = jsonDecode(responseBody);
 
         if (decodedData["insert_key"] != Null) {
+          haveBook = true;
           userBookShelflist = [
             ...userBookShelflist,
             ...userBookshelf.fromJson(decodedData).insertKey as List<InsertKey?>
           ];
+        } else {
+          haveBook = false;
         }
+
+        print(
+            '##11jan userBookShelflist ขนาด ----> ${userBookShelflist.length}');
 
         load = false;
 
@@ -529,15 +536,8 @@ class _bookshelfState extends State<bookshelf> {
       body: load
           ? circular(hasBook)
           : isDeviceConnected
-              ? hasBook
-                  ? Stack(
-                      children: [
-                        contentMain(),
-                        displayProcessLoadPdf
-                            ? showProcessLoad()
-                            : const SizedBox(),
-                      ],
-                    )
+              ? haveBook!
+                  ? Text('Have Book')
                   : Container(
                       child: Center(
                         child: Text(
@@ -565,7 +565,9 @@ class _bookshelfState extends State<bookshelf> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => OfflineReadPdf(sqLiteModel: sqliteModels[index],),
+                                builder: (context) => OfflineReadPdf(
+                                  sqLiteModel: sqliteModels[index],
+                                ),
                               ));
                         }
                       },

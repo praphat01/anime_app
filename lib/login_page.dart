@@ -1,4 +1,5 @@
 import 'package:anime_app/constants/colors.dart';
+import 'package:anime_app/home_page.dart';
 import 'package:anime_app/users/register.dart';
 import 'package:anime_app/widgets/webView.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -176,266 +177,301 @@ class _loginState extends State<login> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
-      body: Form(
-        child: ScrollConfiguration(
-          behavior: MyBehavior(),
-          child: SingleChildScrollView(
-            child: SizedBox(
-              height: size.height,
-              child: Stack(
-                children: [
-                  SizedBox(
-                    height: size.height,
-                    child: Image.asset(
-                      'assets/images/Coffee-Magazine (1).jpeg',
-                      fit: BoxFit.fitHeight,
+      //onTop คือการเอา keyboard ลงไปเก็บ มาสเตอร์
+      body: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => FocusScope.of(context).requestFocus(FocusScopeNode()),
+        child: Form(
+          child: ScrollConfiguration(
+            behavior: MyBehavior(),
+            child: SingleChildScrollView(
+              child: SizedBox(
+                height: size.height,
+                child: Stack(
+                  children: [
+                    SizedBox(
+                      height: size.height,
+                      child: Image.asset(
+                        'assets/images/Coffee-Magazine (1).jpeg',
+                        fit: BoxFit.fitHeight,
+                      ),
                     ),
-                  ),
-                  Center(
-                    child: Column(
-                      children: [
-                        // Text('uniSname is : ${uniSname}'),
-                        // Text('uni_id is : ${uniId}'),
-                        Expanded(
-                          child: SizedBox(),
-                        ),
-                        Expanded(
-                          flex: 7,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(30),
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(sigmaY: 25, sigmaX: 25),
-                              child: Container(
-                                color: Colors.black.withOpacity(0.08),
-                                child: SizedBox(
-                                  width: size.width * .9,
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                          top: size.width * .15,
-                                          bottom: size.width * .1,
-                                        ),
-                                        child: Text(
-                                          '${LocaleKeys.signin.tr()} ${uniSname.toUpperCase()}',
-                                          style: TextStyle(
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.w600,
-                                            color: Color.fromARGB(
-                                                    255, 255, 255, 255)
-                                                .withOpacity(.8),
+                    Center(
+                      child: Column(
+                        children: [
+                          // Text('uniSname is : ${uniSname}'),
+                          // Text('uni_id is : ${uniId}'),
+                          Expanded(
+                            child: SizedBox(),
+                          ),
+                          Expanded(
+                            flex: 7,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(30),
+                              child: BackdropFilter(
+                                filter:
+                                    ImageFilter.blur(sigmaY: 25, sigmaX: 25),
+                                child: Container(
+                                  color: Colors.black.withOpacity(0.08),
+                                  child: SizedBox(
+                                    width: size.width * .9,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                            top: size.width * .15,
+                                            bottom: size.width * .1,
+                                          ),
+                                          child: Text(
+                                            '${LocaleKeys.signin.tr()} ${uniSname.toUpperCase()}',
+                                            style: TextStyle(
+                                              fontSize: 25,
+                                              fontWeight: FontWeight.w600,
+                                              color: Color.fromARGB(
+                                                      255, 255, 255, 255)
+                                                  .withOpacity(.8),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      // component(
-                                      //   Icons.account_circle_outlined,
-                                      //   'User name...',
-                                      //   false,
-                                      //   false,
-                                      //   'userController',
-                                      // ),
-                                      // component(
-                                      //   Icons.lock_outline,
-                                      //   'Password...',
-                                      //   true,
-                                      //   false,
-                                      //   'passwordController',
-                                      // ),
+                                        // component(
+                                        //   Icons.account_circle_outlined,
+                                        //   'User name...',
+                                        //   false,
+                                        //   false,
+                                        //   'userController',
+                                        // ),
+                                        // component(
+                                        //   Icons.lock_outline,
+                                        //   'Password...',
+                                        //   true,
+                                        //   false,
+                                        //   'passwordController',
+                                        // ),
 
-                                      Container(
-                                        height: size.width / 8,
-                                        width: size.width / 1.25,
-                                        alignment: Alignment.center,
-                                        padding: EdgeInsets.only(
-                                            right: size.width / 30),
-                                        decoration: BoxDecoration(
-                                          color: Colors.black.withOpacity(.1),
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        child: TextFormField(
-                                          style: TextStyle(
-                                            color: Colors.white.withOpacity(.9),
-                                          ),
-                                          controller: userController,
-                                          decoration: InputDecoration(
-                                            prefixIcon: Icon(
-                                              Icons.account_circle_outlined,
-                                              color:
-                                                  Colors.white.withOpacity(.8),
-                                            ),
-                                            border: InputBorder.none,
-                                            hintMaxLines: 1,
-                                            hintText: LocaleKeys.username.tr(),
-                                            hintStyle: TextStyle(
-                                              fontSize: 14,
-                                              color:
-                                                  Colors.white.withOpacity(.5),
-                                            ),
-                                          ),
-                                          validator: (String? username) {
-                                            if (username!.isEmpty) {
-                                              return 'Please enter username';
-                                            } else {
-                                              return null;
-                                            }
-                                          },
-                                        ),
-                                      ),
-
-                                      Container(
-                                        height: size.width / 8,
-                                        width: size.width / 1.25,
-                                        alignment: Alignment.center,
-                                        padding: EdgeInsets.only(
-                                            right: size.width / 30),
-                                        decoration: BoxDecoration(
-                                          color: Colors.black.withOpacity(.1),
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        child: TextFormField(
-                                          style: TextStyle(
-                                            color: Colors.white.withOpacity(.9),
-                                          ),
-                                          controller: passwordController,
-                                          obscureText: _isSecurePassword,
-                                          decoration: InputDecoration(
-                                            prefixIcon: Icon(
-                                              Icons.lock_outline,
-                                              color:
-                                                  Colors.white.withOpacity(.8),
-                                            ),
-                                            border: InputBorder.none,
-                                            hintMaxLines: 1,
-                                            hintText: LocaleKeys.password.tr(),
-                                            hintStyle: TextStyle(
-                                              fontSize: 14,
-                                              color:
-                                                  Colors.white.withOpacity(.5),
-                                            ),
-                                            suffixIcon: togglePassword(),
-                                          ),
-                                          validator: (String? password) {
-                                            if (password!.isEmpty) {
-                                              return 'Please enter password';
-                                            } else {
-                                              return null;
-                                            }
-                                          },
-                                        ),
-                                      ),
-                                      // TextFormField(
-                                      //   controller: passwordController,
-                                      //   decoration: InputDecoration(
-                                      //       hintText: 'Password'),
-                                      // ),
-
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          RichText(
-                                            text: TextSpan(
-                                              // text: LocaleKeys.forgetPassword
-                                              //     .tr(),
-                                              text: '               ',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                              ),
-                                              recognizer: TapGestureRecognizer()
-                                                ..onTap = () {
-                                                  HapticFeedback.lightImpact();
-                                                  Fluttertoast.showToast(
-                                                    msg: LocaleKeys
-                                                        .alertForgetPassword
-                                                        .tr(),
-                                                  );
-                                                },
-                                            ),
-                                          ),
-                                          RichText(
-                                            text: TextSpan(
-                                              text: LocaleKeys.createNewAccount
-                                                  .tr(),
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                              ),
-                                              recognizer: TapGestureRecognizer()
-                                                ..onTap = () {
-                                                  Navigator.push(context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) {
-                                                    return register(
-                                                        uniLink: uniLink,
-                                                        pathWebSite:
-                                                            pathWebSite,
-                                                        uniSname: uniSname,
-                                                        uniId: uniId);
-                                                    // return searchloading();
-                                                  }));
-
-                                                  HapticFeedback.lightImpact();
-                                                  Fluttertoast.showToast(
-                                                    msg: LocaleKeys
-                                                        .alertCreateAccount
-                                                        .tr(),
-                                                  );
-                                                },
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: size.width * .3),
-                                      InkWell(
-                                        splashColor: Colors.transparent,
-                                        highlightColor: Colors.transparent,
-                                        onTap: () {
-                                          doLogin(
-                                            userController.text.toString(),
-                                            passwordController.text.toString(),
-                                            uniId,
-                                          );
-                                          HapticFeedback.lightImpact();
-                                        },
-                                        child: Container(
-                                          margin: EdgeInsets.only(
-                                            bottom: size.width * .05,
-                                          ),
+                                        Container(
                                           height: size.width / 8,
                                           width: size.width / 1.25,
                                           alignment: Alignment.center,
+                                          padding: EdgeInsets.only(
+                                              right: size.width / 30),
                                           decoration: BoxDecoration(
                                             color: Colors.black.withOpacity(.1),
                                             borderRadius:
                                                 BorderRadius.circular(20),
                                           ),
-                                          child: Text(
-                                            LocaleKeys.buttonSignin.tr(),
+                                          child: TextFormField(
                                             style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w600,
+                                              color:
+                                                  Colors.white.withOpacity(.9),
+                                            ),
+                                            controller: userController,
+                                            decoration: InputDecoration(
+                                              prefixIcon: Icon(
+                                                Icons.account_circle_outlined,
+                                                color: Colors.white
+                                                    .withOpacity(.8),
+                                              ),
+                                              border: InputBorder.none,
+                                              hintMaxLines: 1,
+                                              hintText:
+                                                  LocaleKeys.username.tr(),
+                                              hintStyle: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.white
+                                                    .withOpacity(.5),
+                                              ),
+                                            ),
+                                            validator: (String? username) {
+                                              if (username!.isEmpty) {
+                                                return 'Please enter username';
+                                              } else {
+                                                return null;
+                                              }
+                                            },
+                                          ),
+                                        ),
+
+                                        Container(
+                                          height: size.width / 8,
+                                          width: size.width / 1.25,
+                                          alignment: Alignment.center,
+                                          padding: EdgeInsets.only(
+                                              right: size.width / 30),
+                                          decoration: BoxDecoration(
+                                            color: Colors.black.withOpacity(.1),
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                          child: TextFormField(
+                                            style: TextStyle(
+                                              color:
+                                                  Colors.white.withOpacity(.9),
+                                            ),
+                                            controller: passwordController,
+                                            obscureText: _isSecurePassword,
+                                            decoration: InputDecoration(
+                                              prefixIcon: Icon(
+                                                Icons.lock_outline,
+                                                color: Colors.white
+                                                    .withOpacity(.8),
+                                              ),
+                                              border: InputBorder.none,
+                                              hintMaxLines: 1,
+                                              hintText:
+                                                  LocaleKeys.password.tr(),
+                                              hintStyle: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.white
+                                                    .withOpacity(.5),
+                                              ),
+                                              suffixIcon: togglePassword(),
+                                            ),
+                                            validator: (String? password) {
+                                              if (password!.isEmpty) {
+                                                return 'Please enter password';
+                                              } else {
+                                                return null;
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                        // TextFormField(
+                                        //   controller: passwordController,
+                                        //   decoration: InputDecoration(
+                                        //       hintText: 'Password'),
+                                        // ),
+
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            RichText(
+                                              text: TextSpan(
+                                                // text: LocaleKeys.forgetPassword
+                                                //     .tr(),
+                                                text: '               ',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                                recognizer:
+                                                    TapGestureRecognizer()
+                                                      ..onTap = () {
+                                                        HapticFeedback
+                                                            .lightImpact();
+                                                        Fluttertoast.showToast(
+                                                          msg: LocaleKeys
+                                                              .alertForgetPassword
+                                                              .tr(),
+                                                        );
+                                                      },
+                                              ),
+                                            ),
+                                            RichText(
+                                              text: TextSpan(
+                                                text: LocaleKeys
+                                                    .createNewAccount
+                                                    .tr(),
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                                recognizer:
+                                                    TapGestureRecognizer()
+                                                      ..onTap = () {
+                                                        Navigator.push(context,
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) {
+                                                          return register(
+                                                              uniLink: uniLink,
+                                                              pathWebSite:
+                                                                  pathWebSite,
+                                                              uniSname:
+                                                                  uniSname,
+                                                              uniId: uniId);
+                                                          // return searchloading();
+                                                        }));
+
+                                                        HapticFeedback
+                                                            .lightImpact();
+                                                        Fluttertoast.showToast(
+                                                          msg: LocaleKeys
+                                                              .alertCreateAccount
+                                                              .tr(),
+                                                        );
+                                                      },
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: size.width * .3),
+                                        InkWell(
+                                          splashColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () {
+                                            doLogin(
+                                              userController.text.toString(),
+                                              passwordController.text
+                                                  .toString(),
+                                              uniId,
+                                            );
+                                            HapticFeedback.lightImpact();
+                                          },
+                                          child: Container(
+                                            margin: EdgeInsets.only(
+                                              bottom: size.width * .05,
+                                            ),
+                                            height: size.width / 8,
+                                            width: size.width / 1.25,
+                                            alignment: Alignment.center,
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  Colors.black.withOpacity(.1),
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ),
+                                            child: Text(
+                                              LocaleKeys.buttonSignin.tr(),
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w600,
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        Expanded(
-                          child: SizedBox(),
-                        ),
-                      ],
+                          Expanded(
+                            child: SizedBox(),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                    Positioned(
+                      top: 24,
+                      child: IconButton(
+                          onPressed: () {
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => HomePagemain(),
+                                ),
+                                (route) => false);
+                          },
+                          icon: Icon(
+                            Icons.arrow_back,
+                            color: Colors.white,
+                          )),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

@@ -88,16 +88,18 @@ class _registerState extends State<register> {
                         TextButton(
                           onPressed: () {
                             Navigator.of(context).pop();
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
+                            // Navigator.of(context).pop();
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
                                   builder: (context) => login(
-                                        uniSname: widget.uniSname,
-                                        uniId: widget.uniId,
-                                        uniLink: uniLink,
-                                        pathWebSite: pathWebSite,
-                                      )),
-                            );
+                                    uniSname: widget.uniSname,
+                                    uniId: widget.uniId,
+                                    uniLink: uniLink,
+                                    pathWebSite: pathWebSite,
+                                  ),
+                                ),
+                                (route) => false);
                           },
                           child: Text(LocaleKeys.backToLogin.tr()),
                         ),

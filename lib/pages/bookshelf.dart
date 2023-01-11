@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:anime_app/models/sqlite_model.dart';
+import 'package:anime_app/pages/pdfviewer/offline_readpdf.dart';
 import 'package:anime_app/widgets/widget_circulat_percent.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -77,8 +78,12 @@ class _bookshelfState extends State<bookshelf> {
   double percentNumber = 0;
 
   var sqliteModels = <SQLiteModel>[];
-  
-  File file = File('/storage/emulated/0/Android/data/com.example.anime_app/files/02007417.jpg');
+
+  File file = File(
+      '/storage/emulated/0/Android/data/com.example.anime_app/files/02007417.jpg');
+
+  var coverFiles = <File>[];
+  var contentFiles = <File>[];
 
   @override
   void initState() {
@@ -170,6 +175,12 @@ class _bookshelfState extends State<bookshelf> {
       for (var element in data) {
         SQLiteModel sqLiteModel = SQLiteModel.fromMap(element);
         sqliteModels.add(sqLiteModel);
+
+        File coverfile = File(element['book_image']);
+        coverFiles.add(coverfile);
+
+        File contentfile = File(element['book_file']);
+        contentFiles.add(contentfile);
       }
     }
 
@@ -433,6 +444,14 @@ class _bookshelfState extends State<bookshelf> {
 
     print('##11jan saveImagePath ---> $saveImagePath');
 
+    List<Map> data = await DatabaseHelper.getIDWithBookId(bookId);
+    print('##11jan data at $bookId --> $data');
+
+    for (var element in data) {
+      DatabaseHelper.updateImageFilePath(
+          id: element['id'], book_image: saveImagePath, book_file: savePath);
+    }
+
     double second = 0.1;
 
     await Dio().download(pdfLinkNew, savePath,
@@ -535,13 +554,31 @@ class _bookshelfState extends State<bookshelf> {
               : GridView.builder(
                   itemCount: sqliteModels.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3, childAspectRatio: 1/2),
+                      crossAxisCount: 3, childAspectRatio: 1 / 2),
                   itemBuilder: (context, index) {
-                    return Column(
-                      children: [
-                        Image.file(file),
-                        Text(sqliteModels[index].book_name),
-                      ],
+                    return InkWell(
+                      onTap: () {
+                        if (sqliteModels[index].book_file.isEmpty) {
+                          //Non Dowload
+                          Fluttertoast.showToast(msg: 'ยังไม่ได้โหลดเลย');
+                        } else {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OfflineReadPdf(sqLiteModel: sqliteModels[index],),
+                              ));
+                        }
+                      },
+                      child: Card(
+                        child: Column(
+                          children: [
+                            sqliteModels[index].book_image.isEmpty
+                                ? Image.asset('assets/images/Book-icon.png')
+                                : Image.file(coverFiles[index]),
+                            Text(sqliteModels[index].book_name),
+                          ],
+                        ),
+                      ),
                     );
                   },
                 ),

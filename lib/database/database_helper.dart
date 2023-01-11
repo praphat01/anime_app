@@ -17,6 +17,8 @@ class DatabaseHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         book_id TEXT,
         book_name TEXT,
+        book_image TEXT,
+        book_file TEXT,
         date_start TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         date_end TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
       )
@@ -26,7 +28,12 @@ class DatabaseHelper {
   static Future<int> createItem(String? book_id, String? book_name) async {
     final db = await DatabaseHelper.db();
 
-    final data = {'book_id': book_id, 'book_name': book_name};
+    final data = {
+      'book_id': book_id,
+      'book_name': book_name,
+      'book_image': '',
+      'book_file': ''
+    };
     final id = await db.insert('items', data,
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
     return id;
@@ -61,6 +68,22 @@ class DatabaseHelper {
       'book_id': book_id,
       'book_name': book_name,
       'date_start': DateTime.now().toString()
+    };
+
+    final result =
+        await db.update('items', data, where: "id = ?", whereArgs: [id]);
+    return result;
+  }
+
+  static Future<int> updateImageFilePath(
+      {required int id,
+      required String book_image,
+      required String book_file}) async {
+    final db = await DatabaseHelper.db();
+
+    final data = {
+      'book_image': book_image,
+      'book_file': book_file,
     };
 
     final result =

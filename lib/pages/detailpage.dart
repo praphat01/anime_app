@@ -244,8 +244,13 @@ class _detailPageState extends State<detailPage> {
           setState(() {
             borrowStatus = false;
           });
+
           if (decodedData['result'] == 'borrowlimit') {
             AlertDialogBorrowlimit(context);
+            print('Status borrow ==> borrowlimit');
+          } else if (decodedData['desc'] == 'bookinuse') {
+            AlertDialogBookinuse(context);
+            print('Status borrow ==> bookinuse');
           }
         } else {
           AlertDialogSuccess(context);
@@ -259,16 +264,19 @@ class _detailPageState extends State<detailPage> {
   }
 
   Future<void> addItem() async {
+    // insert data borrow book to database in mobile
     await DatabaseHelper.createItem(widget.bookId, widget.bookTitle);
     _refreshData();
   }
 
   void _refreshData() async {
+    // show list database in mobile
     final data = await DatabaseHelper.getItems();
     print(data);
   }
 
   AlertDialogBorrowlimit(BuildContext context) {
+    // Alert show book limit
     showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
@@ -284,7 +292,25 @@ class _detailPageState extends State<detailPage> {
     );
   }
 
+  AlertDialogBookinuse(BuildContext context) {
+    // Alert show book in using
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text(LocaleKeys.borrowBook.tr()),
+        content: Text(LocaleKeys.alertBookinuse.tr()),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, LocaleKeys.ok.tr()),
+            child: Text(LocaleKeys.ok.tr()),
+          ),
+        ],
+      ),
+    );
+  }
+
   Future AlertDialogSuccess(BuildContext context) {
+    // Alert success when borrow book finished
     return showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(

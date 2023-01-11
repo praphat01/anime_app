@@ -1,5 +1,7 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../generated/locale_keys.g.dart';
@@ -8,27 +10,62 @@ import '../pages/bookshelf.dart';
 import '../pages/book_publisher.dart';
 import '../pages/book_category.dart';
 import '../constants/colors.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import '../pages/bookshelfOffline.dart';
 
 class MainPage extends StatefulWidget {
   MainPage({Key? key, required this.selectedPage}) : super(key: key);
   int selectedPage;
-
   @override
   State<MainPage> createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
+  bool displayProcessLoadPdf = false;
+  double percentNumber = 0;
+  late StreamSubscription subscription;
+  var isDeviceConnected = false;
   List<Widget> _widgetList = [
     HomePage(),
     bookshelf(),
     bookCategory(),
     bookPublisher(),
   ];
+
   int index = 0;
   @override
   void initState() {
     // TODO: implement initState
     index = widget.selectedPage;
+    GetConnecttivity();
+  }
+
+  Future GetConnecttivity() async {
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) async {
+      isDeviceConnected = await InternetConnectionChecker().hasConnection;
+      setState(() {
+        if (isDeviceConnected) {
+          _widgetList = [
+            HomePage(),
+            bookshelf(),
+            bookCategory(),
+            bookPublisher(),
+          ];
+        } else {
+          _widgetList = [
+            HomePage(),
+            bookshelfOffline(),
+            bookCategory(),
+            bookPublisher(),
+          ];
+        }
+
+        isDeviceConnected;
+      });
+    });
   }
 
   @override

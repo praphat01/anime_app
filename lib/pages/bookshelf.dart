@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get_connect.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,9 +22,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:isolate';
 import 'dart:ui';
-
 import 'dart:async';
-
 import '../pages/mainpage.dart';
 import '../models/m_detail/m_rateingStar.dart';
 import 'package:http/http.dart' as http;
@@ -31,12 +30,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../../database/database_helper.dart';
 import 'package:flutter/foundation.dart';
-
 import 'package:path/path.dart' as path;
 import 'package:mime/mime.dart';
 import '../pages/videoPlayer/vdoPlayer.dart';
-
 import 'package:intl/intl.dart';
+import '../../database/database_helper.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 class bookshelf extends StatefulWidget {
   // static late DownloadCallback download;
@@ -66,9 +66,10 @@ class _bookshelfState extends State<bookshelf> {
   var imageLocalFile;
   var files;
   late List<FileSystemEntity> _folders;
-
+  late StreamSubscription subscription;
+  var isDeviceConnected = false;
+  List<dynamic> bookshelfOffline = [];
   String? percent;
-
   bool displayProcessLoadPdf = false;
   double percentNumber = 0;
 
@@ -76,6 +77,8 @@ class _bookshelfState extends State<bookshelf> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    GetConnecttivity();
+    _refreshData();
     // checkExpireBook();
     fetch();
     controller.addListener(() {
@@ -98,8 +101,22 @@ class _bookshelfState extends State<bookshelf> {
     FlutterDownloader.registerCallback(downloadCallback);
   }
 
+  Future GetConnecttivity() async {
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) async {
+      isDeviceConnected = await InternetConnectionChecker().hasConnection;
+      setState(() {
+        isDeviceConnected;
+      });
+    });
+  }
+
   void returnBook(
-      {required bookshelfId, required DB_id, required pdfLink}) async {
+      {required bookshelfId,
+      required DB_id,
+      required pdfLink,
+      required imgLink}) async {
     final prefs = await SharedPreferences.getInstance();
     final String? uniId = prefs.getString('uniId');
     final String? userLoginname = prefs.getString('userLoginname');
@@ -113,7 +130,7 @@ class _bookshelfState extends State<bookshelf> {
         final responseBody = response.body;
         final decodedData = jsonDecode(responseBody);
         AlertDialogReturnBook(context);
-        deleteBookFromStorage(DB_id, pdfLink);
+        deleteBookFromStorage(DB_id, pdfLink, imgLink);
       }
     });
   }
@@ -130,7 +147,14 @@ class _bookshelfState extends State<bookshelf> {
     setState(() {
       myData = data;
     });
+
+    // print(myData);
   }
+
+  // Future getrefreshData() async {
+  //   final data = await DatabaseHelper.getItems();
+  //   return data;
+  // }
 
   // void checkExpireBook() async {
   //   final directory = await getExternalStorageDirectory();
@@ -148,19 +172,37 @@ class _bookshelfState extends State<bookshelf> {
   //   }
   // }
 
-  void deleteBookFromStorage(DB_id, pdfLink) async {
+  void deleteBookFromStorage(DB_id, pdfLink, imgLink) async {
+    // this function delete file book from mobile and database in mobile
     List<Map> data = await DatabaseHelper.getIDWithBookId(DB_id);
     final existingData =
         data.firstWhere((element) => element['book_id'] == DB_id);
     if (existingData['id'] != null) {
       await DatabaseHelper.deleteItem(existingData['id']);
 
+      // file path of pdf
       File file = new File(pdfLink);
       String filename = path.basename(file.path);
       var appDocDir = await getExternalStorageDirectory();
       String nameFile = "/${filename}";
       String pathFile = appDocDir!.path + nameFile;
       final fileDelete = File(pathFile);
+
+      // file path of image
+      File fileImage = new File(imgLink);
+      String fileImagename = path.basename(fileImage.path);
+      String nameFileImage = "/${fileImagename}";
+      String pathFileImage = appDocDir.path + nameFileImage;
+      final fileDeleteImage = File(pathFileImage);
+
+      try {
+        if (await fileDeleteImage.exists()) {
+          await fileDeleteImage.delete();
+        }
+      } catch (e) {
+        // Error in getting access to the file.
+      }
+
       try {
         if (await fileDelete.exists()) {
           await fileDelete.delete();
@@ -168,6 +210,60 @@ class _bookshelfState extends State<bookshelf> {
         }
       } catch (e) {
         // Error in getting access to the file.
+      }
+    }
+  }
+
+  void deleteBookExpired(database_bookId, imgLink) async {
+    final directory = await getExternalStorageDirectory();
+    final dir = directory!.path;
+    String pdfDirectory = '$dir/';
+    final myDir = new Directory(pdfDirectory);
+    setState(() {
+      _folders = myDir.listSync(recursive: true, followLinks: false);
+    });
+    for (var pathFileData in _folders) {
+      String filename = path.basename(pathFileData.toString());
+      if (filename.contains(database_bookId)) {
+        // Path of pdf file
+        var appDocDir = await getExternalStorageDirectory();
+        String nameFile = "/${filename}";
+        String nameFileNew = nameFile.substring(0, nameFile.length - 1);
+        String pathFile = appDocDir!.path + nameFileNew;
+        final fileDelete = File(pathFile);
+
+        // Path of image file
+        File fileImage = new File(imgLink);
+        String fileImagename = path.basename(fileImage.path);
+        String nameFileImage = "/${fileImagename}";
+        String pathFileImage = appDocDir.path + nameFileImage;
+        final fileDeleteImage = File(pathFileImage);
+
+        try {
+          if (await fileDeleteImage.exists()) {
+            await fileDeleteImage.delete();
+          }
+        } catch (e) {
+          // Error in getting access to the file.
+        }
+
+        try {
+          if (await fileDelete.exists()) {
+            await fileDelete.delete();
+            print('Expired deleted file');
+            List<Map> data =
+                await DatabaseHelper.getIDWithBookId(database_bookId);
+            final existingData = data
+                .firstWhere((element) => element['book_id'] == database_bookId);
+            if (existingData['id'] != null) {
+              await DatabaseHelper.deleteItem(existingData['id']);
+            }
+          } else {
+            print('not delete file');
+          }
+        } catch (e) {
+          // Error in getting access to the file.
+        }
       }
     }
   }
@@ -204,6 +300,7 @@ class _bookshelfState extends State<bookshelf> {
   }
 
   Future fetch() async {
+    // Get data from server
     final prefs = await SharedPreferences.getInstance();
     final String? uniId = prefs.getString('uniId');
     final String? userLoginname = prefs.getString('userLoginname');
@@ -235,6 +332,21 @@ class _bookshelfState extends State<bookshelf> {
           pathSite = pathWebSite;
           // _localPath;
         });
+
+        // Get database sqflite in mobile
+        for (var dataDB in myData) {
+          for (var dataServer in decodedData["insert_key"]) {
+            if (dataDB['book_id'] != dataServer['book_id']) {
+              print('Arm loop book data ==> ${dataDB['book_id']}');
+
+              deleteBookExpired(dataDB['book_id'], dataServer['imgLink']);
+
+              // bookshelfOffline = [...bookshelfOffline, ...dataServer];
+            }
+
+            print('book offline ===> $myData');
+          }
+        }
       }
     }).catchError((err) {
       debugPrint('=========== $err =============');
@@ -243,23 +355,6 @@ class _bookshelfState extends State<bookshelf> {
 
   Widget circular(hasBook) {
     return Center(child: CircularProgressIndicator());
-    // if (hasBook == true) {
-    //   return Center(child: CircularProgressIndicator());
-    // } else {
-    //   return Container(
-    //     child: Center(
-    //       child: Text(
-    //         LocaleKeys.noBook.tr(),
-    //         style: const TextStyle(
-    //           fontSize: 18,
-    //           fontWeight: FontWeight.bold,
-    //           color: Colors.grey,
-    //         ),
-    //         textAlign: TextAlign.center,
-    //       ),
-    //     ),
-    //   );
-    // }
   }
 
   @override
@@ -275,25 +370,34 @@ class _bookshelfState extends State<bookshelf> {
     send.send([id, status, progress]);
   }
 
-  void download({required pdfLink}) async {
-    // Navigator.of(context).pop();
-    // String percent = '';
-    // double percentNumber = 0.0;
-
+  void download(
+      {required pdfLink,
+      required bookId,
+      required bookTitle,
+      required imgLink}) async {
     String pdfLinkNew =
         pdfLink.replaceAll("ebook_tab", "ebook_wm"); // Test file unlock
+
+    // file of pdf or video
     File file = File(pdfLink);
     String filename = path.basename(file.path);
-    // print(filename);
-    // print('##14nov pdfLink ===> $pdfLink');
+
+    // file of image cover book
+    File fileImage = File(imgLink);
+    String fileImageName = path.basename(fileImage.path);
 
     await [
       Permission.storage,
     ].request();
 
     var appDocDir = await getExternalStorageDirectory();
+    // Path save file of PDF or video
     String nameFile = "/${filename}";
     String savePath = appDocDir!.path + nameFile;
+
+    // Path of image cover book
+    String nameFileImage = "/${fileImageName}";
+    String saveImagePath = appDocDir.path + nameFileImage;
 
     double second = 0.1;
 
@@ -307,13 +411,6 @@ class _bookshelfState extends State<bookshelf> {
       displayProcessLoadPdf = true;
 
       setState(() {});
-
-      // showDialog(
-      //     barrierColor: Colors.black.withOpacity(0.01),
-      //     context: context,
-      //     builder: (context) {
-      //       return WidgetCirculatPercentIndicator(percentNumber: percentNumber);
-      //     });
     }).then((value) {
       displayProcessLoadPdf = false;
       setState(() {});
@@ -326,7 +423,9 @@ class _bookshelfState extends State<bookshelf> {
         toastLength: Toast.LENGTH_LONG,
       );
     });
-    // Navigator.of(context, rootNavigator: true).pop(context);
+
+    await Dio().download(imgLink, saveImagePath);
+    await ImageGallerySaver.saveFile(appDocDir.path, name: nameFileImage);
   }
 
   Future<bool> checkfileBeforeReadPdf({required fileBook}) async {
@@ -349,56 +448,55 @@ class _bookshelfState extends State<bookshelf> {
       hasBook = true;
     }
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          LocaleKeys.menu_Bookshelf.tr(),
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            color: AnimeUI.cyan,
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            LocaleKeys.menu_Bookshelf.tr(),
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: AnimeUI.cyan,
+            ),
           ),
+          backgroundColor: Colors.white,
+          elevation: 0.0,
+          iconTheme: const IconThemeData(color: Colors.black),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.search, color: Colors.black, size: 30),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const searchPage()),
+                );
+              },
+            ),
+          ],
         ),
-        backgroundColor: Colors.white,
-        elevation: 0.0,
-        iconTheme: const IconThemeData(color: Colors.black),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search, color: Colors.black, size: 30),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const searchPage()),
-              );
-            },
-          ),
-        ],
-      ),
-      drawer: const PublicDrawer(),
-      body: load
-          ? circular(hasBook)
-          : hasBook
-              ? Stack(
-                  children: [
-                    contentMain(),
-                    displayProcessLoadPdf
-                        ? showProcessLoad()
-                        : const SizedBox(),
-                  ],
-                )
-              : Container(
-                  child: Center(
-                    child: Text(
-                      LocaleKeys.noBook.tr(),
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
+        drawer: const PublicDrawer(),
+        body: load
+            ? circular(hasBook)
+            : hasBook
+                ? Stack(
+                    children: [
+                      contentMain(),
+                      displayProcessLoadPdf
+                          ? showProcessLoad()
+                          : const SizedBox(),
+                    ],
+                  )
+                : Container(
+                    child: Center(
+                      child: Text(
+                        LocaleKeys.noBook.tr(),
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
                     ),
-                  ),
-                ),
-    );
+                  ));
   }
 
   Widget showProcessLoad() {
@@ -567,6 +665,143 @@ class _bookshelfState extends State<bookshelf> {
               );
             }
           }),
+    );
+  }
+
+  Padding contentMainOffline() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: GridView.builder(
+          controller: controller,
+          itemCount: userBookShelflist.length + 1,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            mainAxisSpacing: 20,
+            crossAxisSpacing: 8,
+            mainAxisExtent: 200,
+          ),
+          itemBuilder: (BuildContext ctx, index) {
+            if (index < userBookShelflist.length) {
+              bookIdType =
+                  userBookShelflist[index]!.bookId.toString().substring(1, 2);
+              if (bookIdType == '9') {
+                // Re url image
+                imageUrl = userBookShelflist[index]!.imgLink.toString();
+                userBookShelflist[index]!.imgLink =
+                    imageUrl.replaceAll("http://www.2ebook.com/new", pathSite);
+                // userBookShelflist[index]!.imgLink = imageUrl.replaceAll(
+                //     "http://2ebook.com/new", pathSite);
+
+                // Re url pdf
+                pdfUrl = userBookShelflist[index]!.pdfLink.toString();
+                userBookShelflist[index]!.pdfLink =
+                    pdfUrl.replaceAll("http://www.2ebook.com/new", pathSite);
+                userBookShelflist[index]!.pdfLink =
+                    pdfUrl.replaceAll("http://2ebook.com/new", pathSite);
+              }
+              return Container(
+                //borderRadius: BorderRadius.circular(20),
+                child: (userBookShelflist[index]!.bookDesc != null &&
+                        userBookShelflist[index]!.bookId != '0')
+                    ? InkWell(
+                        onTap: () async {
+                          if ((await checkfileBeforeReadPdf(
+                                  fileBook:
+                                      userBookShelflist[index]!.pdfLink) ==
+                              false)) {
+                            bookshelfMenuDownload(
+                                userBookShelflist[index]!.pdfLink,
+                                userBookShelflist[index]!.bookTitle,
+                                userBookShelflist[index]!.bookId,
+                                userBookShelflist[index]!.bookDesc,
+                                userBookShelflist[index]!.bookshelfId,
+                                userBookShelflist[index]!.bookPrice,
+                                userBookShelflist[index]!.bookAuthor,
+                                userBookShelflist[index]!.bookNoOfPage,
+                                userBookShelflist[index]!.booktypeName,
+                                userBookShelflist[index]!.publisherName,
+                                userBookShelflist[index]!.bookIsbn,
+                                userBookShelflist[index]!.bookcateName,
+                                userBookShelflist[index]!.imgLink);
+                          } else {
+                            bookshelfMenuRead(
+                                userBookShelflist[index]!.pdfLink,
+                                userBookShelflist[index]!.bookTitle,
+                                userBookShelflist[index]!.bookId,
+                                userBookShelflist[index]!.bookDesc,
+                                userBookShelflist[index]!.bookshelfId,
+                                userBookShelflist[index]!.bookPrice,
+                                userBookShelflist[index]!.bookAuthor,
+                                userBookShelflist[index]!.bookNoOfPage,
+                                userBookShelflist[index]!.booktypeName,
+                                userBookShelflist[index]!.publisherName,
+                                userBookShelflist[index]!.bookIsbn,
+                                userBookShelflist[index]!.bookcateName,
+                                userBookShelflist[index]!.imgLink);
+                          }
+                        },
+                        child: Column(
+                          children: [
+                            Card(
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0))),
+                              elevation: 10.0,
+                              child: ClipRRect(
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(20.0),
+                                ),
+                                child: dataBookOffline(index),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : Image.asset('assets/images/logo_2ebook.png'),
+              );
+            } else {
+              return const Padding(
+                padding: EdgeInsets.symmetric(vertical: 30),
+                child: Center(),
+              );
+            }
+          }),
+    );
+  }
+
+  Stack dataBookOffline(int index) {
+    for (var dataDB in myData) {
+      bookshelfOffline = [dataDB];
+    }
+
+    // print('bookshelfOffline ===> $bookshelfOffline);
+
+    return Stack(
+      children: <Widget>[
+        Image.network(
+          userBookShelflist[index]!.imgLink.toString(),
+          height: 150,
+          width: 200,
+          fit: BoxFit.fitWidth,
+        ),
+        endTime(userBookShelflist[index]!.endTime.toString()),
+        Container(
+          margin: const EdgeInsets.only(top: 160, left: 20),
+          height: 30,
+          width: 120,
+          child: Stack(
+            children: <Widget>[
+              Center(
+                child: Text(
+                  userBookShelflist[index]!.bookDesc.toString(),
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(color: Colors.black),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -741,7 +976,8 @@ class _bookshelfState extends State<bookshelf> {
                     returnBook(
                         bookshelfId: bookshelfId ?? '',
                         DB_id: bookId ?? '',
-                        pdfLink: pdfLink ?? '');
+                        pdfLink: pdfLink ?? '',
+                        imgLink: imgLink ?? '');
                   },
                   style: ElevatedButton.styleFrom(
                     primary: AnimeUI.cyan, // Background color
@@ -804,7 +1040,11 @@ class _bookshelfState extends State<bookshelf> {
                       AlertHaveBookAlready();
                     } else {
                       Navigator.of(context).pop();
-                      download(pdfLink: pdfLink);
+                      download(
+                          pdfLink: pdfLink,
+                          bookId: bookId,
+                          bookTitle: bookTitle,
+                          imgLink: imgLink);
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -876,7 +1116,8 @@ class _bookshelfState extends State<bookshelf> {
                     returnBook(
                         bookshelfId: bookshelfId ?? '',
                         DB_id: bookId ?? '',
-                        pdfLink: pdfLink ?? '');
+                        pdfLink: pdfLink ?? '',
+                        imgLink: imgLink ?? '');
                   },
                   style: ElevatedButton.styleFrom(
                     primary: AnimeUI.cyan, // Background color

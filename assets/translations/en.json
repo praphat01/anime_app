@@ -94,7 +94,8 @@
     "firstName" : "Firstname...",
     "lastName" : "Lastname...",
     "downloadFail" : "Download Failed",
-    "downloadFailDetails" : "Can't download this book , You already downloaded"
+    "downloadFailDetails" : "Can't download this book , You already downloaded",
+    "alertBookinuse" : "Cannot borrow the book because someone else has borrowed it!"
 
 
 

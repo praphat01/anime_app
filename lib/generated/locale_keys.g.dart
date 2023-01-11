@@ -97,5 +97,6 @@ abstract class  LocaleKeys {
   static const lastName = 'lastName';
   static const downloadFail = 'downloadFail';
   static const downloadFailDetails = 'downloadFailDetails';
+  static const alertBookinuse = 'alertBookinuse';
 
 }

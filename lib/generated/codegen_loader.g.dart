@@ -111,7 +111,8 @@ class CodegenLoader extends AssetLoader{
   "lastName": "Lastname...",
   "downloadFail": "Download Failed",
   "downloadFailDetails": "Can't download this book , You already downloaded",
-  "alertBookinuse": "Cannot borrow the book because someone else has borrowed it!"
+  "alertBookinuse": "Cannot borrow the book because someone else has borrowed it!",
+  "offlineRead": "The book you haven't downloaded yet!"
 };
 static const Map<String,dynamic> th = {
   "title2ebook": "2Ebook",
@@ -210,7 +211,8 @@ static const Map<String,dynamic> th = {
   "lastName": "นามสกุล...",
   "downloadFail": "ดาวน์โหลดผิดพลาด",
   "downloadFailDetails": "ไม่สามารถโหลดหนังสือเล่มนี้ได้ เนื่องจากโหลดหนังสือเล่มนี้แล้ว",
-  "alertBookinuse": "ไม่สามารถยืมหนังสือได้ มีผู้อื่นยืมหนังสือเล่มนี้อยู่!"
+  "alertBookinuse": "ไม่สามารถยืมหนังสือได้ มีผู้อื่นยืมหนังสือเล่มนี้อยู่!",
+  "offlineRead": "หนังสือเล่มคุณยังไม่ได้ดาวน์โหลด"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en": en, "th": th};
 }

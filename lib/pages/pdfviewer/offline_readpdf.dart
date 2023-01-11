@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 
 import 'package:anime_app/models/sqlite_model.dart';
 
+import '../../constants/colors.dart';
+
 class OfflineReadPdf extends StatefulWidget {
   const OfflineReadPdf({
     Key? key,
@@ -28,22 +30,44 @@ class _OfflineReadPdfState extends State<OfflineReadPdf> {
   }
 
   Future<void> loadPdfDocument() async {
-    
-        await PDFDocument.fromFile(File(widget.sqLiteModel.book_file)).then((value) {
-          pdfDocument = value;
-          setState(() {
-            
-          });
-        });
+    await PDFDocument.fromFile(File(widget.sqLiteModel.book_file))
+        .then((value) {
+      pdfDocument = value;
+      setState(() {});
+    });
   }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     appBar: AppBar(
+  //       title: Text(widget.sqLiteModel.book_name),
+  //     ),
+  //     body: pdfDocument == null ? const SizedBox() :  PDFViewer(document: pdfDocument!),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.sqLiteModel.book_name),
+        centerTitle: true,
+        title: Text(
+          widget.sqLiteModel.book_name,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: AnimeUI.cyan,
+          ),
+        ),
+        iconTheme: const IconThemeData(
+          color: Colors.black,
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
       ),
-      body: pdfDocument == null ? const SizedBox() :  PDFViewer(document: pdfDocument!),
+      body: pdfDocument == null
+          ? const SizedBox()
+          : PDFViewer(document: pdfDocument!),
     );
   }
 }

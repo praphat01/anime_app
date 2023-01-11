@@ -98,5 +98,6 @@ abstract class  LocaleKeys {
   static const downloadFail = 'downloadFail';
   static const downloadFailDetails = 'downloadFailDetails';
   static const alertBookinuse = 'alertBookinuse';
+  static const offlineRead = 'offlineRead';
 
 }

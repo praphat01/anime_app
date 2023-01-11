@@ -320,12 +320,12 @@ class _detailPageState extends State<detailPage> {
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MainPage(selectedPage: 1),
-                ),
-              );
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MainPage(selectedPage: 1),
+                  ),
+                  (route) => false);
             },
             child: Text(LocaleKeys.ok.tr()),
           ),

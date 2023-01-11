@@ -2,6 +2,7 @@
 
 import 'package:anime_app/models/sqlite_model.dart';
 import 'package:anime_app/pages/pdfviewer/offline_readpdf.dart';
+import 'package:anime_app/pages/videoPlayer/offlineVdoPlayer.dart';
 import 'package:anime_app/widgets/widget_circulat_percent.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -81,7 +82,7 @@ class _bookshelfState extends State<bookshelf> {
 
   var coverFiles = <File>[];
   var contentFiles = <File>[];
-  
+
   bool? haveBook;
 
   @override
@@ -537,7 +538,14 @@ class _bookshelfState extends State<bookshelf> {
           ? circular(hasBook)
           : isDeviceConnected
               ? haveBook!
-                  ? Text('Have Book')
+                  ? Stack(
+                      children: [
+                        contentMain(),
+                        displayProcessLoadPdf
+                            ? showProcessLoad()
+                            : const SizedBox(),
+                      ],
+                    )
                   : Container(
                       child: Center(
                         child: Text(
@@ -551,35 +559,104 @@ class _bookshelfState extends State<bookshelf> {
                         ),
                       ),
                     )
-              : GridView.builder(
+              :
+              // Offline Mode
+              GridView.builder(
                   itemCount: sqliteModels.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3, childAspectRatio: 1 / 2),
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 20,
+                    crossAxisSpacing: 8,
+                    mainAxisExtent: 200,
+                  ),
                   itemBuilder: (context, index) {
                     return InkWell(
                       onTap: () {
                         if (sqliteModels[index].book_file.isEmpty) {
                           //Non Dowload
-                          Fluttertoast.showToast(msg: 'ยังไม่ได้โหลดเลย');
+                          Fluttertoast.showToast(
+                              msg: LocaleKeys.offlineRead.tr());
                         } else {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => OfflineReadPdf(
-                                  sqLiteModel: sqliteModels[index],
-                                ),
-                              ));
+                          if (checkTypeOfFile(sqliteModels[index].book_file) ==
+                              'application/pdf') {
+                            print(
+                                'check type book is ---> ${checkTypeOfFile(sqliteModels[index].book_file)}');
+                            // check type of book is PDF
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => OfflineReadPdf(
+                                    sqLiteModel: sqliteModels[index],
+                                  ),
+                                ));
+                          } else if (checkTypeOfFile(
+                                      sqliteModels[index].book_file) ==
+                                  'video/mp4' ||
+                              checkTypeOfFile(sqliteModels[index].book_file) ==
+                                  'audio/mpeg') {
+                            // check type of book is Video
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => offlineVdoPlayer(
+                                    sqLiteModel: sqliteModels[index],
+                                  ),
+                                ));
+                          }
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //       builder: (context) => OfflineReadPdf(
+                          //         sqLiteModel: sqliteModels[index],
+                          //       ),
+                          //     ));
                         }
                       },
-                      child: Card(
-                        child: Column(
-                          children: [
-                            sqliteModels[index].book_image.isEmpty
-                                ? Image.asset('assets/images/Book-icon.png')
-                                : Image.file(coverFiles[index]),
-                            Text(sqliteModels[index].book_name),
-                          ],
-                        ),
+                      child: Column(
+                        children: [
+                          Card(
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20.0))),
+                            elevation: 10.0,
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(20.0),
+                              ),
+                              child: Stack(
+                                children: <Widget>[
+                                  sqliteModels[index].book_image.isEmpty
+                                      ? Image.asset(
+                                          'assets/images/logo_2ebook.png')
+                                      : Image.file(
+                                          coverFiles[index],
+                                          height: 150,
+                                          width: 200,
+                                          fit: BoxFit.fitWidth,
+                                        ),
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 160, left: 20),
+                                    height: 30,
+                                    width: 120,
+                                    child: Stack(
+                                      children: <Widget>[
+                                        Center(
+                                          child: Text(
+                                            sqliteModels[index].book_name,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                                color: Colors.black),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     );
                   },
@@ -753,143 +830,6 @@ class _bookshelfState extends State<bookshelf> {
               );
             }
           }),
-    );
-  }
-
-  Padding contentMainOffline() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: GridView.builder(
-          controller: controller,
-          itemCount: userBookShelflist.length + 1,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            mainAxisSpacing: 20,
-            crossAxisSpacing: 8,
-            mainAxisExtent: 200,
-          ),
-          itemBuilder: (BuildContext ctx, index) {
-            if (index < userBookShelflist.length) {
-              bookIdType =
-                  userBookShelflist[index]!.bookId.toString().substring(1, 2);
-              if (bookIdType == '9') {
-                // Re url image
-                imageUrl = userBookShelflist[index]!.imgLink.toString();
-                userBookShelflist[index]!.imgLink =
-                    imageUrl.replaceAll("http://www.2ebook.com/new", pathSite);
-                // userBookShelflist[index]!.imgLink = imageUrl.replaceAll(
-                //     "http://2ebook.com/new", pathSite);
-
-                // Re url pdf
-                pdfUrl = userBookShelflist[index]!.pdfLink.toString();
-                userBookShelflist[index]!.pdfLink =
-                    pdfUrl.replaceAll("http://www.2ebook.com/new", pathSite);
-                userBookShelflist[index]!.pdfLink =
-                    pdfUrl.replaceAll("http://2ebook.com/new", pathSite);
-              }
-              return Container(
-                //borderRadius: BorderRadius.circular(20),
-                child: (userBookShelflist[index]!.bookDesc != null &&
-                        userBookShelflist[index]!.bookId != '0')
-                    ? InkWell(
-                        onTap: () async {
-                          if ((await checkfileBeforeReadPdf(
-                                  fileBook:
-                                      userBookShelflist[index]!.pdfLink) ==
-                              false)) {
-                            bookshelfMenuDownload(
-                                userBookShelflist[index]!.pdfLink,
-                                userBookShelflist[index]!.bookTitle,
-                                userBookShelflist[index]!.bookId,
-                                userBookShelflist[index]!.bookDesc,
-                                userBookShelflist[index]!.bookshelfId,
-                                userBookShelflist[index]!.bookPrice,
-                                userBookShelflist[index]!.bookAuthor,
-                                userBookShelflist[index]!.bookNoOfPage,
-                                userBookShelflist[index]!.booktypeName,
-                                userBookShelflist[index]!.publisherName,
-                                userBookShelflist[index]!.bookIsbn,
-                                userBookShelflist[index]!.bookcateName,
-                                userBookShelflist[index]!.imgLink);
-                          } else {
-                            bookshelfMenuRead(
-                                userBookShelflist[index]!.pdfLink,
-                                userBookShelflist[index]!.bookTitle,
-                                userBookShelflist[index]!.bookId,
-                                userBookShelflist[index]!.bookDesc,
-                                userBookShelflist[index]!.bookshelfId,
-                                userBookShelflist[index]!.bookPrice,
-                                userBookShelflist[index]!.bookAuthor,
-                                userBookShelflist[index]!.bookNoOfPage,
-                                userBookShelflist[index]!.booktypeName,
-                                userBookShelflist[index]!.publisherName,
-                                userBookShelflist[index]!.bookIsbn,
-                                userBookShelflist[index]!.bookcateName,
-                                userBookShelflist[index]!.imgLink);
-                          }
-                        },
-                        child: Column(
-                          children: [
-                            Card(
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20.0))),
-                              elevation: 10.0,
-                              child: ClipRRect(
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(20.0),
-                                ),
-                                child: dataBookOffline(index),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    : Image.asset('assets/images/logo_2ebook.png'),
-              );
-            } else {
-              return const Padding(
-                padding: EdgeInsets.symmetric(vertical: 30),
-                child: Center(),
-              );
-            }
-          }),
-    );
-  }
-
-  Stack dataBookOffline(int index) {
-    for (var dataDB in myData) {
-      bookshelfOffline = [dataDB];
-    }
-
-    // print('bookshelfOffline ===> $bookshelfOffline);
-
-    return Stack(
-      children: <Widget>[
-        Image.network(
-          userBookShelflist[index]!.imgLink.toString(),
-          height: 150,
-          width: 200,
-          fit: BoxFit.fitWidth,
-        ),
-        endTime(userBookShelflist[index]!.endTime.toString()),
-        Container(
-          margin: const EdgeInsets.only(top: 160, left: 20),
-          height: 30,
-          width: 120,
-          child: Stack(
-            children: <Widget>[
-              Center(
-                child: Text(
-                  userBookShelflist[index]!.bookDesc.toString(),
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(color: Colors.black),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 

@@ -76,97 +76,100 @@ class _searchPageState extends State<searchPage> {
         elevation: 0.0,
       ),
       backgroundColor: Colors.grey[100],
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                SizedBox(height: 100),
-                Text(
-                  LocaleKeys.title_search.tr(),
-                  style: TextStyle(
-                    color: AnimeUI.cyan,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30,
-                  ),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  LocaleKeys.detail_search.tr(),
-                  style: TextStyle(
-                    fontSize: 12,
-                  ),
-                ),
-                SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(12),
+      body: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => FocusScope.of(context).requestFocus(FocusScopeNode()),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Center(
+              child: Column(
+                children: [
+                  SizedBox(height: 100),
+                  Text(
+                    LocaleKeys.title_search.tr(),
+                    style: TextStyle(
+                      color: AnimeUI.cyan,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30,
                     ),
-                    child: TextFormField(
-                      controller: t,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: LocaleKeys.form_search.tr(),
-                        prefixIcon: Icon(Icons.search),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    LocaleKeys.detail_search.tr(),
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.white),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: TextFormField(
+                        controller: t,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: LocaleKeys.form_search.tr(),
+                          prefixIcon: Icon(Icons.search),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  // onPressed: () {
-                  //   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  //     return searchloading(text: t.text);
-                  //     // return searchloading();
-                  //   }));
-                  // },
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => searchloading(text: t.text)),
-                    );
-                  },
-                  style:
-                      ElevatedButton.styleFrom(backgroundColor: AnimeUI.cyan),
-                  // splashColor: Color(0xfff012AC0),
-                  // color: AnimeUI.cyan,
-                  child: Text(
-                    LocaleKeys.search.tr(),
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    // onPressed: () {
+                    //   Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    //     return searchloading(text: t.text);
+                    //     // return searchloading();
+                    //   }));
+                    // },
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => searchloading(text: t.text)),
+                      );
+                    },
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: AnimeUI.cyan),
+                    // splashColor: Color(0xfff012AC0),
+                    // color: AnimeUI.cyan,
+                    child: Text(
+                      LocaleKeys.search.tr(),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
                     ),
                   ),
-                ),
 
-                // SizedBox(height: 20),
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                //   child: Container(
-                //     padding: EdgeInsets.all(20),
-                //     decoration: BoxDecoration(
-                //         color: AnimeUI.cyan,
-                //         borderRadius: BorderRadius.circular(12)),
-                //     child: Center(
-                //       child: Text(
-                //         'SEARCH',
-                //         style: TextStyle(
-                //           color: Colors.white,
-                //           fontWeight: FontWeight.bold,
-                //           fontSize: 18,
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-              ],
+                  // SizedBox(height: 20),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  //   child: Container(
+                  //     padding: EdgeInsets.all(20),
+                  //     decoration: BoxDecoration(
+                  //         color: AnimeUI.cyan,
+                  //         borderRadius: BorderRadius.circular(12)),
+                  //     child: Center(
+                  //       child: Text(
+                  //         'SEARCH',
+                  //         style: TextStyle(
+                  //           color: Colors.white,
+                  //           fontWeight: FontWeight.bold,
+                  //           fontSize: 18,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                ],
+              ),
             ),
           ),
         ),

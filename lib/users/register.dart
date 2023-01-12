@@ -290,8 +290,6 @@ class _registerState extends State<register> {
                                         splashColor: Colors.transparent,
                                         highlightColor: Colors.transparent,
                                         onTap: () {
-                                          print('You tab create new account');
-
                                           if ((userController.text.isEmpty) ||
                                               (firstNameController
                                                   .text.isEmpty) ||
@@ -304,9 +302,12 @@ class _registerState extends State<register> {
                                                   .text.isEmpty)) {
                                             AppDialog(context: context)
                                                 .normalDialog(
-                                                    title: 'Have Space ?',
-                                                    subTitle:
-                                                        'Please Fill Every Blank');
+                                                    title: LocaleKeys
+                                                        .registerfailed
+                                                        .tr(),
+                                                    subTitle: LocaleKeys
+                                                        .pleasefillanyform
+                                                        .tr());
                                           } else {
                                             if (emailController.text
                                                     .contains('@') &&
@@ -322,7 +323,7 @@ class _registerState extends State<register> {
                                                     confirmdPasswordController
                                                         .text) {
                                                   //Password Map
-                                                  print('Every think OK');
+                                                  print('Everything OK');
 
                                                   doRegister(
                                                     userController.text
@@ -339,32 +340,40 @@ class _registerState extends State<register> {
                                                         .toString(),
                                                   );
                                                   HapticFeedback.lightImpact();
-                                                  Fluttertoast.showToast(
-                                                    msg: LocaleKeys.alertSignIn
-                                                        .tr(),
-                                                  );
+                                                  // Fluttertoast.showToast(
+                                                  //   msg: LocaleKeys.alertSignIn
+                                                  //       .tr(),
+                                                  // );
                                                 } else {
                                                   AppDialog(context: context)
                                                       .normalDialog(
-                                                          title:
-                                                              'Password Not Math',
-                                                          subTitle:
-                                                              'Please Try Again Password not Math');
+                                                          title: LocaleKeys
+                                                              .registerfailed
+                                                              .tr(),
+                                                          subTitle: LocaleKeys
+                                                              .passworddifferent
+                                                              .tr());
                                                 }
                                               } else {
                                                 AppDialog(context: context)
                                                     .normalDialog(
-                                                        title: 'Weak Password',
-                                                        subTitle:
-                                                            'Password More 6 digi');
+                                                        title: LocaleKeys
+                                                            .registerfailed
+                                                            .tr(),
+                                                        subTitle: LocaleKeys
+                                                            .errorPasswordlength
+                                                            .tr());
                                               }
                                             } else {
                                               // invalid Email
                                               AppDialog(context: context)
                                                   .normalDialog(
-                                                      title: 'Invalid Email',
-                                                      subTitle:
-                                                          'Badly Format Email');
+                                                      title: LocaleKeys
+                                                          .registerfailed
+                                                          .tr(),
+                                                      subTitle: LocaleKeys
+                                                          .errorEmail
+                                                          .tr());
                                             }
                                           }
 

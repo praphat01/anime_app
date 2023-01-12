@@ -17,7 +17,7 @@ class splashScreen extends StatefulWidget {
 
 class _splashScreenState extends State<splashScreen> {
   late StreamSubscription subscription;
-  var isDeviceConnected = false;
+  var isDeviceConnected = true;
 
   @override
   void initState() {

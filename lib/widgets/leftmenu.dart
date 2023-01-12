@@ -144,6 +144,7 @@ class _PublicDrawerState extends State<PublicDrawer> {
             ),
             title: Text(LocaleKeys.newBook.tr()),
             onTap: () {
+              Navigator.of(context).pop();
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => booklist(indexTap: 0)),
@@ -157,6 +158,7 @@ class _PublicDrawerState extends State<PublicDrawer> {
             ),
             title: Text(LocaleKeys.book_recommended.tr()),
             onTap: () {
+              Navigator.of(context).pop();
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => booklist(indexTap: 1)),
@@ -170,6 +172,7 @@ class _PublicDrawerState extends State<PublicDrawer> {
             ),
             title: Text(LocaleKeys.book_popular.tr()),
             onTap: () {
+              Navigator.of(context).pop();
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => booklist(indexTap: 2)),

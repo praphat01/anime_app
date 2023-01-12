@@ -13,9 +13,18 @@ class AppDialog {
         context: context,
         builder: (context) => AlertDialog(
               title: ListTile(
-                leading: const Icon(Icons.warning),
-                title: Text(title),
-                subtitle: Text(subTitle),
+                leading: const Icon(
+                  Icons.warning,
+                  color: Colors.orange,
+                ),
+                title:
+                    Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(subTitle),
+                ],
               ),
               actions: [
                 TextButton(

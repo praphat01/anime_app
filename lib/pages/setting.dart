@@ -110,10 +110,17 @@ class _settingState extends State<setting> {
                       context.setLocale(Locale('en'));
                     }
 
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => splashScreen()),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => splashScreen()),
+                    // );
+
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => splashScreen(),
+                        ),
+                        (route) => false);
                   },
                   style: ElevatedButton.styleFrom(
                     primary: AnimeUI.cyan, // Background color

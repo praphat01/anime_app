@@ -112,7 +112,12 @@ class CodegenLoader extends AssetLoader{
   "downloadFail": "Download Failed",
   "downloadFailDetails": "Can't download this book , You already downloaded",
   "alertBookinuse": "Cannot borrow the book because someone else has borrowed it!",
-  "offlineRead": "The book you haven't downloaded yet!"
+  "offlineRead": "The book you haven't downloaded yet!",
+  "registerfailed": "Registration error!",
+  "pleasefillanyform": "Please fill in all fields.",
+  "passworddifferent": "Please try again, the passwords do not match.",
+  "errorPasswordlength": "The password should be longer than 6 characters.",
+  "errorEmail": "Please enter a valid email address, for example example@gmail.com."
 };
 static const Map<String,dynamic> th = {
   "title2ebook": "2Ebook",
@@ -212,7 +217,12 @@ static const Map<String,dynamic> th = {
   "downloadFail": "ดาวน์โหลดผิดพลาด",
   "downloadFailDetails": "ไม่สามารถโหลดหนังสือเล่มนี้ได้ เนื่องจากโหลดหนังสือเล่มนี้แล้ว",
   "alertBookinuse": "ไม่สามารถยืมหนังสือได้ มีผู้อื่นยืมหนังสือเล่มนี้อยู่!",
-  "offlineRead": "หนังสือเล่มคุณยังไม่ได้ดาวน์โหลด"
+  "offlineRead": "หนังสือเล่มคุณยังไม่ได้ดาวน์โหลด",
+  "registerfailed": "สมัครสมาชิกผิดพลาด!",
+  "pleasefillanyform": "กรุณากรอกข้อมูลให้ครับทุกช่อง",
+  "passworddifferent": "กรุณาลองใหม่อีกครั้ง พาสเวิร์ดไม่เหมือนกัน",
+  "errorPasswordlength": "พาสเวิร์ดควรมีความยาวเกิน 6 ตัวอักษร",
+  "errorEmail": "กรุณากรอกอีเมลล์ให้ถูกต้อง ตัวอย่าง example@gmail.com"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en": en, "th": th};
 }

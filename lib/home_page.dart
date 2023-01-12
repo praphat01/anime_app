@@ -66,88 +66,95 @@ class _HomePagemainState extends State<HomePagemain> {
         padding: EdgeInsets.all(20.0),
         child: Column(
           children: <Widget>[
-            Container(
-              width: double.infinity,
-              height: 200,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                image: DecorationImage(
-                    image: AssetImage('assets/images/logo.png'),
-                    fit: BoxFit.cover),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey,
-                    blurRadius: 4,
-                    offset: Offset(4, 8), // Shadow position
-                  ),
-                ],
-              ),
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () =>
+                  FocusScope.of(context).requestFocus(FocusScopeNode()),
               child: Container(
+                width: double.infinity,
+                height: 200,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    gradient:
-                        LinearGradient(begin: Alignment.bottomRight, colors: [
-                      Colors.black.withOpacity(.4),
-                      Colors.black.withOpacity(.2),
-                    ])),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Text(
-                      LocaleKeys.searchYourLibrary.tr(),
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 35,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: TextField(
-                        controller: textInput,
-                        decoration: InputDecoration(
-                          prefixIcon: const Icon(Icons.search),
-                          filled: true,
-                          fillColor: Colors.white,
-                          hintText: LocaleKeys.findYourLibrary.tr(),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey.shade600),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey.shade600),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return searchloadingUni(text: textInput.text);
-                          // return searchloading();
-                        }));
-                      },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange),
-                      // splashColor: Color(0xfff012AC0),
-                      // color: Colors.orange,
-                      child: Text(
-                        LocaleKeys.uniButtonSearch.tr(),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
+                  borderRadius: BorderRadius.circular(20),
+                  image: DecorationImage(
+                      image: AssetImage('assets/images/logo.png'),
+                      fit: BoxFit.cover),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 4,
+                      offset: Offset(4, 8), // Shadow position
                     ),
                   ],
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      gradient:
+                          LinearGradient(begin: Alignment.bottomRight, colors: [
+                        Colors.black.withOpacity(.4),
+                        Colors.black.withOpacity(.2),
+                      ])),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Text(
+                        LocaleKeys.searchYourLibrary.tr(),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 35,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                        child: TextField(
+                          controller: textInput,
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(Icons.search),
+                            filled: true,
+                            fillColor: Colors.white,
+                            hintText: LocaleKeys.findYourLibrary.tr(),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.grey.shade600),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.grey.shade600),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return searchloadingUni(text: textInput.text);
+                            // return searchloading();
+                          }));
+                        },
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.orange),
+                        // splashColor: Color(0xfff012AC0),
+                        // color: Colors.orange,
+                        child: Text(
+                          LocaleKeys.uniButtonSearch.tr(),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -270,7 +277,7 @@ class _HomePagemainState extends State<HomePagemain> {
           );
         });
 
-    return exitApp ?? false;
+    return exitApp;
   }
 
   SafeArea dataBodyTablet(BuildContext context) {

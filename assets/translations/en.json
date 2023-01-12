@@ -96,7 +96,13 @@
     "downloadFail" : "Download Failed",
     "downloadFailDetails" : "Can't download this book , You already downloaded",
     "alertBookinuse" : "Cannot borrow the book because someone else has borrowed it!",
-    "offlineRead" : "The book you haven't downloaded yet!"
+    "offlineRead" : "The book you haven't downloaded yet!",
+    
+    "registerfailed" : "Registration error!",
+    "pleasefillanyform" : "Please fill in all fields.",
+    "passworddifferent" : "Please try again, the passwords do not match.",
+    "errorPasswordlength" : "The password should be longer than 6 characters.",
+    "errorEmail" : "Please enter a valid email address, for example example@gmail.com."
 
 
 

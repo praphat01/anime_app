@@ -8,9 +8,7 @@ import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get_connect.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -29,19 +27,11 @@ import 'dart:isolate';
 import 'dart:ui';
 import 'dart:async';
 import '../pages/mainpage.dart';
-import '../models/m_detail/m_rateingStar.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 import '../../database/database_helper.dart';
-import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as path;
 import 'package:mime/mime.dart';
 import '../pages/videoPlayer/vdoPlayer.dart';
-import 'package:intl/intl.dart';
-import '../../database/database_helper.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 class bookshelf extends StatefulWidget {
   // static late DownloadCallback download;
@@ -87,11 +77,8 @@ class _bookshelfState extends State<bookshelf> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getConnecttivity();
-
-    // checkExpireBook();
   }
 
   void statusNoInternet() {
@@ -356,12 +343,15 @@ class _bookshelfState extends State<bookshelf> {
     final uri = Uri.parse(getNewBook);
     http.get(uri).then((response) {
       if (response.statusCode == 200) {
-        print('##11jan response -->${response.body}');
+        
         final responseBody = response.body;
+        print('##11jan responseBody -->$responseBody');
+
+       
 
         final decodedData = jsonDecode(responseBody);
 
-        if (decodedData["insert_key"] != Null) {
+        if (decodedData["insert_key"] != null) {
           haveBook = true;
           userBookShelflist = [
             ...userBookShelflist,
@@ -372,7 +362,7 @@ class _bookshelfState extends State<bookshelf> {
         }
 
         print(
-            '##11jan userBookShelflist ขนาด ----> ${userBookShelflist.length}');
+            '##11jan haveBook --> $haveBook');
 
         load = false;
 

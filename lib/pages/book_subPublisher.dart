@@ -73,6 +73,11 @@ class _subPublisherListState extends State<subPublisherList> {
           ...subPublisherbook.fromJson(decodedData).result as List<Result?>
         ];
 
+        print('##12jan subCategoryList --> ${subCategorylist.length}');
+        for (var element in subCategorylist) {
+          print('##12jan element --> ${element!.bookTitle}');
+        }
+
         setState(() {
           page++;
           load = false;
@@ -219,7 +224,7 @@ class _subPublisherListState extends State<subPublisherList> {
                                             Center(
                                                 child: Text(
                                               subCategorylist[index]!
-                                                  .bookDesc
+                                                  .bookTitle
                                                   .toString(),
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(

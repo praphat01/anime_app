@@ -1,4 +1,4 @@
-package com.example.anime_app
+package com.staq.staq2ebook
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:anime_app/utility/app_dialog.dart';
 import 'package:dart_ipify/dart_ipify.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +53,7 @@ class _registerState extends State<register> {
   bool _isSecureConfirmPassword = true;
   final formKey = GlobalKey<FormState>();
 
+  @override
   void initState() {
     super.initState();
     getIpData();
@@ -207,7 +209,7 @@ class _registerState extends State<register> {
         elevation: 0.0,
       ),
       extendBodyBehindAppBar: true,
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: Form(
         key: formKey,
         child: ScrollConfiguration(
@@ -264,296 +266,113 @@ class _registerState extends State<register> {
                                       ),
 
                                       // username
-                                      Container(
-                                        height: size.width / 8,
-                                        width: size.width / 1.25,
-                                        alignment: Alignment.center,
-                                        padding: EdgeInsets.only(
-                                            right: size.width / 30),
-                                        decoration: BoxDecoration(
-                                          color: Colors.black.withOpacity(.1),
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        child: TextFormField(
-                                          style: TextStyle(
-                                            color: Colors.white.withOpacity(.9),
-                                          ),
-                                          controller: userController,
-                                          decoration: InputDecoration(
-                                            prefixIcon: Icon(
-                                              Icons.account_circle_outlined,
-                                              color:
-                                                  Colors.white.withOpacity(.8),
-                                            ),
-                                            border: InputBorder.none,
-                                            hintMaxLines: 1,
-                                            hintText: LocaleKeys.username.tr(),
-                                            hintStyle: TextStyle(
-                                              fontSize: 14,
-                                              color:
-                                                  Colors.white.withOpacity(.5),
-                                            ),
-                                          ),
-                                          validator: (String? valueusername) {
-                                            if (valueusername!.isEmpty) {
-                                              return 'please enter username';
-                                            } else {
-                                              return null;
-                                            }
-                                          },
-                                        ),
-                                      ),
+                                      userNameForm(
+                                          size: size,
+                                          userController: userController),
 
                                       // fristname
-                                      Container(
-                                        height: size.width / 8,
-                                        width: size.width / 1.25,
-                                        alignment: Alignment.center,
-                                        padding: EdgeInsets.only(
-                                            right: size.width / 30),
-                                        decoration: BoxDecoration(
-                                          color: Colors.black.withOpacity(.1),
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        child: TextFormField(
-                                          style: TextStyle(
-                                            color: Colors.white.withOpacity(.9),
-                                          ),
-                                          controller: firstNameController,
-                                          decoration: InputDecoration(
-                                            prefixIcon: Icon(
-                                              Icons.account_box_outlined,
-                                              color:
-                                                  Colors.white.withOpacity(.8),
-                                            ),
-                                            border: InputBorder.none,
-                                            hintMaxLines: 1,
-                                            hintText: LocaleKeys.firstName.tr(),
-                                            hintStyle: TextStyle(
-                                              fontSize: 14,
-                                              color:
-                                                  Colors.white.withOpacity(.5),
-                                            ),
-                                          ),
-                                          validator: (String? valuefirstname) {
-                                            if (valuefirstname!.isEmpty) {
-                                              return 'please enter Firstname';
-                                            } else {
-                                              return null;
-                                            }
-                                          },
-                                        ),
-                                      ),
+                                      firstNameForm(size),
 
                                       // Last name
-                                      Container(
-                                        height: size.width / 8,
-                                        width: size.width / 1.25,
-                                        alignment: Alignment.center,
-                                        padding: EdgeInsets.only(
-                                            right: size.width / 30),
-                                        decoration: BoxDecoration(
-                                          color: Colors.black.withOpacity(.1),
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        child: TextFormField(
-                                          style: TextStyle(
-                                            color: Colors.white.withOpacity(.9),
-                                          ),
-                                          controller: lastNameController,
-                                          decoration: InputDecoration(
-                                            prefixIcon: Icon(
-                                              Icons.contact_page_outlined,
-                                              color:
-                                                  Colors.white.withOpacity(.8),
-                                            ),
-                                            border: InputBorder.none,
-                                            hintMaxLines: 1,
-                                            hintText: LocaleKeys.lastName.tr(),
-                                            hintStyle: TextStyle(
-                                              fontSize: 14,
-                                              color:
-                                                  Colors.white.withOpacity(.5),
-                                            ),
-                                          ),
-                                          validator: (String? valueLastname) {
-                                            if (valueLastname!.isEmpty) {
-                                              return 'please enter Lastname';
-                                            } else {
-                                              return null;
-                                            }
-                                          },
-                                        ),
-                                      ),
+                                      lastNameForm(size),
 
                                       // email
-                                      Container(
-                                        height: size.width / 8,
-                                        width: size.width / 1.25,
-                                        alignment: Alignment.center,
-                                        padding: EdgeInsets.only(
-                                            right: size.width / 30),
-                                        decoration: BoxDecoration(
-                                          color: Colors.black.withOpacity(.1),
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        child: TextFormField(
-                                          style: TextStyle(
-                                            color: Colors.white.withOpacity(.9),
-                                          ),
-                                          controller: emailController,
-                                          decoration: InputDecoration(
-                                            prefixIcon: Icon(
-                                              Icons.email,
-                                              color:
-                                                  Colors.white.withOpacity(.8),
-                                            ),
-                                            border: InputBorder.none,
-                                            hintMaxLines: 1,
-                                            hintText:
-                                                LocaleKeys.form_email.tr(),
-                                            hintStyle: TextStyle(
-                                              fontSize: 14,
-                                              color:
-                                                  Colors.white.withOpacity(.5),
-                                            ),
-                                          ),
-                                          validator: (String? valueEmail) {
-                                            if (!((valueEmail!.contains('@')) &&
-                                                (valueEmail.contains('.')))) {
-                                              return 'Please Type Email in Exp. you@email.com';
-                                            } else {
-                                              return null;
-                                            }
-                                          },
-                                        ),
-                                      ),
+                                      emailForm(size),
 
                                       //password
-                                      Container(
-                                        height: size.width / 8,
-                                        width: size.width / 1.25,
-                                        alignment: Alignment.center,
-                                        padding: EdgeInsets.only(
-                                            right: size.width / 30),
-                                        decoration: BoxDecoration(
-                                          color: Colors.black.withOpacity(.1),
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        child: TextFormField(
-                                          style: TextStyle(
-                                            color: Colors.white.withOpacity(.9),
-                                          ),
-                                          controller: passwordController,
-                                          obscureText: _isSecurePassword,
-                                          decoration: InputDecoration(
-                                            prefixIcon: Icon(
-                                              Icons.lock_outline,
-                                              color:
-                                                  Colors.white.withOpacity(.8),
-                                            ),
-                                            border: InputBorder.none,
-                                            hintMaxLines: 1,
-                                            hintText: LocaleKeys.password.tr(),
-                                            hintStyle: TextStyle(
-                                              fontSize: 14,
-                                              color:
-                                                  Colors.white.withOpacity(.5),
-                                            ),
-                                            suffixIcon: togglePassword(),
-                                          ),
-                                          validator: (String? valuePassword) {
-                                            if (valuePassword!.length < 6) {
-                                              return 'Password More 6 Charactor';
-                                            } else {
-                                              return null;
-                                            }
-                                          },
-                                        ),
-                                      ),
+                                      passwordForm(size),
 
                                       //confirm password
-                                      Container(
-                                        height: size.width / 8,
-                                        width: size.width / 1.25,
-                                        alignment: Alignment.center,
-                                        padding: EdgeInsets.only(
-                                            right: size.width / 30),
-                                        decoration: BoxDecoration(
-                                          color: Colors.black.withOpacity(.1),
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        child: TextFormField(
-                                          style: TextStyle(
-                                            color: Colors.white.withOpacity(.9),
-                                          ),
-                                          controller:
-                                              confirmdPasswordController,
-                                          obscureText: _isSecureConfirmPassword,
-                                          decoration: InputDecoration(
-                                            prefixIcon: Icon(
-                                              Icons.lock_outline,
-                                              color:
-                                                  Colors.white.withOpacity(.8),
-                                            ),
-                                            border: InputBorder.none,
-                                            hintMaxLines: 1,
-                                            hintText: LocaleKeys
-                                                .confirm_password
-                                                .tr(),
-                                            hintStyle: TextStyle(
-                                              fontSize: 14,
-                                              color:
-                                                  Colors.white.withOpacity(.5),
-                                            ),
-                                            suffixIcon: toggleConfirmPassword(),
-                                          ),
-                                          validator:
-                                              (String? valueConfirmPassword) {
-                                            if ((passwordController.text !=
-                                                    confirmdPasswordController
-                                                        .text) &&
-                                                (confirmdPasswordController
-                                                    .text.isEmpty)) {
-                                              return 'Re-password is incurrect';
-                                            } else {
-                                              return null;
-                                            }
-                                          },
-                                        ),
-                                      ),
+                                      confirmPasswordForm(size),
 
                                       SizedBox(height: size.width * .15),
                                       InkWell(
                                         splashColor: Colors.transparent,
                                         highlightColor: Colors.transparent,
                                         onTap: () {
-                                          if (formKey.currentState!
-                                              .validate()) {
-                                            doRegister(
-                                              userController.text.toString(),
-                                              firstNameController.text
-                                                  .toString(),
-                                              lastNameController.text
-                                                  .toString(),
-                                              passwordController.text
-                                                  .toString(),
-                                              widget.uniId,
-                                              widget.uniSname,
-                                              emailController.text.toString(),
-                                            );
-                                            HapticFeedback.lightImpact();
-                                            Fluttertoast.showToast(
-                                              msg: LocaleKeys.alertSignIn.tr(),
-                                            );
-                                            // _showSuccessDialog();
+                                          print('You tab create new account');
+
+                                          if ((userController.text.isEmpty) ||
+                                              (firstNameController
+                                                  .text.isEmpty) ||
+                                              (lastNameController
+                                                  .text.isEmpty) ||
+                                              (emailController.text.isEmpty) ||
+                                              (passwordController
+                                                  .text.isEmpty) ||
+                                              (confirmdPasswordController
+                                                  .text.isEmpty)) {
+                                            AppDialog(context: context)
+                                                .normalDialog(
+                                                    title: 'Have Space ?',
+                                                    subTitle:
+                                                        'Please Fill Every Blank');
+                                          } else {
+                                            if (emailController.text
+                                                    .contains('@') &&
+                                                (emailController.text
+                                                    .contains('.'))) {
+                                              // email
+
+                                              if (passwordController
+                                                      .text.length >=
+                                                  6) {
+                                                //Pass OK
+                                                if (passwordController.text ==
+                                                    confirmdPasswordController
+                                                        .text) {
+                                                  //Password Map
+                                                  print('Every think OK');
+
+                                                  doRegister(
+                                                    userController.text
+                                                        .toString(),
+                                                    firstNameController.text
+                                                        .toString(),
+                                                    lastNameController.text
+                                                        .toString(),
+                                                    passwordController.text
+                                                        .toString(),
+                                                    widget.uniId,
+                                                    widget.uniSname,
+                                                    emailController.text
+                                                        .toString(),
+                                                  );
+                                                  HapticFeedback.lightImpact();
+                                                  Fluttertoast.showToast(
+                                                    msg: LocaleKeys.alertSignIn
+                                                        .tr(),
+                                                  );
+                                                } else {
+                                                  AppDialog(context: context)
+                                                      .normalDialog(
+                                                          title:
+                                                              'Password Not Math',
+                                                          subTitle:
+                                                              'Please Try Again Password not Math');
+                                                }
+                                              } else {
+                                                AppDialog(context: context)
+                                                    .normalDialog(
+                                                        title: 'Weak Password',
+                                                        subTitle:
+                                                            'Password More 6 digi');
+                                              }
+                                            } else {
+                                              // invalid Email
+                                              AppDialog(context: context)
+                                                  .normalDialog(
+                                                      title: 'Invalid Email',
+                                                      subTitle:
+                                                          'Badly Format Email');
+                                            }
                                           }
+
+                                          // if (formKey.currentState!
+                                          //     .validate()) {
+
+                                          //   // _showSuccessDialog();
+                                          // }
                                         },
                                         child: Container(
                                           margin: EdgeInsets.only(
@@ -599,6 +418,206 @@ class _registerState extends State<register> {
     );
   }
 
+  Container confirmPasswordForm(Size size) {
+    return Container(
+      height: size.width / 8,
+      width: size.width / 1.25,
+      alignment: Alignment.center,
+      padding: EdgeInsets.only(right: size.width / 30),
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(.1),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: TextFormField(
+        style: TextStyle(
+          color: Colors.white.withOpacity(.9),
+        ),
+        controller: confirmdPasswordController,
+        obscureText: _isSecureConfirmPassword,
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.lock_outline,
+            color: Colors.white.withOpacity(.8),
+          ),
+          border: InputBorder.none,
+          hintMaxLines: 1,
+          hintText: LocaleKeys.confirm_password.tr(),
+          hintStyle: TextStyle(
+            fontSize: 14,
+            color: Colors.white.withOpacity(.5),
+          ),
+          suffixIcon: toggleConfirmPassword(),
+        ),
+        validator: (String? valueConfirmPassword) {
+          if ((passwordController.text != confirmdPasswordController.text) &&
+              (confirmdPasswordController.text.isEmpty)) {
+            return 'Re-password is incurrect';
+          } else {
+            return null;
+          }
+        },
+      ),
+    );
+  }
+
+  Container passwordForm(Size size) {
+    return Container(
+      height: size.width / 8,
+      width: size.width / 1.25,
+      alignment: Alignment.center,
+      padding: EdgeInsets.only(right: size.width / 30),
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(.1),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: TextFormField(
+        style: TextStyle(
+          color: Colors.white.withOpacity(.9),
+        ),
+        controller: passwordController,
+        obscureText: _isSecurePassword,
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.lock_outline,
+            color: Colors.white.withOpacity(.8),
+          ),
+          border: InputBorder.none,
+          hintMaxLines: 1,
+          hintText: LocaleKeys.password.tr(),
+          hintStyle: TextStyle(
+            fontSize: 14,
+            color: Colors.white.withOpacity(.5),
+          ),
+          suffixIcon: togglePassword(),
+        ),
+        validator: (String? valuePassword) {
+          if (valuePassword!.length < 6) {
+            return 'Password More 6 Charactor';
+          } else {
+            return null;
+          }
+        },
+      ),
+    );
+  }
+
+  Container emailForm(Size size) {
+    return Container(
+      height: size.width / 8,
+      width: size.width / 1.25,
+      alignment: Alignment.center,
+      padding: EdgeInsets.only(right: size.width / 30),
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(.1),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: TextFormField(
+        style: TextStyle(
+          color: Colors.white.withOpacity(.9),
+        ),
+        controller: emailController,
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.email,
+            color: Colors.white.withOpacity(.8),
+          ),
+          border: InputBorder.none,
+          hintMaxLines: 1,
+          hintText: LocaleKeys.form_email.tr(),
+          hintStyle: TextStyle(
+            fontSize: 14,
+            color: Colors.white.withOpacity(.5),
+          ),
+        ),
+        validator: (String? valueEmail) {
+          if (!((valueEmail!.contains('@')) && (valueEmail.contains('.')))) {
+            return 'Please Type Email in Exp. you@email.com';
+          } else {
+            return null;
+          }
+        },
+      ),
+    );
+  }
+
+  Container lastNameForm(Size size) {
+    return Container(
+      height: size.width / 8,
+      width: size.width / 1.25,
+      alignment: Alignment.center,
+      padding: EdgeInsets.only(right: size.width / 30),
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(.1),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: TextFormField(
+        style: TextStyle(
+          color: Colors.white.withOpacity(.9),
+        ),
+        controller: lastNameController,
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.contact_page_outlined,
+            color: Colors.white.withOpacity(.8),
+          ),
+          border: InputBorder.none,
+          hintMaxLines: 1,
+          hintText: LocaleKeys.lastName.tr(),
+          hintStyle: TextStyle(
+            fontSize: 14,
+            color: Colors.white.withOpacity(.5),
+          ),
+        ),
+        validator: (String? valueLastname) {
+          if (valueLastname!.isEmpty) {
+            return 'please enter Lastname';
+          } else {
+            return null;
+          }
+        },
+      ),
+    );
+  }
+
+  Container firstNameForm(Size size) {
+    return Container(
+      height: size.width / 8,
+      width: size.width / 1.25,
+      alignment: Alignment.center,
+      padding: EdgeInsets.only(right: size.width / 30),
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(.1),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: TextFormField(
+        style: TextStyle(
+          color: Colors.white.withOpacity(.9),
+        ),
+        controller: firstNameController,
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.account_box_outlined,
+            color: Colors.white.withOpacity(.8),
+          ),
+          border: InputBorder.none,
+          hintMaxLines: 1,
+          hintText: LocaleKeys.firstName.tr(),
+          hintStyle: TextStyle(
+            fontSize: 14,
+            color: Colors.white.withOpacity(.5),
+          ),
+        ),
+        validator: (String? valuefirstname) {
+          if (valuefirstname!.isEmpty) {
+            return 'please enter Firstname';
+          } else {
+            return null;
+          }
+        },
+      ),
+    );
+  }
+
   Widget togglePassword() {
     return IconButton(
       onPressed: () {
@@ -624,6 +643,57 @@ class _registerState extends State<register> {
           ? Icon(Icons.visibility)
           : Icon(Icons.visibility_off),
       color: Colors.grey,
+    );
+  }
+}
+
+class userNameForm extends StatelessWidget {
+  const userNameForm({
+    Key? key,
+    required this.size,
+    required this.userController,
+  }) : super(key: key);
+
+  final Size size;
+  final TextEditingController userController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: size.width / 8,
+      width: size.width / 1.25,
+      alignment: Alignment.center,
+      padding: EdgeInsets.only(right: size.width / 30),
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(.1),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: TextFormField(
+        style: TextStyle(
+          color: Colors.white.withOpacity(.9),
+        ),
+        controller: userController,
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.account_circle_outlined,
+            color: Colors.white.withOpacity(.8),
+          ),
+          border: InputBorder.none,
+          hintMaxLines: 1,
+          hintText: LocaleKeys.username.tr(),
+          hintStyle: TextStyle(
+            fontSize: 14,
+            color: Colors.white.withOpacity(.5),
+          ),
+        ),
+        validator: (String? valueusername) {
+          if (valueusername!.isEmpty) {
+            return 'please enter username';
+          } else {
+            return null;
+          }
+        },
+      ),
     );
   }
 }

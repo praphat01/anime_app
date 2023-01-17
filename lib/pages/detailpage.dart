@@ -141,6 +141,16 @@ class _detailPageState extends State<detailPage> {
     });
   }
 
+  void getChkBorrow() async {
+    List<Map> data = await DatabaseHelper.getIDWithBookId(widget.bookId);
+    final existingData =
+        data.firstWhere((element) => element['book_id'] == widget.bookId);
+
+    if (existingData['id'] != null) {
+      borrowStatus = false;
+    }
+  }
+
   void getChkFav() async {
     final prefs = await SharedPreferences.getInstance();
     final String? uniId = prefs.getString('uniId');
@@ -203,6 +213,7 @@ class _detailPageState extends State<detailPage> {
     super.initState();
     getChkFav();
     getBookRating();
+    getChkBorrow();
 
     IsolateNameServer.registerPortWithName(
         _port.sendPort, 'downloader_send_port');
@@ -503,29 +514,51 @@ class _detailPageState extends State<detailPage> {
                                       size: 25.0,
                                     ),
                                   ),
-                            OutlinedButton(
-                              onPressed: () {
-                                debugPrint('Received click');
-                              },
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  primary: Colors.blue,
-                                  onSurface: Colors.red,
-                                ),
-                                onPressed: () {
-                                  // _showDialog();
-                                  // borrowStatus ? borrowBook() : '';
-                                  borrowBook();
-                                },
-                                child: Text(
-                                  LocaleKeys.borrow.tr(),
-                                  style: const TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),
+
+                            // Borrow status
+                            borrowStatus
+                                ? OutlinedButton(
+                                    onPressed: () {
+                                      debugPrint('Received click');
+                                    },
+                                    child: TextButton(
+                                      style: TextButton.styleFrom(
+                                        primary: Colors.blue,
+                                        onSurface: Colors.red,
+                                      ),
+                                      onPressed: () {
+                                        // _showDialog();
+                                        // borrowStatus ? borrowBook() : '';
+                                        borrowBook();
+                                      },
+                                      child: Text(
+                                        LocaleKeys.borrow.tr(),
+                                        style: const TextStyle(
+                                            fontSize: 20,
+                                            color: Colors.red,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  )
+                                : OutlinedButton(
+                                    onPressed: () {
+                                      debugPrint('Received click');
+                                    },
+                                    child: TextButton(
+                                      style: TextButton.styleFrom(
+                                        primary: Colors.blue,
+                                        onSurface: Colors.red,
+                                      ),
+                                      onPressed: () {},
+                                      child: Text(
+                                        LocaleKeys.borrow.tr(),
+                                        style: const TextStyle(
+                                            fontSize: 20,
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
                           ],
                         ),
                         SizedBox(

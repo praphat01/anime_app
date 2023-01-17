@@ -53,7 +53,7 @@ class _bookshelfState extends State<bookshelf> {
   String statusFile = '';
   String _localPath = '';
   bool load = true;
-  bool hasBook = false;
+
   var bookIdType;
   var pathSite;
   var imageUrl;
@@ -108,15 +108,11 @@ class _bookshelfState extends State<bookshelf> {
   }
 
   Future getConnecttivity() async {
-    print('##11jan GetConnecttivity Work');
-
     await Connectivity().checkConnectivity().then((value) {
       if (value == ConnectivityResult.none) {
-        print('##11jan Not Connected Interner');
         isDeviceConnected = false;
         statusNoInternet();
       } else {
-        print('##11jan Connected Interner');
         isDeviceConnected = true;
         statusHaveInternet();
       }
@@ -156,7 +152,6 @@ class _bookshelfState extends State<bookshelf> {
 
   void _refreshData() async {
     final data = await DatabaseHelper.getItems();
-    print('##11jan data sqlite --> $data');
 
     if (data.isNotEmpty) {
       for (var element in data) {
@@ -343,11 +338,7 @@ class _bookshelfState extends State<bookshelf> {
     final uri = Uri.parse(getNewBook);
     http.get(uri).then((response) {
       if (response.statusCode == 200) {
-        
         final responseBody = response.body;
-        print('##11jan responseBody -->$responseBody');
-
-       
 
         final decodedData = jsonDecode(responseBody);
 
@@ -360,9 +351,6 @@ class _bookshelfState extends State<bookshelf> {
         } else {
           haveBook = false;
         }
-
-        print(
-            '##11jan haveBook --> $haveBook');
 
         load = false;
 
@@ -434,16 +422,11 @@ class _bookshelfState extends State<bookshelf> {
     String nameFile = "/${filename}";
     String savePath = appDocDir!.path + nameFile;
 
-    print('##11jan savePath ---> $savePath');
-
     // Path of image cover book
     String nameFileImage = "/${fileImageName}";
     String saveImagePath = appDocDir.path + nameFileImage;
 
-    print('##11jan saveImagePath ---> $saveImagePath');
-
     List<Map> data = await DatabaseHelper.getIDWithBookId(bookId);
-    print('##11jan data at $bookId --> $data');
 
     for (var element in data) {
       DatabaseHelper.updateImageFilePath(
@@ -493,11 +476,6 @@ class _bookshelfState extends State<bookshelf> {
 
   @override
   Widget build(BuildContext context) {
-    if (userBookShelflist.length == 0) {
-      hasBook = false;
-    } else {
-      hasBook = true;
-    }
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -525,7 +503,7 @@ class _bookshelfState extends State<bookshelf> {
       ),
       drawer: const PublicDrawer(),
       body: load
-          ? circular(hasBook)
+          ? circular(haveBook)
           : isDeviceConnected
               ? haveBook!
                   ? Stack(
@@ -654,7 +632,7 @@ class _bookshelfState extends State<bookshelf> {
     );
   }
 
-  Widget showProcessLoad() {
+  showProcessLoad() {
     return Container(
       decoration: BoxDecoration(color: Colors.black.withOpacity(0.25)),
       alignment: Alignment.center,
@@ -791,7 +769,7 @@ class _bookshelfState extends State<bookshelf> {
                                           Center(
                                             child: Text(
                                               userBookShelflist[index]!
-                                                  .bookDesc
+                                                  .bookTitle
                                                   .toString(),
                                               overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(

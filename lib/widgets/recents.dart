@@ -69,7 +69,6 @@ class Recents extends StatelessWidget {
                                       fontWeight: FontWeight.bold),
                             ),
                       onTap: () {
-                        Navigator.of(context).pop();
                         Navigator.push(
                           context,
                           MaterialPageRoute(

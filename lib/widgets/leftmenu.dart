@@ -106,7 +106,7 @@ class _PublicDrawerState extends State<PublicDrawer> {
           ),
           ListTile(
             leading: Icon(
-              Icons.attach_file,
+              Icons.account_circle_outlined,
               color: Colors.green,
             ),
             title: Text(LocaleKeys.data_frofile.tr()),

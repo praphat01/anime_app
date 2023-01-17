@@ -169,10 +169,10 @@ class _HomePagemainState extends State<HomePagemain> {
                 child: GridView.builder(
               itemCount: uniList.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 20,
+                crossAxisCount: 2,
+                crossAxisSpacing: 30,
                 mainAxisSpacing: 30,
-                mainAxisExtent: 140,
+                mainAxisExtent: 175,
               ),
               itemBuilder: (BuildContext context, int index) {
                 return Container(
@@ -205,15 +205,15 @@ class _HomePagemainState extends State<HomePagemain> {
                               children: [
                                 Expanded(
                                   child: Container(
-                                    height: 500,
-                                    width: 300,
+                                    height: 450,
+                                    width: 250,
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(20),
                                       image: DecorationImage(
                                         image: NetworkImage(
                                             uniList[index]!.imgLink.toString()),
-                                        fit: BoxFit.fitHeight,
+                                        fit: BoxFit.contain,
                                       ),
                                       boxShadow: [
                                         BoxShadow(
@@ -228,15 +228,15 @@ class _HomePagemainState extends State<HomePagemain> {
                                 ),
                                 const SizedBox(height: 15),
                                 SizedBox(
-                                    width: 100,
+                                    width: 175,
                                     child: Text(
                                         uniList[index]!.uniName.toString(),
-                                        overflow: TextOverflow.ellipsis,
                                         style: Theme.of(context)
                                             .textTheme
                                             .subtitle1
                                             ?.copyWith(
                                                 color: Colors.black,
+                                                fontSize: 15,
                                                 fontWeight: FontWeight.bold))),
                                 // const SizedBox(height: 15),
                               ],
@@ -382,10 +382,10 @@ class _HomePagemainState extends State<HomePagemain> {
                 child: GridView.builder(
               itemCount: uniList.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 4,
+                crossAxisCount: 3,
                 crossAxisSpacing: 30,
                 mainAxisSpacing: 40,
-                mainAxisExtent: 200,
+                mainAxisExtent: 250,
               ),
               itemBuilder: (BuildContext context, int index) {
                 return Container(
@@ -425,7 +425,7 @@ class _HomePagemainState extends State<HomePagemain> {
                                   image: DecorationImage(
                                     image: NetworkImage(
                                         uniList[index]!.imgLink.toString()),
-                                    fit: BoxFit.fill,
+                                    fit: BoxFit.contain,
                                   ),
                                   boxShadow: [
                                     BoxShadow(
@@ -439,13 +439,14 @@ class _HomePagemainState extends State<HomePagemain> {
                             ),
                             const SizedBox(height: 15),
                             SizedBox(
+                                width: 250,
                                 child: Text(uniList[index]!.uniName.toString(),
-                                    overflow: TextOverflow.ellipsis,
                                     style: Theme.of(context)
                                         .textTheme
                                         .subtitle1
                                         ?.copyWith(
                                             color: Colors.black,
+                                            fontSize: 20,
                                             fontWeight: FontWeight.bold))),
                             // const SizedBox(height: 15),
                           ])))

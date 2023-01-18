@@ -115,16 +115,67 @@ class _searchloadingState extends State<searchloading> {
                       ),
                       child: Row(
                         children: [
-                          Container(
-                            height: 210,
-                            width: 140,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                image: DecorationImage(
-                                    image: NetworkImage(dataBookSearch[index]!
-                                        .imgLink
-                                        .toString()),
-                                    fit: BoxFit.cover)),
+                          InkWell(
+                            child: Container(
+                              height: 210,
+                              width: 140,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  image: DecorationImage(
+                                      image: NetworkImage(dataBookSearch[index]!
+                                          .imgLink
+                                          .toString()),
+                                      fit: BoxFit.cover)),
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => detailPage(
+                                          bookId:
+                                              dataBookSearch[index]!.bookId ??
+                                                  '',
+                                          bookDesc:
+                                              dataBookSearch[index]!.bookDesc ??
+                                                  '',
+                                          bookshelfId: dataBookSearch[index]!
+                                                  .bookshelfId ??
+                                              '',
+                                          bookPrice: dataBookSearch[index]!
+                                                  .bookPrice ??
+                                              '',
+                                          bookTitle: dataBookSearch[index]!
+                                                  .bookTitle ??
+                                              '',
+                                          bookAuthor: dataBookSearch[index]!
+                                                  .bookAuthor ??
+                                              '',
+                                          bookNoOfPage: dataBookSearch[index]!
+                                                  .bookNoOfPage ??
+                                              '',
+                                          booktypeName: dataBookSearch[index]!
+                                                  .booktypeName ??
+                                              '',
+                                          publisherName: dataBookSearch[index]!
+                                                  .publisherName ??
+                                              '',
+                                          bookIsbn:
+                                              dataBookSearch[index]!.bookIsbn ??
+                                                  '',
+                                          bookcateId: '', // No data
+                                          bookcateName: dataBookSearch[index]!
+                                                  .bookcateName ??
+                                              '',
+                                          onlinetype: dataBookSearch[index]!
+                                                  .onlinetype ??
+                                              '',
+                                          t2Id: '', // No data
+                                          imgLink:
+                                              dataBookSearch[index]!.imgLink ??
+                                                  '',
+                                        )),
+                              );
+                            },
                           ),
                           SizedBox(
                             width: 20,

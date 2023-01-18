@@ -86,16 +86,35 @@ class _searchloadingUniState extends State<searchloadingUni> {
                               fit: BoxFit.cover)),
                       child: Row(
                         children: [
-                          Container(
-                            height: 100,
-                            width: 100,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                image: DecorationImage(
-                                    image: NetworkImage(dataUniSearch[index]!
-                                        .imgLink
-                                        .toString()),
-                                    fit: BoxFit.fitHeight)),
+                          InkWell(
+                            child: Container(
+                              height: 100,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  image: DecorationImage(
+                                      image: NetworkImage(dataUniSearch[index]!
+                                          .imgLink
+                                          .toString()),
+                                      fit: BoxFit.fitHeight)),
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => login(
+                                          uniSname:
+                                              dataUniSearch[index]!.uniSname ??
+                                                  '',
+                                          uniId:
+                                              dataUniSearch[index]!.uniId ?? '',
+                                          uniLink: urlWeb ?? '',
+                                          pathWebSite:
+                                              dataUniSearch[index]!.uniLink ??
+                                                  '',
+                                        )),
+                              );
+                            },
                           ),
                           SizedBox(
                             width: 20,

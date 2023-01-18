@@ -353,6 +353,10 @@ class _detailPageState extends State<detailPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+          shadows: <Shadow>[Shadow(color: Colors.black, blurRadius: 10.0)],
+        ),
       ),
       extendBodyBehindAppBar: true,
       body: useMobileLayout

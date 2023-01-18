@@ -243,9 +243,12 @@ class _subPublisherListState extends State<subPublisherList> {
                     : Image.asset('assets/images/logo_2ebook.png'),
               );
             } else {
-              return const Padding(
-                padding: EdgeInsets.symmetric(vertical: 30),
-                child: Center(),
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 30),
+                child: Center(
+                    child: hasmore
+                        ? const CircularProgressIndicator()
+                        : const Text('')),
               );
             }
           }),

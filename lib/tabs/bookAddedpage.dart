@@ -31,7 +31,10 @@ class _bookAddedState extends State<bookAdded> {
 
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
-        fetch();
+        if (hasmore == false) {
+        } else {
+          fetch();
+        }
       }
     });
   }
@@ -48,7 +51,7 @@ class _bookAddedState extends State<bookAdded> {
     final String? uniLink = prefs.getString('uniLink');
     final String? pathWebSite = prefs.getString('pathWebSite');
 
-    const limited = 10;
+    int limited = 10;
     var getNewBook = "${uniLink}/new_book.php?uni_id=${uniId}&page=$page";
     final uri = Uri.parse(getNewBook);
     http.get(uri).then((response) {
@@ -60,10 +63,12 @@ class _bookAddedState extends State<bookAdded> {
           ...bookadded.fromJson(decodedData).result as List<Result?>
         ];
         setState(() {
-          page++;
-
-          if (newBooklist.length < limited) {
+          int limitLength = limited * page;
+          if (newBooklist.length < limitLength) {
             hasmore = false;
+          } else {
+            hasmore = true;
+            page++;
           }
           pathSite = pathWebSite;
         });
@@ -200,10 +205,10 @@ class _bookAddedState extends State<bookAdded> {
             } else {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 30),
-                // child: Center(
-                //     child: hasmore
-                //         ? const CircularProgressIndicator()
-                //         : const Text('')),
+                child: Center(
+                    child: hasmore
+                        ? const CircularProgressIndicator()
+                        : const Text('')),
               );
             }
           }),
@@ -329,10 +334,10 @@ class _bookAddedState extends State<bookAdded> {
             } else {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 30),
-                // child: Center(
-                //     child: hasmore
-                //         ? const CircularProgressIndicator()
-                //         : const Text('')),
+                child: Center(
+                    child: hasmore
+                        ? const CircularProgressIndicator()
+                        : const Text('')),
               );
             }
           }),

@@ -30,7 +30,8 @@ class _bookRecommendedState extends State<bookRecommended> {
     fetch();
 
     controller.addListener(() {
-      if (controller.position.maxScrollExtent == controller.offset) {
+      if (hasmore == false) {
+      } else {
         fetch();
       }
     });
@@ -48,7 +49,7 @@ class _bookRecommendedState extends State<bookRecommended> {
     final String? uniLink = prefs.getString('uniLink');
     final String? pathWebSite = prefs.getString('pathWebSite');
     // print('User id is : ${uniId}');
-    const limited = 10;
+    int limited = 10;
     var getRecommendUrl =
         "${uniLink}/book_recommended.php?uni_id=${uniId}&page=$page";
     final uri = Uri.parse(getRecommendUrl);
@@ -62,10 +63,12 @@ class _bookRecommendedState extends State<bookRecommended> {
         ];
 
         setState(() {
-          page++;
-
-          if (recommendedBooklist.length < limited) {
+          int limitLength = limited * page;
+          if (recommendedBooklist.length < limitLength) {
             hasmore = false;
+          } else {
+            hasmore = true;
+            page++;
           }
           pathSite = pathWebSite;
           // var recommendedBooklist = List.from(recommendedBooklist)..addAll(decodedData);
@@ -216,10 +219,10 @@ class _bookRecommendedState extends State<bookRecommended> {
             } else {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 30),
-                // child: Center(
-                //     child: hasmore
-                //         ? const CircularProgressIndicator()
-                //         : const Text('')),
+                child: Center(
+                    child: hasmore
+                        ? const CircularProgressIndicator()
+                        : const Text('')),
               );
             }
           }),
@@ -358,10 +361,10 @@ class _bookRecommendedState extends State<bookRecommended> {
             } else {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 30),
-                // child: Center(
-                //     child: hasmore
-                //         ? const CircularProgressIndicator()
-                //         : const Text('')),
+                child: Center(
+                    child: hasmore
+                        ? const CircularProgressIndicator()
+                        : const Text('')),
               );
             }
           }),

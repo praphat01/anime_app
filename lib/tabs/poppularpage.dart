@@ -31,7 +31,10 @@ class _bookPoppularState extends State<bookPoppular> {
 
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
-        fetch();
+        if (hasmore == false) {
+        } else {
+          fetch();
+        }
       }
     });
   }
@@ -47,7 +50,7 @@ class _bookPoppularState extends State<bookPoppular> {
     final String? uniId = prefs.getString('uniId');
     final String? uniLink = prefs.getString('uniLink');
     final String? pathWebSite = prefs.getString('pathWebSite');
-    const limited = 10;
+    int limited = 10;
     var getNewBook = "${uniLink}/book_popular.php?uni_id=${uniId}&page=$page";
     final uri = Uri.parse(getNewBook);
     http.get(uri).then((response) {
@@ -60,10 +63,12 @@ class _bookPoppularState extends State<bookPoppular> {
         ];
 
         setState(() {
-          page++;
-
-          if (popularBooklist.length < limited) {
+          int limitLength = limited * page;
+          if (popularBooklist.length < limitLength) {
             hasmore = false;
+          } else {
+            hasmore = true;
+            page++;
           }
           pathSite = pathWebSite;
           // var popularBooklist = List.from(popularBooklist)..addAll(decodedData);
@@ -212,10 +217,10 @@ class _bookPoppularState extends State<bookPoppular> {
             } else {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 30),
-                // child: Center(
-                //     child: hasmore
-                //         ? const CircularProgressIndicator()
-                //         : const Text('')),
+                child: Center(
+                    child: hasmore
+                        ? const CircularProgressIndicator()
+                        : const Text('')),
               );
             }
           }),
@@ -352,10 +357,10 @@ class _bookPoppularState extends State<bookPoppular> {
             } else {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 30),
-                // child: Center(
-                //     child: hasmore
-                //         ? const CircularProgressIndicator()
-                //         : const Text('')),
+                child: Center(
+                    child: hasmore
+                        ? const CircularProgressIndicator()
+                        : const Text('')),
               );
             }
           }),

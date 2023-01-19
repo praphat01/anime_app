@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -42,7 +44,10 @@ class _subPublisherListState extends State<subPublisherList> {
 
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
-        fetch(bookcateId);
+        if (hasmore == false) {
+        } else {
+          fetch(bookcateId);
+        }
       }
     });
   }
@@ -58,7 +63,7 @@ class _subPublisherListState extends State<subPublisherList> {
     final String? uniId = prefs.getString('uniId');
     final String? uniLink = prefs.getString('uniLink');
     final String? pathWebSite = prefs.getString('pathWebSite');
-    const limited = 10;
+    int limited = 10;
     // print('page is $page');
     var getNewBook =
         "${uniLink}/categoriesbooks_publisher.php?publisher_id=${bookcate_id}&uni_id=${uniId}&page=${page}";
@@ -79,10 +84,13 @@ class _subPublisherListState extends State<subPublisherList> {
         }
 
         setState(() {
-          page++;
           load = false;
-          if (subCategorylist.length < limited) {
+          int limitLength = limited * page;
+          if (subCategorylist.length < limitLength) {
             hasmore = false;
+          } else {
+            hasmore = true;
+            page++;
           }
           pathSite = pathWebSite;
         });

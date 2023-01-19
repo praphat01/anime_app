@@ -31,6 +31,7 @@ class _subCategoryListState extends State<subCategoryList> {
   var pathSite;
   var imageUrl;
   var imageLocalFile;
+  bool hasmore = true;
 
   @override
   void initState() {
@@ -40,7 +41,10 @@ class _subCategoryListState extends State<subCategoryList> {
 
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
-        fetch(bookcateId);
+        if (hasmore == false) {
+        } else {
+          fetch(bookcateId);
+        }
       }
     });
   }
@@ -56,7 +60,7 @@ class _subCategoryListState extends State<subCategoryList> {
     final String? uniId = prefs.getString('uniId');
     final String? uniLink = prefs.getString('uniLink');
     final String? pathWebSite = prefs.getString('pathWebSite');
-    const limited = 10;
+    int limited = 10;
     // print('page is $page');
     var getNewBook =
         "${uniLink}/categoriesbooks.php?uni_id=${uniId}&bookcate_id=${bookcateId}&page=${page}";
@@ -70,7 +74,13 @@ class _subCategoryListState extends State<subCategoryList> {
           ...subCategory_books.fromJson(decodedData).result as List<Result?>
         ];
         setState(() {
-          page++;
+          int limitLength = limited * page;
+          if (subCategorylist.length < limitLength) {
+            hasmore = false;
+          } else {
+            hasmore = true;
+            page++;
+          }
 
           pathSite = pathWebSite;
           load = false;
@@ -236,7 +246,10 @@ class _subCategoryListState extends State<subCategoryList> {
             } else {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 30),
-                child: Center(),
+                child: Center(
+                    child: hasmore
+                        ? const CircularProgressIndicator()
+                        : const Text('')),
               );
             }
           }),
@@ -374,7 +387,10 @@ class _subCategoryListState extends State<subCategoryList> {
             } else {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 30),
-                child: Center(),
+                child: Center(
+                    child: hasmore
+                        ? const CircularProgressIndicator()
+                        : const Text('')),
               );
             }
           }),

@@ -53,7 +53,7 @@ class _bookshelfState extends State<bookshelf> {
   String statusFile = '';
   String _localPath = '';
   bool load = true;
-
+  bool fileError = true;
   var bookIdType;
   var pathSite;
   var imageUrl;
@@ -119,6 +119,32 @@ class _bookshelfState extends State<bookshelf> {
       setState(() {});
     });
   }
+
+  // void checkQualityFile(pdfLink) async {
+  //   File file = new File(pdfLink);
+  //   String filename = path.basename(file.path);
+  //   var appDocDir = await getExternalStorageDirectory();
+  //   String nameFile = "/${filename}";
+  //   String pathFile = appDocDir!.path + nameFile;
+  //   final files = File(pathFile);
+
+  //   print('##23 jan Arm ==> $files');
+
+  //   try {
+  //     files.readAsString();
+  //   } catch (e) {
+  //     print('##24 file book error download uncompleted $e');
+  //     setState(() {
+  //       fileError = false;
+  //     });
+  //   }
+
+  //   // files.readAsString().catchError((e) {
+  //   //   setState(() {
+  //   //     fileError = false;
+  //   //   });
+  //   // });
+  // }
 
   void returnBook(
       {required bookshelfId,
@@ -428,38 +454,43 @@ class _bookshelfState extends State<bookshelf> {
 
     List<Map> data = await DatabaseHelper.getIDWithBookId(bookId);
 
-    for (var element in data) {
-      DatabaseHelper.updateImageFilePath(
-          id: element['id'], book_image: saveImagePath, book_file: savePath);
+    try {
+      for (var element in data) {
+        DatabaseHelper.updateImageFilePath(
+            id: element['id'], book_image: saveImagePath, book_file: savePath);
+      }
+
+      double second = 0.1;
+
+      await Dio().download(pdfLinkNew, savePath,
+          onReceiveProgress: (count, total) {
+        // print((count / total * 100).toStringAsFixed(0) + "%");
+
+        percent = (count / total * 100).toStringAsFixed(0) + "%";
+        percentNumber = double.parse((count / total * 100).toStringAsFixed(0));
+
+        displayProcessLoadPdf = true;
+
+        setState(() {});
+      }).then((value) {
+        displayProcessLoadPdf = false;
+        setState(() {});
+      });
+
+      await ImageGallerySaver.saveFile(appDocDir.path, name: nameFile)
+          .then((value) {
+        Fluttertoast.showToast(
+          msg: LocaleKeys.downloadFinished.tr(),
+          toastLength: Toast.LENGTH_LONG,
+        );
+      });
+
+      await Dio().download(imgLink, saveImagePath);
+      await ImageGallerySaver.saveFile(appDocDir.path, name: nameFileImage);
+    } catch (e) {
+      print('Download not complete');
+      deleteBookFromStorage(bookId, pdfLink, imgLink);
     }
-
-    double second = 0.1;
-
-    await Dio().download(pdfLinkNew, savePath,
-        onReceiveProgress: (count, total) {
-      // print((count / total * 100).toStringAsFixed(0) + "%");
-
-      percent = (count / total * 100).toStringAsFixed(0) + "%";
-      percentNumber = double.parse((count / total * 100).toStringAsFixed(0));
-
-      displayProcessLoadPdf = true;
-
-      setState(() {});
-    }).then((value) {
-      displayProcessLoadPdf = false;
-      setState(() {});
-    });
-
-    await ImageGallerySaver.saveFile(appDocDir.path, name: nameFile)
-        .then((value) {
-      Fluttertoast.showToast(
-        msg: LocaleKeys.downloadFinished.tr(),
-        toastLength: Toast.LENGTH_LONG,
-      );
-    });
-
-    await Dio().download(imgLink, saveImagePath);
-    await ImageGallerySaver.saveFile(appDocDir.path, name: nameFileImage);
   }
 
   Future<bool> checkfileBeforeReadPdf({required fileBook}) async {
@@ -700,26 +731,43 @@ class _bookshelfState extends State<bookshelf> {
                         userBookShelflist[index]!.bookId != '0')
                     ? InkWell(
                         onTap: () async {
-                          if ((await checkfileBeforeReadPdf(
-                                  fileBook:
-                                      userBookShelflist[index]!.pdfLink) ==
-                              false)) {
-                            bookshelfMenuDownload(
-                                userBookShelflist[index]!.pdfLink,
-                                userBookShelflist[index]!.bookTitle,
-                                userBookShelflist[index]!.bookId,
-                                userBookShelflist[index]!.bookDesc,
-                                userBookShelflist[index]!.bookshelfId,
-                                userBookShelflist[index]!.bookPrice,
-                                userBookShelflist[index]!.bookAuthor,
-                                userBookShelflist[index]!.bookNoOfPage,
-                                userBookShelflist[index]!.booktypeName,
-                                userBookShelflist[index]!.publisherName,
-                                userBookShelflist[index]!.bookIsbn,
-                                userBookShelflist[index]!.bookcateName,
-                                userBookShelflist[index]!.imgLink);
+                          if (fileError) {
+                            if ((await checkfileBeforeReadPdf(
+                                    fileBook:
+                                        userBookShelflist[index]!.pdfLink) ==
+                                false)) {
+                              bookshelfMenuDownload(
+                                  userBookShelflist[index]!.pdfLink,
+                                  userBookShelflist[index]!.bookTitle,
+                                  userBookShelflist[index]!.bookId,
+                                  userBookShelflist[index]!.bookDesc,
+                                  userBookShelflist[index]!.bookshelfId,
+                                  userBookShelflist[index]!.bookPrice,
+                                  userBookShelflist[index]!.bookAuthor,
+                                  userBookShelflist[index]!.bookNoOfPage,
+                                  userBookShelflist[index]!.booktypeName,
+                                  userBookShelflist[index]!.publisherName,
+                                  userBookShelflist[index]!.bookIsbn,
+                                  userBookShelflist[index]!.bookcateName,
+                                  userBookShelflist[index]!.imgLink);
+                            } else {
+                              bookshelfMenuRead(
+                                  userBookShelflist[index]!.pdfLink,
+                                  userBookShelflist[index]!.bookTitle,
+                                  userBookShelflist[index]!.bookId,
+                                  userBookShelflist[index]!.bookDesc,
+                                  userBookShelflist[index]!.bookshelfId,
+                                  userBookShelflist[index]!.bookPrice,
+                                  userBookShelflist[index]!.bookAuthor,
+                                  userBookShelflist[index]!.bookNoOfPage,
+                                  userBookShelflist[index]!.booktypeName,
+                                  userBookShelflist[index]!.publisherName,
+                                  userBookShelflist[index]!.bookIsbn,
+                                  userBookShelflist[index]!.bookcateName,
+                                  userBookShelflist[index]!.imgLink);
+                            }
                           } else {
-                            bookshelfMenuRead(
+                            bookshelfMenuDownload(
                                 userBookShelflist[index]!.pdfLink,
                                 userBookShelflist[index]!.bookTitle,
                                 userBookShelflist[index]!.bookId,

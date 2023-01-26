@@ -224,34 +224,47 @@ class _bookshelfState extends State<bookshelf> {
   void deleteBookFromStorage(DB_id, pdfLink, imgLink) async {
     // this function delete file book from mobile and database in mobile
     List<Map> data = await DatabaseHelper.getIDWithBookId(DB_id);
-    final existingData =
-        data.firstWhere((element) => element['book_id'] == DB_id);
-    if (existingData['id'] != null) {
-      await DatabaseHelper.deleteItem(existingData['id']);
 
-      // file path of pdf
-      File file = new File(pdfLink);
-      String filename = path.basename(file.path);
-      var appDocDir = await getExternalStorageDirectory();
-      String nameFile = "/${filename}";
-      String pathFile = appDocDir!.path + nameFile;
-      final fileDelete = File(pathFile);
+    // file path of pdf
+    File file = new File(pdfLink);
+    String filename = path.basename(file.path);
+    var appDocDir = await getExternalStorageDirectory();
+    String nameFile = "/${filename}";
+    String pathFile = appDocDir!.path + nameFile;
+    final fileDelete = File(pathFile);
 
-      // file path of image
-      File fileImage = new File(imgLink);
-      String fileImagename = path.basename(fileImage.path);
-      String nameFileImage = "/${fileImagename}";
-      String pathFileImage = appDocDir.path + nameFileImage;
-      final fileDeleteImage = File(pathFileImage);
+    // file path of image
+    File fileImage = new File(imgLink);
+    String fileImagename = path.basename(fileImage.path);
+    String nameFileImage = "/${fileImagename}";
+    String pathFileImage = appDocDir.path + nameFileImage;
+    final fileDeleteImage = File(pathFileImage);
 
-      try {
-        if (await fileDeleteImage.exists()) {
-          await fileDeleteImage.delete();
+    try {
+      final existingData =
+          data.firstWhere((element) => element['book_id'] == DB_id);
+      if (existingData['id'] != null) {
+        await DatabaseHelper.deleteItem(existingData['id']);
+
+        try {
+          if (await fileDeleteImage.exists()) {
+            await fileDeleteImage.delete();
+          }
+        } catch (e) {
+          // Error in getting access to the file.
         }
-      } catch (e) {
-        // Error in getting access to the file.
-      }
 
+        try {
+          if (await fileDelete.exists()) {
+            await fileDelete.delete();
+            print('Alread delete');
+          }
+        } catch (e) {
+          // Error in getting access to the file.
+        }
+      }
+    } catch (e) {
+      print('deleteBookFromStorage Error');
       try {
         if (await fileDelete.exists()) {
           await fileDelete.delete();
@@ -477,6 +490,12 @@ class _bookshelfState extends State<bookshelf> {
         setState(() {});
       });
 
+      // setState(() {
+      //   fileError = true;
+      // });
+
+      print('##Arm file error is status TRUE ');
+
       await ImageGallerySaver.saveFile(appDocDir.path, name: nameFile)
           .then((value) {
         Fluttertoast.showToast(
@@ -489,7 +508,11 @@ class _bookshelfState extends State<bookshelf> {
       await ImageGallerySaver.saveFile(appDocDir.path, name: nameFileImage);
     } catch (e) {
       print('Download not complete');
+      print('##Arm file error is status FLASE ');
       deleteBookFromStorage(bookId, pdfLink, imgLink);
+      // setState(() {
+      //   fileError = false;
+      // });
     }
   }
 
@@ -731,43 +754,26 @@ class _bookshelfState extends State<bookshelf> {
                         userBookShelflist[index]!.bookId != '0')
                     ? InkWell(
                         onTap: () async {
-                          if (fileError) {
-                            if ((await checkfileBeforeReadPdf(
-                                    fileBook:
-                                        userBookShelflist[index]!.pdfLink) ==
-                                false)) {
-                              bookshelfMenuDownload(
-                                  userBookShelflist[index]!.pdfLink,
-                                  userBookShelflist[index]!.bookTitle,
-                                  userBookShelflist[index]!.bookId,
-                                  userBookShelflist[index]!.bookDesc,
-                                  userBookShelflist[index]!.bookshelfId,
-                                  userBookShelflist[index]!.bookPrice,
-                                  userBookShelflist[index]!.bookAuthor,
-                                  userBookShelflist[index]!.bookNoOfPage,
-                                  userBookShelflist[index]!.booktypeName,
-                                  userBookShelflist[index]!.publisherName,
-                                  userBookShelflist[index]!.bookIsbn,
-                                  userBookShelflist[index]!.bookcateName,
-                                  userBookShelflist[index]!.imgLink);
-                            } else {
-                              bookshelfMenuRead(
-                                  userBookShelflist[index]!.pdfLink,
-                                  userBookShelflist[index]!.bookTitle,
-                                  userBookShelflist[index]!.bookId,
-                                  userBookShelflist[index]!.bookDesc,
-                                  userBookShelflist[index]!.bookshelfId,
-                                  userBookShelflist[index]!.bookPrice,
-                                  userBookShelflist[index]!.bookAuthor,
-                                  userBookShelflist[index]!.bookNoOfPage,
-                                  userBookShelflist[index]!.booktypeName,
-                                  userBookShelflist[index]!.publisherName,
-                                  userBookShelflist[index]!.bookIsbn,
-                                  userBookShelflist[index]!.bookcateName,
-                                  userBookShelflist[index]!.imgLink);
-                            }
-                          } else {
+                          if ((await checkfileBeforeReadPdf(
+                                  fileBook:
+                                      userBookShelflist[index]!.pdfLink) ==
+                              false)) {
                             bookshelfMenuDownload(
+                                userBookShelflist[index]!.pdfLink,
+                                userBookShelflist[index]!.bookTitle,
+                                userBookShelflist[index]!.bookId,
+                                userBookShelflist[index]!.bookDesc,
+                                userBookShelflist[index]!.bookshelfId,
+                                userBookShelflist[index]!.bookPrice,
+                                userBookShelflist[index]!.bookAuthor,
+                                userBookShelflist[index]!.bookNoOfPage,
+                                userBookShelflist[index]!.booktypeName,
+                                userBookShelflist[index]!.publisherName,
+                                userBookShelflist[index]!.bookIsbn,
+                                userBookShelflist[index]!.bookcateName,
+                                userBookShelflist[index]!.imgLink);
+                          } else {
+                            bookshelfMenuRead(
                                 userBookShelflist[index]!.pdfLink,
                                 userBookShelflist[index]!.bookTitle,
                                 userBookShelflist[index]!.bookId,

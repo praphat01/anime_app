@@ -217,20 +217,19 @@ class _subCategoryListState extends State<subCategoryList> {
                                       ),
                                       Container(
                                         margin:
-                                            EdgeInsets.only(top: 160, left: 20),
+                                            EdgeInsets.only(top: 160, left: 10),
                                         height: 30,
                                         width: 90,
                                         child: Stack(
                                           children: <Widget>[
-                                            Center(
-                                                child: Text(
+                                            Text(
                                               subCategorylist[index]!
-                                                  .bookDesc
+                                                  .bookTitle
                                                   .toString(),
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                   color: Colors.black),
-                                            ))
+                                            )
                                           ],
                                         ),
                                       ),
@@ -283,7 +282,7 @@ class _subCategoryListState extends State<subCategoryList> {
 
               return Container(
                 //borderRadius: BorderRadius.circular(20),
-                child: (subCategorylist[index]!.bookDesc != null &&
+                child: (subCategorylist[index]!.bookTitle != null &&
                         subCategorylist[index]!.bookId != '0')
                     ? InkWell(
                         onTap: () {
@@ -357,7 +356,7 @@ class _subCategoryListState extends State<subCategoryList> {
                                       ),
                                       Container(
                                         margin:
-                                            EdgeInsets.only(top: 260, left: 20),
+                                            EdgeInsets.only(top: 260, left: 10),
                                         height: 90,
                                         width: 180,
                                         child: Stack(
@@ -365,7 +364,7 @@ class _subCategoryListState extends State<subCategoryList> {
                                             Center(
                                                 child: Text(
                                               subCategorylist[index]!
-                                                  .bookDesc
+                                                  .bookTitle
                                                   .toString(),
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(

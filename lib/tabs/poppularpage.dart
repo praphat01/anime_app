@@ -188,7 +188,7 @@ class _bookPoppularState extends State<bookPoppular> {
                                       ),
                                       Container(
                                         margin:
-                                            EdgeInsets.only(top: 160, left: 20),
+                                            EdgeInsets.only(top: 160, left: 10),
                                         height: 30,
                                         width: 90,
                                         child: Stack(
@@ -196,7 +196,7 @@ class _bookPoppularState extends State<bookPoppular> {
                                             Center(
                                                 child: Text(
                                               popularBooklist[index]!
-                                                  .bookDesc
+                                                  .bookTitle
                                                   .toString(),
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
@@ -327,7 +327,7 @@ class _bookPoppularState extends State<bookPoppular> {
                                       ),
                                       Container(
                                         margin:
-                                            EdgeInsets.only(top: 260, left: 20),
+                                            EdgeInsets.only(top: 260, left: 10),
                                         height: 90,
                                         width: 180,
                                         child: Stack(
@@ -335,7 +335,7 @@ class _bookPoppularState extends State<bookPoppular> {
                                             Center(
                                                 child: Text(
                                               popularBooklist[index]!
-                                                  .bookDesc
+                                                  .bookTitle
                                                   .toString(),
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(

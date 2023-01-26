@@ -194,7 +194,7 @@ class _book_faveritesState extends State<book_faverites> {
                                         ),
                                         Container(
                                           margin: EdgeInsets.only(
-                                              top: 160, left: 20),
+                                              top: 160, left: 10),
                                           height: 30,
                                           width: 90,
                                           child: Stack(
@@ -202,7 +202,7 @@ class _book_faveritesState extends State<book_faverites> {
                                               Center(
                                                   child: Text(
                                                 dataBookFaverites[index]!
-                                                    .bookDesc
+                                                    .bookTitle
                                                     .toString(),
                                                 overflow: TextOverflow.ellipsis,
                                                 style: TextStyle(

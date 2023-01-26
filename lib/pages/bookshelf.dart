@@ -658,7 +658,7 @@ class _bookshelfState extends State<bookshelf> {
                                         ),
                                   Container(
                                     margin: const EdgeInsets.only(
-                                        top: 160, left: 20),
+                                        top: 160, left: 10),
                                     height: 30,
                                     width: 120,
                                     child: Stack(
@@ -815,7 +815,7 @@ class _bookshelfState extends State<bookshelf> {
                                         .toString()),
                                     Container(
                                       margin: const EdgeInsets.only(
-                                          top: 160, left: 20),
+                                          top: 160, left: 10),
                                       height: 30,
                                       width: 120,
                                       child: Stack(

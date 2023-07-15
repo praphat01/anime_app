@@ -1,4 +1,4 @@
-package com.staq.staq2ebook
+package com.staq.staq2ebookNew
 
 import io.flutter.embedding.android.FlutterActivity
 

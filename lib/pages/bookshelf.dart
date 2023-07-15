@@ -120,31 +120,31 @@ class _bookshelfState extends State<bookshelf> {
     });
   }
 
-  // void checkQualityFile(pdfLink) async {
-  //   File file = new File(pdfLink);
-  //   String filename = path.basename(file.path);
-  //   var appDocDir = await getExternalStorageDirectory();
-  //   String nameFile = "/${filename}";
-  //   String pathFile = appDocDir!.path + nameFile;
-  //   final files = File(pathFile);
+  void checkQualityFile(pdfLink) async {
+    File file = new File(pdfLink);
+    String filename = path.basename(file.path);
+    var appDocDir = await getExternalStorageDirectory();
+    String nameFile = "/${filename}";
+    String pathFile = appDocDir!.path + nameFile;
+    final files = File(pathFile);
 
-  //   print('##23 jan Arm ==> $files');
+    print('##23 jan Arm ==> $files');
 
-  //   try {
-  //     files.readAsString();
-  //   } catch (e) {
-  //     print('##24 file book error download uncompleted $e');
-  //     setState(() {
-  //       fileError = false;
-  //     });
-  //   }
+    try {
+      files.readAsString();
+    } catch (e) {
+      print('##24 file book error download uncompleted $e');
+      setState(() {
+        fileError = false;
+      });
+    }
 
-  //   // files.readAsString().catchError((e) {
-  //   //   setState(() {
-  //   //     fileError = false;
-  //   //   });
-  //   // });
-  // }
+    files.readAsString().catchError((e) {
+      setState(() {
+        fileError = false;
+      });
+    });
+  }
 
   void returnBook(
       {required bookshelfId,
@@ -625,13 +625,13 @@ class _bookshelfState extends State<bookshelf> {
                                   ),
                                 ));
                           }
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //       builder: (context) => OfflineReadPdf(
-                          //         sqLiteModel: sqliteModels[index],
-                          //       ),
-                          //     ));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OfflineReadPdf(
+                                  sqLiteModel: sqliteModels[index],
+                                ),
+                              ));
                         }
                       },
                       child: Column(

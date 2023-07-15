@@ -1,14 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:tools="http://schemas.android.com/tools"
 
-    package="com.staq.staq2ebook">
+    package="com.staq.staq2ebookNew">
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     
    <application
-        android:label="2ebook"
+        android:label="2ebook Library"
         android:name="${applicationName}"
         android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true"

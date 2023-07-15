@@ -746,13 +746,13 @@ class _detailPageState extends State<detailPage> {
                               style: const TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold),
                             ),
-                            Flexible(
-                              child: Text(
-                                onlinetype, // จำนวนหนังสือ
-                                style: const TextStyle(
-                                    fontSize: 15, color: Colors.grey),
-                              ),
-                            ),
+                            // Flexible(
+                            //   child: Text(
+                            //     onlinetype, // จำนวนหนังสือ
+                            //     style: const TextStyle(
+                            //         fontSize: 15, color: Colors.grey),
+                            //   ),
+                            // ),
                           ],
                         ),
                         SizedBox(

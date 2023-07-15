@@ -49,11 +49,11 @@ def keystoreProperties = new Properties()
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.staq.staq2ebook"
+        applicationId "com.staq.staq2ebookNew"
         minSdkVersion 22
         targetSdkVersion flutter.targetSdkVersion
-        versionCode 2
-        versionName '2.0.0'
+        versionCode 3
+        versionName '1.0.3'
     }
 
        signingConfigs {
